@@ -3,8 +3,10 @@
 import Vue from 'vue'
 import App from './App'
 import router from './router'
+import TitlePageComponent from './components/TitlePage';
 
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
+Vue.component('title-page', TitlePageComponent);
 
 /* eslint-disable no-new */
 new Vue({

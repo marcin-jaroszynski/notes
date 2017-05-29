@@ -2,6 +2,7 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Login from '@/components/Login'
 import Dashboard from '@/components/Dashboard'
+import Category from '@/components/Category'
 
 Vue.use(Router)
 
@@ -26,6 +27,17 @@ export default new Router({
       name: 'Dashboard',
       title: 'Dashboard',
       component: Dashboard
+    },
+    {
+      path: '/category/',
+      name: 'Category',
+      component: Category,
+      children: [
+        {
+          path: 'show/:id',
+          component: Category
+        }
+      ]
     }
   ]
 });

@@ -4,7 +4,7 @@
     <layout>
       <div slot="menu">
         <side-menu title="Categories" v-bind:items="categories"></side-menu>
-        <button>Strona główna</button>
+        <button @click="backToDashboard()">Back to Dashboard</button>
       </div>
       <div slot="content">
         <div>Category: {{ nameCategory }}</div>
@@ -45,7 +45,7 @@
     },
     data() {
       return {
-        nameCategory: 'XXX',
+        nameCategory: CategoryModel.getTitleFor(this.$route.params.id),
         countEntriesCategory: 25,
         categories: CategoryModel.getList(),
         entries: [
@@ -61,6 +61,11 @@
           { title: 'Tag 3', url: '/tags/tag3' },
           { title: 'Tag 4', url: '/tags/tag4' },
         ]
+      }
+    },
+    methods: {
+      backToDashboard: function() {
+        this.$router.push('/dashboard');
       }
     }
   }

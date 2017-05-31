@@ -3,7 +3,7 @@
     <div>{{ title }}</div>
     <nav>
       <ul>
-        <li v-for="item in items"><a :href="item.url">{{ item.title }}</a></li>
+        <li v-for="item in items"><router-link :to="item.url">{{ item.title }}</router-link></li>
       </ul>
     </nav>
   </section>

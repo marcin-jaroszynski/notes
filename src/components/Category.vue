@@ -7,7 +7,7 @@
         <button @click="backToDashboard()">Back to Dashboard</button>
       </div>
       <div slot="content">
-        <div>Category: {{ nameCategory }}</div>
+        <div>Category: {{ getCategoryName(categoryId) }}</div>
         <div>
           Number of entries: {{ countEntriesCategory }}
           <button>Add new entry</button>
@@ -38,14 +38,16 @@
 <script>
   import Layout from './Layout'
   import CategoryModel from '../model/category.js'
+  console.log('show category section!');
   export default {
+    props: ['categoryId'],
     name: 'category', 
     components: {
       layout: Layout
     },
     data() {
       return {
-        nameCategory: CategoryModel.getTitleFor(this.$route.params.id),
+        // nameCategory: CategoryModel.getTitleFor(this.$route.params.id),
         countEntriesCategory: 25,
         categories: CategoryModel.getList(),
         entries: [
@@ -66,6 +68,9 @@
     methods: {
       backToDashboard: function() {
         this.$router.push('/dashboard');
+      },
+      getCategoryName: function(categoryId) {
+        return CategoryModel.getTitleFor(categoryId);
       }
     }
   }

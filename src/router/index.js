@@ -32,9 +32,10 @@ export default new Router({
       path: '/category/',
       name: 'Category',
       component: Category,
+      props: true,
       children: [
         {
-          path: 'show/:id',
+          path: 'show/:categoryId',
           component: Category
         }
       ]

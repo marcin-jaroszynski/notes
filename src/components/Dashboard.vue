@@ -17,8 +17,8 @@
                 <td>Date added</td>
               </tr>
               <tr v-for="entry in entries">
-                <td><a :href="entry.note_url">{{ entry.title }}</a></td>
-                <td><a :href="entry.category_url">{{ entry.category }}</a></td>
+                <td><router-link :to="entry.note_url">{{ entry.title }}</router-link></td>
+                <td><router-link :to="entry.category_url">{{ entry.category }}</router-link></td>
                 <td>{{ entry.date_added }}</td>
               </tr>
             </tbody>

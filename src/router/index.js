@@ -2,7 +2,8 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Login from '@/components/Login'
 import Dashboard from '@/components/Dashboard'
-import Category from '@/components/Category'
+import CategoryShow from '@/components/CategoryShow'
+import CategoryAdd from '@/components/CategoryAdd'
 
 Vue.use(Router)
 
@@ -29,16 +30,15 @@ export default new Router({
       component: Dashboard
     },
     {
-      path: '/category/',
-      name: 'Category',
-      component: Category,
-      props: true,
-      children: [
-        {
-          path: 'show/:categoryId',
-          component: Category
-        }
-      ]
+      path: '/category/show/:categoryId/',
+      name: 'CategoryShow',
+      component: CategoryShow,
+      props: true
+    },
+    {
+      path: '/category/add/',
+      name: 'CategoryAdd',
+      component: CategoryAdd
     }
   ]
 });

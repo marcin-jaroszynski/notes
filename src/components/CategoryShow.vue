@@ -38,10 +38,9 @@
 <script>
   import Layout from './Layout'
   import CategoryModel from '../model/category.js'
-  console.log('show category section!');
   export default {
     props: ['categoryId'],
-    name: 'category', 
+    name: 'category-show', 
     components: {
       layout: Layout
     },

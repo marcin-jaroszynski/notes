@@ -5,6 +5,7 @@ export default class Category {
           { title: 'JavaScript', code: 'javascript', url: '/category/show/javascript' },
           { title: 'HTML 5', code: 'html5', url: '/category/show/html5' },
           { title: 'PHP', code: 'php', url: '/category/show/php' },
+          { title: 'MySQL', code: 'mysql', url: '/category/show/mysql' },
     ];
   }
 

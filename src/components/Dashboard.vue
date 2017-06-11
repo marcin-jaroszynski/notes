@@ -32,6 +32,7 @@
 <script>
   import Layout from './Layout'
   import CategoryModel from '../model/category.js'
+  let categoryModel = new CategoryModel();
   export default {
     name: 'dashboard',
     components: {
@@ -50,7 +51,7 @@
     },
     methods: {
       categories: function() {
-        let categoriesList = CategoryModel.getList();
+        let categoriesList = categoryModel.getList();
         categoriesList.push({ title: 'Add category', url: '/category/add' });
         return categoriesList;
       }

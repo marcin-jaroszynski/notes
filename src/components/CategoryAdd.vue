@@ -26,6 +26,8 @@
   import Layout from './Layout'
   import CategoryModel from '../model/category.js'
   import HelperModel from '../model/helper.js'
+
+  let categoryModel = new CategoryModel();
   export default {
     name: 'category-add', 
     components: {
@@ -33,7 +35,7 @@
     },
     data() {
       return {
-        categories: CategoryModel.getList(),
+        categories: categoryModel.getList(),
         nameCategoryToAdd: '',
       }
     },

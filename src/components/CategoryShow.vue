@@ -38,6 +38,7 @@
 <script>
   import Layout from './Layout'
   import CategoryModel from '../model/category.js'
+  let categoryModel = new CategoryModel();
   export default {
     props: ['categoryId'],
     name: 'category-show', 
@@ -46,9 +47,8 @@
     },
     data() {
       return {
-        // nameCategory: CategoryModel.getTitleFor(this.$route.params.id),
         countEntriesCategory: 25,
-        categories: CategoryModel.getList(),
+        categories: categoryModel.getList(),
         entries: [
           { title: 'Entry 1', category: 'CSS', note_url: '/note/show/1', date_added:'26.05.2017 22:36:56' },
           { title: 'Entry 2', category: 'MySQL', note_url: '/note/show/2', date_added:'26.05.2017 22:36:56' },
@@ -69,7 +69,7 @@
         this.$router.push('/dashboard');
       },
       getCategoryName: function(categoryId) {
-        return CategoryModel.getTitleFor(categoryId);
+        return categoryModel.getTitleFor(categoryId);
       }
     }
   }

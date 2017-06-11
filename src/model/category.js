@@ -1,5 +1,5 @@
 export default class Category {
-  static getList() {
+  getList() {
     return [
           { title: 'CSS', code: 'css', url: '/category/show/css' },
           { title: 'JavaScript', code: 'javascript', url: '/category/show/javascript' },
@@ -9,7 +9,7 @@ export default class Category {
     ];
   }
 
-  static getTitleFor(code) {
+  getTitleFor(code) {
     let data = this.getList();
     let categoryTitle = 'undefined';
     for (let i = 0; i < data.length; i++) {

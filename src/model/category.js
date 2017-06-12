@@ -14,9 +14,27 @@ export default class Category {
     let categoryTitle = 'undefined';
     for (let i = 0; i < data.length; i++) {
       if (data[i].code == code) {
-        categoryTitle = data[i].title;
+        return data[i].title;
       }
     }
     return categoryTitle;
+  }
+
+  getEmptyObject() {
+    return {
+      title: '',
+      code: '',
+      url: ''
+    }
+  }
+
+  checkIsExist(code) {
+    let data = this.getList();
+    for (let i = 0; i < data.length; i++) {
+      if (data[i].code == code) {
+        return data[i];
+      }
+    }
+    return this.getEmptyObject();
   }
 }

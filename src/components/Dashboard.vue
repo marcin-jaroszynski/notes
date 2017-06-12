@@ -32,7 +32,9 @@
 <script>
   import Layout from './Layout'
   import CategoryModel from '../model/category.js'
+  import CategoryStorage from '../model/category-storage.js'
   let categoryModel = new CategoryModel();
+  let categoryStorage = new CategoryStorage();
   export default {
     name: 'dashboard',
     components: {
@@ -51,8 +53,8 @@
     },
     methods: {
       categories: function() {
-        let categoriesList = categoryModel.getList();
-        categoriesList.push({ title: 'Add category', url: '/category/add' });
+        let categoriesList = categoryStorage.getList();
+        // categoriesList.push({ title: 'Add category', url: '/category/add' });
         return categoriesList;
       }
     }

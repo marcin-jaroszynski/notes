@@ -22,8 +22,9 @@ export default class CategoryList {
     return categoryTitle;
   }
 
-  checkIsExist(categoryCode) {
-    return this.findByCode(categoryCode);
+  checkIsExist(categoryTitle) {
+    let categoryToFind = new Category({ title: categoryTitle });
+    return this.findByCode(categoryToFind.getCode());
   }
 
   findByCode(categoryCode) {

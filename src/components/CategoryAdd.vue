@@ -24,10 +24,10 @@
 
 <script>
   import Layout from './Layout'
-  import CategoryModel from '../model/category.js'
+  import CategoryStorage from '../model/category/storage.js'
   import HelperModel from '../model/helper.js'
 
-  let categoryModel = new CategoryModel();
+  let categoryStorage = new CategoryStorage();
   export default {
     name: 'category-add', 
     components: {
@@ -35,7 +35,7 @@
     },
     data() {
       return {
-        categories: categoryModel.getList(),
+        categories: categoryStorage.getList(),
         nameCategoryToAdd: '',
       }
     },
@@ -44,8 +44,12 @@
         this.$router.push('/dashboard');
       },
       addCategory: function() {
-        // console.log('Name category to add: ' + this.nameCategoryToAdd);
-        console.log('Slugify name category: ' + HelperModel.slugify(this.nameCategoryToAdd));
+        if (categoryStorage.add(this.nameCategoryToAdd)) {
+          console.log('Category added');
+          this.nameCategoryToAdd = '';
+        } else {
+          console.log('Category already exist! Not added');
+        }
       }
     }
   }

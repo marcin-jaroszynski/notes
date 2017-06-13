@@ -4,6 +4,7 @@
     <layout>
       <div slot="menu">
         <side-menu title="Categories" v-bind:items="categories()"></side-menu>
+        <li><router-link to="/category/add">Add category</router-link></li>
       </div>
       <div slot="content">
         <div>Dashboard</div>
@@ -31,9 +32,7 @@
 
 <script>
   import Layout from './Layout'
-  import CategoryModel from '../model/category.js'
-  import CategoryStorage from '../model/category-storage.js'
-  let categoryModel = new CategoryModel();
+  import CategoryStorage from '../model/category/storage.js'
   let categoryStorage = new CategoryStorage();
   export default {
     name: 'dashboard',
@@ -53,9 +52,7 @@
     },
     methods: {
       categories: function() {
-        let categoriesList = categoryStorage.getList();
-        // categoriesList.push({ title: 'Add category', url: '/category/add' });
-        return categoriesList;
+        return categoryStorage.getList();
       }
     }
   }

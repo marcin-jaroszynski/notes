@@ -29,10 +29,10 @@ describe('Category model', () => {
     expect('undefined').to.equal(categoryList.getTitleFor('whaaat'));
   });
 
-  it('checkIsExist returns founded category by code', () => {
+  it('checkIsExist returns founded category by title', () => {
     let categoryList = getNonEmptyCategoryList();
-    let categoryToCheckIsExist = categoryList.checkIsExist('foo');
-    expect('Foo').to.equal(categoryToCheckIsExist.getTitle());
+    let categoryToCheckIsExist = categoryList.checkIsExist('Foo');
+    expect('foo').to.equal(categoryToCheckIsExist.getCode());
   });
 
   it('checkIsExist returns empty object category for non-existing code', () => {

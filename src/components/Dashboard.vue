@@ -32,9 +32,8 @@
 
 <script>
   import Layout from './Layout'
-  import CategoryStorage from '../model/category/storage.js'
-  let categoryStorage = new CategoryStorage();
   export default {
+    props: ['categoryStorage'],
     name: 'dashboard',
     components: {
       layout: Layout
@@ -52,7 +51,8 @@
     },
     methods: {
       categories: function() {
-        return categoryStorage.getList();
+        // this.foo();
+        return this.categoryStorage.getList();
       }
     }
   }

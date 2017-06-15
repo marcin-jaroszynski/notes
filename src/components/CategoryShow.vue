@@ -7,7 +7,7 @@
         <button @click="backToDashboard()">Back to Dashboard</button>
       </div>
       <div slot="content">
-        <div>Category: {{ getCategoryName(categoryId) }}</div>
+        <div>Category: {{ getCategoryName($route.params.categoryId) }}</div>
         <div>
           Number of entries: {{ countEntriesCategory }}
           <button>Add new entry</button>
@@ -37,10 +37,8 @@
 
 <script>
   import Layout from './Layout'
-  import CategoryStorage from '../model/category/storage.js'
-  let categoryStorage = new CategoryStorage();
   export default {
-    props: ['categoryId'],
+    props: ['categoryStorage'],
     name: 'category-show', 
     components: {
       layout: Layout
@@ -48,7 +46,7 @@
     data() {
       return {
         countEntriesCategory: 25,
-        categories: categoryStorage.getList(),
+        categories: this.categoryStorage.getList(),
         entries: [
           { title: 'Entry 1', category: 'CSS', note_url: '/note/show/1', date_added:'26.05.2017 22:36:56' },
           { title: 'Entry 2', category: 'MySQL', note_url: '/note/show/2', date_added:'26.05.2017 22:36:56' },
@@ -69,7 +67,7 @@
         this.$router.push('/dashboard');
       },
       getCategoryName: function(categoryId) {
-        return categoryStorage.getTitleFor(categoryId);
+        return this.categoryStorage.getTitleFor(categoryId);
       }
     }
   }

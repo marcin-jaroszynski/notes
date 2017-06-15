@@ -7,6 +7,9 @@ import CategoryAdd from '@/components/CategoryAdd'
 
 Vue.use(Router)
 
+import CategoryStorage from '../model/category/storage.js'
+let categoryStorage = new CategoryStorage();
+
 export default new Router({
   mode: 'history',
   base: __dirname,
@@ -27,18 +30,26 @@ export default new Router({
       path: '/dashboard',
       name: 'Dashboard',
       title: 'Dashboard',
-      component: Dashboard
+      component: Dashboard,
+      props: {
+        categoryStorage: categoryStorage
+      }
     },
     {
       path: '/category/show/:categoryId/',
       name: 'CategoryShow',
       component: CategoryShow,
-      props: true
+      props: {
+        categoryStorage: categoryStorage
+      }
     },
     {
       path: '/category/add/',
       name: 'CategoryAdd',
-      component: CategoryAdd
+      component: CategoryAdd,
+      props: {
+        categoryStorage: categoryStorage
+      }
     }
   ]
 });

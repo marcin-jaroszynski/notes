@@ -24,18 +24,15 @@
 
 <script>
   import Layout from './Layout'
-  import CategoryStorage from '../model/category/storage.js'
-  import HelperModel from '../model/helper.js'
-
-  let categoryStorage = new CategoryStorage();
   export default {
+    props: ['categoryStorage'],
     name: 'category-add', 
     components: {
       layout: Layout
     },
     data() {
       return {
-        categories: categoryStorage.getList(),
+        categories: this.categoryStorage.getList(),
         nameCategoryToAdd: '',
       }
     },
@@ -44,7 +41,7 @@
         this.$router.push('/dashboard');
       },
       addCategory: function() {
-        if (categoryStorage.add(this.nameCategoryToAdd)) {
+        if (this.categoryStorage.add(this.nameCategoryToAdd)) {
           console.log('Category added');
           this.nameCategoryToAdd = '';
         } else {

@@ -9,13 +9,15 @@
         <div>Add new category</div>
         <div>
           Categories:
-          <select>
+          <select @change="chooseFromCategoryList">
+            <option value="">Choose category to edit...</option>
             <option v-for="category in categories" :value="category.code">{{ category.title }}</option>
           </select>
         </div>
         <p>
-          Name of new category: <input type="text" v-model.trim="nameCategoryToAdd">
-          <button @click="addCategory()">Add</button>
+          Name of new category: <input type="text" v-model.trim="categoryNameFromField">
+          <button @click="addCategory()" :disabled="isDisabledAddBtn">Add</button>
+          <button @click="changeCategoryTitle()" :disabled="isDisabledEditBtn">Edit</button>
         </p>
       </div>
     </layout>
@@ -33,7 +35,10 @@
     data() {
       return {
         categories: this.categoryStorage.getList(),
-        nameCategoryToAdd: '',
+        categoryNameFromField: '',
+        categoryNameFromSelect: '',
+        isDisabledAddBtn: false,
+        isDisabledEditBtn: true
       }
     },
     methods: {
@@ -41,11 +46,37 @@
         this.$router.push('/dashboard');
       },
       addCategory: function() {
-        if (this.categoryStorage.add(this.nameCategoryToAdd)) {
+        if (this.categoryStorage.add(this.categoryNameFromField)) {
           console.log('Category added');
-          this.nameCategoryToAdd = '';
+          this.categoryNameFromField = '';
         } else {
           console.log('Category already exist! Not added');
+        }
+      },
+      chooseFromCategoryList: function(event) {
+        let categoryCode = event.target.value;
+        if (categoryCode == '') {
+          this.isDisabledAddBtn = false;
+          this.isDisabledEditBtn = true;
+          this.categoryNameFromField = '';
+          this.categoryNameFromSelect = '';
+        } else {
+          this.isDisabledAddBtn = true;
+          this.isDisabledEditBtn = false;
+          this.categoryNameFromSelect = this.categoryStorage.getTitleFor(categoryCode);
+          this.categoryNameFromField = this.categoryStorage.getTitleFor(categoryCode);
+        }
+      },
+      changeCategoryTitle: function() {
+        console.log('current category name: ' + this.categoryNameFromSelect);
+        console.log('new category name: ' + this.categoryNameFromField);
+        let result = this.categoryStorage.changeTitle(this.categoryNameFromSelect, this.categoryNameFromField);
+        if (result.getTitle() == this.categoryNameFromField) {
+          alert('Category title changed!');
+          this.categoryNameFromSelect = result.getTitle();
+          this.categoryNameFromField = result.getTitle();
+        } else {
+          alert('Category with this title is already exist!');
         }
       }
     }

@@ -52,4 +52,12 @@ describe('Category model', () => {
     let categoryToFind = categoryList.findByCode('non-exist-code');
     expect('').to.equal(categoryToFind.getTitle());
   });
+
+  it('changeTitle returns true - success to change title', () => {
+    let currentTitleOfCategory = 'Foo';
+    let newTitleOfCategory = 'New foo';
+    let categoryList = getNonEmptyCategoryList();
+    let categoryWithChangedName = categoryList.changeTitle(currentTitleOfCategory, newTitleOfCategory);
+    expect(newTitleOfCategory).to.equal(categoryWithChangedName.getTitle());
+  })
 });

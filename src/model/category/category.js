@@ -2,15 +2,7 @@ import Helper from '../helper.js'
 
 export default class Category {
   constructor(data=this.getEmptyObject()) {
-    let code = '';
-    let url = '';
-    if (data.title) {
-      code = Helper.slugify(data.title);
-      url = '/category/show/'+ code;
-    }
-    this.title = data.title;
-    this.code = code;
-    this.url = url;
+    this.setTitle(data.title);
   }
 
   getTitle() {
@@ -24,6 +16,25 @@ export default class Category {
   getUrl() {
     return this.url;
   }
+
+  createUrl(code) {
+    return '/category/show/'+ code;
+  }
+
+  setTitle(categoryTitle) {
+    if (categoryTitle) {
+      this.code = Helper.slugify(categoryTitle);
+      this.url = this.createUrl(this.code);
+      this.title = categoryTitle;
+    } else {
+      let emptyObject = this.getEmptyObject();
+      this.title = emptyObject.title;
+      this.code = emptyObject.code;
+      this.url = emptyObject.url;
+    }
+  }
+
+
 
   getEmptyObject() {
     return {

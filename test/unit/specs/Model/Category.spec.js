@@ -23,4 +23,10 @@ describe('Category model', () => {
     expect('').to.equal(emptyObject.url);
   });
 
+  it('setTitle', () => {
+    let category = new Category({ title: 'Java' });
+    let newCategoryTitle = 'JavaScript';
+    category.setTitle(newCategoryTitle);
+    expect(newCategoryTitle).to.equal(category.getTitle());
+  });
 });

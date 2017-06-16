@@ -5,8 +5,20 @@ export default class CategoryList {
     this.data = [];
   }
 
-  add($category) {
-    this.data.push($category);
+  add(category) {
+    this.data.push(category);
+  }
+  
+  changeTitle(currentCategoryTitle, newCategoryTitle) {
+    let categoryToChangeName = this.checkIsExist(currentCategoryTitle);
+    if (categoryToChangeName.getTitle() == currentCategoryTitle) {
+      let categoryWithNewName = this.checkIsExist(newCategoryTitle);
+      if (categoryWithNewName.getTitle() == '') {
+        categoryToChangeName.setTitle(newCategoryTitle);
+        return categoryToChangeName;
+      }
+    }
+    return new Category();
   }
 
   get() {

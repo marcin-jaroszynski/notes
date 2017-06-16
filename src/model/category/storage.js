@@ -28,4 +28,8 @@ export default class CategoryStorage {
     this.list.add(categoryToAdd); 
     return true;
   }
+
+  changeTitle(currentCategoryTitle, newCategoryTitle) {
+    return this.list.changeTitle(currentCategoryTitle, newCategoryTitle);
+  }
 }

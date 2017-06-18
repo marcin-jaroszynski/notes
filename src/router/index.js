@@ -4,6 +4,7 @@ import Login from '@/components/Login'
 import Dashboard from '@/components/Dashboard'
 import CategoryShow from '@/components/CategoryShow'
 import CategoryAdd from '@/components/CategoryAdd'
+import NoteAdd from '@/components/NoteAdd'
 
 Vue.use(Router)
 
@@ -47,6 +48,14 @@ export default new Router({
       path: '/category/add/',
       name: 'CategoryAdd',
       component: CategoryAdd,
+      props: {
+        categoryStorage: categoryStorage
+      }
+    },
+    {
+      path: '/note/add/:categoryId/',
+      name: 'NoteAdd',
+      component: NoteAdd,
       props: {
         categoryStorage: categoryStorage
       }

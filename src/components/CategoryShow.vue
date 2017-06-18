@@ -7,10 +7,10 @@
         <button @click="backToDashboard()">Back to Dashboard</button>
       </div>
       <div slot="content">
-        <div>Category: {{ getCategoryName($route.params.categoryId) }}</div>
+        <div>Category: {{ getCategoryName(getCurrentCategoryId()) }}</div>
         <div>
           Number of entries: {{ countEntriesCategory }}
-          <button>Add new entry</button>
+          <button  @click="addNewNote">Add new entry</button>
         </div>
         <p>
           <div>Latest entries:</div>
@@ -63,11 +63,17 @@
       }
     },
     methods: {
+      getCurrentCategoryId: function() {
+        return this.$route.params.categoryId;
+      },
       backToDashboard: function() {
         this.$router.push('/dashboard');
       },
       getCategoryName: function(categoryId) {
         return this.categoryStorage.getTitleFor(categoryId);
+      },
+      addNewNote: function() {
+        this.$router.push('/note/add/' + this.getCurrentCategoryId());
       }
     }
   }

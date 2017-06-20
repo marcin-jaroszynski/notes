@@ -4,7 +4,9 @@ export default class Tag {
   constructor(data=this.getEmptyObject()) {
     this.title = data.title;
     this.url = data.url;
+    this.code = data.code;
     if (data.title) {
+      this.code = Helper.slugify(this.title);
       this.url = this.createUrl();
     }
   }
@@ -17,14 +19,19 @@ export default class Tag {
     return this.url;
   }
 
+  getCode() {
+    return this.code;
+  }
+
   createUrl() {
-    return '/tags/' + Helper.slugify(this.title);
+    return '/tags/' + this.code;
   }
 
   getEmptyObject() {
     return  {
       title: '',
-      url: ''
+      url: '',
+      code: ''
     }
   }
 }

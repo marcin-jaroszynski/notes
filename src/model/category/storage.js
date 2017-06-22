@@ -1,14 +1,14 @@
 import Category from './category.js'
-import list from './list.js'
+import CategoryList from './list.js'
 
 export default class CategoryStorage {
   constructor() {
-    this.list = new list();
-    this.list.add(new Category({ title: 'CSS' }));
-    this.list.add(new Category({ title: 'JavaScript' }));
-    this.list.add(new Category({ title: 'HTML 5' }));
-    this.list.add(new Category({ title: 'PHP' }));
-    this.list.add(new Category({ title: 'MySQL' }));
+    this.list = new CategoryList();
+    this.list.add('CSS');
+    this.list.add('JavaScript');
+    this.list.add('HTML 5');
+    this.list.add('PHP');
+    this.list.add('MySQL');
   }
 
   getList() {
@@ -19,13 +19,13 @@ export default class CategoryStorage {
     return this.list.getTitleFor(categoryCode);
   }
 
-  add(categoryTitle) {
-    let categoryToAdd = new Category({ title: categoryTitle });
+  add(title) {
+    let categoryToAdd = new Category(title);
     let result = this.list.checkIsExist(categoryToAdd.getCode());
     if (result.getTitle()) {
       return false;
     }
-    this.list.add(categoryToAdd); 
+    this.list.add(title); 
     return true;
   }
 

@@ -1,12 +1,9 @@
 import Category from './category.js'
+import ResourceList from '../resource/list.js'
 
-export default class CategoryList {
-  constructor() {
-    this.data = [];
-  }
-
-  add(category) {
-    this.data.push(category);
+export default class CategoryList extends ResourceList {
+  add(title) {
+    this.data.push(new Category({title: title}));
   }
   
   changeTitle(currentCategoryTitle, newCategoryTitle) {
@@ -21,10 +18,6 @@ export default class CategoryList {
     return new Category();
   }
 
-  get() {
-    return this.data;
-  }
-
   getTitleFor(categoryCode) {
     let categoryTitle = 'undefined';
     let categoryToFind = this.findByCode(categoryCode);
@@ -32,19 +25,5 @@ export default class CategoryList {
       categoryTitle = categoryToFind.getTitle();
     }
     return categoryTitle;
-  }
-
-  checkIsExist(categoryTitle) {
-    let categoryToFind = new Category({ title: categoryTitle });
-    return this.findByCode(categoryToFind.getCode());
-  }
-
-  findByCode(categoryCode) {
-    for (let i = 0; i < this.data.length; i++) {
-      if (this.data[i].getCode() == categoryCode) {
-        return this.data[i];
-      }
-    }
-    return new Category();
   }
 }

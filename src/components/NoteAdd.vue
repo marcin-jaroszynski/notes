@@ -14,10 +14,13 @@
         </div>
         <div>
           <label for="note-tag">Tag:</label>
-          <input id="note-tag" type="text">
-          <button>Add</button>
+          <input v-model.trim="tagField" id="note-tag" type="text">
+          <button @click="addTag">Add</button>
           <div>
-            List of tags: 
+            List of tags:  
+            <ul>
+              <li is="tag-item" v-for="tag in tagList" v-bind:item="tag" v-bind:key="tag" @remove="removeTag"></li>
+            </ul>
           </div>
         </div>
         <div>
@@ -34,6 +37,9 @@
 
 <script>
   import Layout from './Layout'
+  import TagList from '../model/tag/list.js'
+  let tagList = new TagList();
+
   export default {
     name: 'note-add',
     props: ['categoryStorage'],
@@ -42,7 +48,8 @@
     },
     data() {
       return {
-      
+        tagField: '',
+        tagList: tagList.get()
       }
     },
     methods: {
@@ -57,6 +64,15 @@
       },
       getCategoryName: function() {
         return this.categoryStorage.getTitleFor(this.getCurrentCategoryId());
+      },
+      addTag: function() {
+        console.log('Add tag: ' + this.tagField);
+        tagList.add(this.tagField);
+        this.tagField = '';
+      },
+      removeTag: function(event) {
+        console.log('Remove tag! value: ' + event.target.dataset.title);
+        tagList.remove(event.target.dataset.title);
       }
     }
   }

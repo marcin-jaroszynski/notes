@@ -21,7 +21,7 @@ export default class CategoryStorage {
 
   add(title) {
     let categoryToAdd = new Category(title);
-    let result = this.list.checkIsExist(categoryToAdd.getCode());
+    let result = this.list.checkIsExist(title);
     if (result.getTitle()) {
       return false;
     }

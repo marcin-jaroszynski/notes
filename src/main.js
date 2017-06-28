@@ -5,10 +5,12 @@ import App from './App'
 import router from './router'
 import TitlePageComponent from './components/TitlePage';
 import SideMenuTemplate from './components/templates/SideMenu';
+import TagItemTemplate from './components/templates/TagItem';
 
 Vue.config.productionTip = false;
 Vue.component('title-page', TitlePageComponent);
 Vue.component('side-menu', SideMenuTemplate);
+Vue.component('tag-item', TagItemTemplate);
 
 /* eslint-disable no-new */
 new Vue({

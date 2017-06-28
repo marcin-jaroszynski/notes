@@ -7,12 +7,12 @@ export default class CategoryList extends ResourceList {
   }
   
   changeTitle(currentCategoryTitle, newCategoryTitle) {
-    let categoryToChangeName = this.checkIsExist(currentCategoryTitle);
-    if (categoryToChangeName.getTitle() == currentCategoryTitle) {
-      let categoryWithNewName = this.checkIsExist(newCategoryTitle);
-      if (categoryWithNewName.getTitle() == '') {
-        categoryToChangeName.setTitle(newCategoryTitle);
-        return categoryToChangeName;
+    let categoryToChangeTitle = this.checkIsExist(currentCategoryTitle);
+    if (categoryToChangeTitle.getTitle() == currentCategoryTitle) {
+      let categoryWithNewTitle = this.checkIsExist(newCategoryTitle);
+      if (categoryWithNewTitle.getTitle() == '') {
+        categoryToChangeTitle.setTitle(newCategoryTitle);
+        return categoryToChangeTitle;
       }
     }
     return new Category();

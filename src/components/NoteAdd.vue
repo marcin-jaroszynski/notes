@@ -10,7 +10,7 @@
         <div>Category: {{ getCategoryName() }}</div>
         <div>
           <label for="note-title">Title:</label>
-          <input id="note-title" type="text"> 
+          <input v-model.trim="titleField" id="note-title" type="text"> 
         </div>
         <div>
           <label for="note-tag">Tag:</label>
@@ -19,15 +19,15 @@
           <div>
             List of tags:  
             <ul>
-              <li is="tag-item" v-for="tag in tagList" v-bind:item="tag" v-bind:key="tag" @remove="removeTag"></li>
+              <li is="tag-item" v-for="tag in getTagList()" v-bind:item="tag" v-bind:key="tag" @remove="removeTag"></li>
             </ul>
           </div>
         </div>
         <div>
           <div><label for="note-content">Content:</label></div>
-          <textarea id="note-content"></textarea>
+          <textarea v-model="contentField" id="note-content"></textarea>
           <div>
-            <button>Add</button>
+            <button @click="addNote">Add</button>
           </div>
         </div>
       </div>
@@ -37,8 +37,7 @@
 
 <script>
   import Layout from './Layout'
-  import TagList from '../model/tag/list.js'
-  let tagList = new TagList();
+  import Note from '../model/note/note.js'
 
   export default {
     name: 'note-add',
@@ -48,11 +47,16 @@
     },
     data() {
       return {
+        note: new Note(),
+        titleField: '',
         tagField: '',
-        tagList: tagList.get()
+        contentField: ''
       }
     },
     methods: {
+      getTagList: function() {
+        return this.note.getTags();
+      },
       getCurrentCategoryId: function() {
         return this.$route.params.categoryId;
       },
@@ -67,12 +71,20 @@
       },
       addTag: function() {
         console.log('Add tag: ' + this.tagField);
-        tagList.add(this.tagField);
+        this.note.addTag(this.tagField);
         this.tagField = '';
       },
       removeTag: function(event) {
         console.log('Remove tag! value: ' + event.target.dataset.title);
-        tagList.remove(event.target.dataset.title);
+        this.note.removeTag(event.target.dataset.title);
+      },
+      addNote: function() {
+        console.log('Add note!');
+        this.note.setTitle(this.titleField);
+        this.note.setContent(this.contentField);
+        console.log('Note title: '+ this.note.getTitle());
+        console.log('Note content: '+ this.note.getContent());
+        this.categoryStorage.addNoteFor(this.getCurrentCategoryId(), this.note);
       }
     }
   }

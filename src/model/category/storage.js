@@ -9,6 +9,8 @@ export default class CategoryStorage {
     this.list.add('HTML 5');
     this.list.add('PHP');
     this.list.add('MySQL');
+
+    this.freeNoteId = 1;
   }
 
   getList() {
@@ -31,5 +33,16 @@ export default class CategoryStorage {
 
   changeTitle(currentCategoryTitle, newCategoryTitle) {
     return this.list.changeTitle(currentCategoryTitle, newCategoryTitle);
+  }
+
+  addNoteFor(categoryCode, note) {
+    note.setId(this.freeNoteId);
+    this.freeNoteId++;
+    return this.list.addNoteFor(categoryCode, note);
+  }
+
+  getNotesFor(categoryCode) {
+    let categoryToFind = this.list.findByCode(categoryCode);
+    return categoryToFind.getNotes();
   }
 }

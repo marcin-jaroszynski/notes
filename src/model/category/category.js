@@ -2,6 +2,11 @@ import Helper from '../helper.js'
 import Resource from '../resource/resource.js'
 
 export default class Category extends Resource {
+  constructor(data) {
+    super(data);
+    this.notes = [];
+  }
+
   createUrl() {
     return '/category/show/'+ this.code;
   }
@@ -12,5 +17,13 @@ export default class Category extends Resource {
       this.url = this.createUrl();
       this.title = title;
     }
+  }
+
+  getNotes() {
+    return this.notes;
+  }
+
+  addNote(note) {
+    this.notes.push(note);
   }
 }

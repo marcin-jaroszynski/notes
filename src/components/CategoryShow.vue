@@ -20,9 +20,9 @@
                 <td>Title</td>
                 <td>Date added</td>
               </tr>
-              <tr v-for="entry in entries">
-                <td><a :href="entry.note_url">{{ entry.title }}</a></td>
-                <td>{{ entry.date_added }}</td>
+              <tr v-for="entry in getCategoryNotes(getCurrentCategoryId())">
+                <td><a :href="entry.url">{{ entry.title }}</a></td>
+                <td>{{ entry.dateAdded }}</td>
               </tr>
             </tbody>
           </table>
@@ -47,13 +47,6 @@
       return {
         countEntriesCategory: 25,
         categories: this.categoryStorage.getList(),
-        entries: [
-          { title: 'Entry 1', category: 'CSS', note_url: '/note/show/1', date_added:'26.05.2017 22:36:56' },
-          { title: 'Entry 2', category: 'MySQL', note_url: '/note/show/2', date_added:'26.05.2017 22:36:56' },
-          { title: 'Entry 3', category: 'PHP', note_url: '/note/show/3', date_added:'26.05.2017 22:36:56' },
-          { title: 'Entry 4', category: 'HTML 5', note_url: '/note/show/4', date_added:'26.05.2017 22:36:56' },
-          { title: 'Entry 5', category: 'JavaScript', note_url: '/note/show/5', date_added:'26.05.2017 22:36:56' }
-        ],
         tags: [
           { title: 'Tag 1', url: '/tags/tag1' },
           { title: 'Tag 2', url: '/tags/tag2' },
@@ -63,6 +56,12 @@
       }
     },
     methods: {
+      getCategoryNotes: function(categoryId) {
+        console.log('categoryId: ' + categoryId);
+        let notes = this.categoryStorage.getNotesFor(categoryId);
+        console.log('notes: ' + JSON.stringify(notes));
+        return notes;
+      },
       getCurrentCategoryId: function() {
         return this.$route.params.categoryId;
       },

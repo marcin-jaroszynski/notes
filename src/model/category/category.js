@@ -1,10 +1,12 @@
 import Helper from '../helper.js'
 import Resource from '../resource/resource.js'
+import TagList from '../tag/list.js'
 
 export default class Category extends Resource {
   constructor(data) {
     super(data);
     this.notes = [];
+    this.tags = new TagList();
   }
 
   createUrl() {
@@ -23,7 +25,12 @@ export default class Category extends Resource {
     return this.notes;
   }
 
+  getTags() {
+    return this.tags.get();
+  }
+
   addNote(note) {
     this.notes.push(note);
+    this.tags.addMany(note.getTags());
   }
 }

@@ -7,9 +7,9 @@
         <button @click="backToDashboard()">Back to Dashboard</button>
       </div>
       <div slot="content">
-        <div>Category: {{ getCategoryName(getCurrentCategoryId()) }}</div>
+        <div>Category: {{ getCategoryName() }}</div>
         <div>
-          Number of entries: {{ countEntriesCategory }}
+          Number of entries: {{ getCategoryCountNotes() }}
           <button  @click="addNewNote">Add new entry</button>
         </div>
         <p>
@@ -20,14 +20,14 @@
                 <td>Title</td>
                 <td>Date added</td>
               </tr>
-              <tr v-for="entry in getCategoryNotes(getCurrentCategoryId())">
+              <tr v-for="entry in getCategoryNotes()">
                 <td><a :href="entry.url">{{ entry.title }}</a></td>
                 <td>{{ entry.dateAdded }}</td>
               </tr>
             </tbody>
           </table>
           <div>
-          Tags: <a v-for="tag in tags" :href="tag.url">{{ tag.title }} </a>
+          Tags: <a v-for="tag in getCategoryTags()" :href="tag.url">{{ tag.title }} </a>
           </div>
         </p>
       </div>
@@ -56,11 +56,14 @@
       }
     },
     methods: {
-      getCategoryNotes: function(categoryId) {
-        console.log('categoryId: ' + categoryId);
-        let notes = this.categoryStorage.getNotesFor(categoryId);
-        console.log('notes: ' + JSON.stringify(notes));
-        return notes;
+      getCategoryCountNotes: function() {
+        return this.getCategoryNotes().length;
+      },
+      getCategoryNotes: function() {
+        return this.categoryStorage.getNotesFor(this.getCurrentCategoryId());
+      },
+      getCategoryTags: function() {
+        return this.categoryStorage.getTagsFor(this.getCurrentCategoryId());
       },
       getCurrentCategoryId: function() {
         return this.$route.params.categoryId;
@@ -68,8 +71,8 @@
       backToDashboard: function() {
         this.$router.push('/dashboard');
       },
-      getCategoryName: function(categoryId) {
-        return this.categoryStorage.getTitleFor(categoryId);
+      getCategoryName: function() {
+        return this.categoryStorage.getTitleFor(this.getCurrentCategoryId());
       },
       addNewNote: function() {
         this.$router.push('/note/add/' + this.getCurrentCategoryId());

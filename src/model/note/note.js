@@ -29,13 +29,8 @@ export default class Note {
   }
 
   addTag(title) {
-    let tagToFind = this.tags.checkIsExist(title);
-    if (!tagToFind.getTitle()) {
-      this.tags.add(title);
-      return true;
-    }
-    return false;
-  }
+    return this.tags.add(title);
+  } 
 
   removeTag(title) {
     return this.tags.remove(title);

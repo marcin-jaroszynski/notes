@@ -45,4 +45,9 @@ export default class CategoryStorage {
     let categoryToFind = this.list.findByCode(categoryCode);
     return categoryToFind.getNotes();
   }
+
+  getTagsFor(categoryCode) {
+    let categoryToFind = this.list.findByCode(categoryCode);
+    return categoryToFind.getTags();
+  }
 }

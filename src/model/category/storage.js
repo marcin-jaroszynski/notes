@@ -1,5 +1,6 @@
 import Category from './category.js'
 import CategoryList from './list.js'
+import Note from '../note/note.js'
 
 export default class CategoryStorage {
   constructor() {
@@ -49,5 +50,18 @@ export default class CategoryStorage {
   getTagsFor(categoryCode) {
     let categoryToFind = this.list.findByCode(categoryCode);
     return categoryToFind.getTags();
+  }
+
+  getNoteFor(noteId) {
+    let categories = this.list.get();
+    for (let i = 0; i < categories.length; i++) {
+      let notes = categories[i].getNotes();
+      for (let j = 0; j < notes.length; j++) {
+        if (notes[j].getId() == noteId) {
+          return notes[j];
+        }
+      }
+    }
+    return new Note();
   }
 }

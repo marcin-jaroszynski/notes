@@ -85,6 +85,12 @@
         console.log('Note title: '+ this.note.getTitle());
         console.log('Note content: '+ this.note.getContent());
         this.categoryStorage.addNoteFor(this.getCurrentCategoryId(), this.note);
+        this.resetFields();
+      },
+      resetFields: function() {
+        this.note = new Note();
+        this.titleField = '';
+        this.contentField = '';
       }
     }
   }

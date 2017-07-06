@@ -5,6 +5,7 @@ import Dashboard from '@/components/Dashboard'
 import CategoryShow from '@/components/CategoryShow'
 import CategoryAdd from '@/components/CategoryAdd'
 import NoteAdd from '@/components/NoteAdd'
+import NoteShow from '@/components/NoteShow'
 
 Vue.use(Router)
 
@@ -59,6 +60,15 @@ export default new Router({
       props: {
         categoryStorage: categoryStorage
       }
+    },
+    {
+      path: '/note/show/:noteId/',
+      name: 'NoteShow',
+      component: NoteShow,
+      props: {
+        categoryStorage: categoryStorage
+      }
     }
+
   ]
 });

@@ -21,7 +21,7 @@
                 <td>Date added</td>
               </tr>
               <tr v-for="entry in getCategoryNotes()">
-                <td><a :href="entry.url">{{ entry.title }}</a></td>
+                <td><router-link :to="entry.url">{{ entry.title }}</router-link></td>
                 <td>{{ entry.dateAdded }}</td>
               </tr>
             </tbody>
@@ -45,14 +45,7 @@
     },
     data() {
       return {
-        countEntriesCategory: 25,
         categories: this.categoryStorage.getList(),
-        tags: [
-          { title: 'Tag 1', url: '/tags/tag1' },
-          { title: 'Tag 2', url: '/tags/tag2' },
-          { title: 'Tag 3', url: '/tags/tag3' },
-          { title: 'Tag 4', url: '/tags/tag4' },
-        ]
       }
     },
     methods: {

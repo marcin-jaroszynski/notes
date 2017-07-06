@@ -4,6 +4,7 @@ export default class Note {
   constructor() {
     let empty = this.getEmptyObject();
     this.id = empty.id;
+    this.categoryId = empty.categoryId;
     this.title = empty.title;
     this.content = empty.content;
     this.url = empty.url;
@@ -14,6 +15,10 @@ export default class Note {
   setId(id) {
     this.id = id;
     this.url = this.createUrl();
+  }
+
+  setCategoryId(categoryId) {
+    this.categoryId = categoryId;
   }
 
   setTitle(title) {
@@ -36,6 +41,14 @@ export default class Note {
     return this.tags.remove(title);
   }
 
+  getId() {
+    return this.id;
+  }
+
+  getCategoryId() {
+    return this.categoryId;
+  }
+
   getTitle() {
     return this.title;
   }
@@ -48,9 +61,14 @@ export default class Note {
     return this.tags.get();
   }
 
+  getDateAdded() {
+    return this.dateAdded;
+  }
+
   getEmptyObject() {
     return {
       id: 0,
+      categoryId: '',
       title: '',
       content: '',
       url: '',

@@ -20,6 +20,15 @@ describe('Category model', () => {
     expect(newCategoryTitle).to.equal(category.getTitle());
   });
 
+  it('addNote', () => {
+    let category = getCategory();
+    let note = new Note();
+    note.setTitle('Note 1');
+    category.addNote(note);
+    let addedNote = category.getNotes()[0];
+    expect(category.getCode()).to.equal(addedNote.getCategoryId());
+  });
+
   it('Add few notes with many tags', () => {
     let category = getCategory();
 

@@ -30,6 +30,7 @@ export default class Category extends Resource {
   }
 
   addNote(note) {
+    note.setCategoryId(this.code);
     this.notes.push(note);
     this.tags.addMany(note.getTags());
   }

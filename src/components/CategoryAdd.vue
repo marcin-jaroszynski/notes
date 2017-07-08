@@ -26,6 +26,8 @@
 
 <script>
   import Layout from './Layout'
+  import Url from '../model/url.js'
+
   export default {
     props: ['categoryStorage'],
     name: 'category-add', 
@@ -43,7 +45,7 @@
     },
     methods: {
       backToDashboard: function() {
-        this.$router.push('/dashboard');
+        this.$router.push(Url.getDashboard());
       },
       addCategory: function() {
         if (this.categoryStorage.add(this.categoryNameFromField)) {

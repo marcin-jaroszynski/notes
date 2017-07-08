@@ -11,6 +11,8 @@
 </template>
 
 <script>
+import Url from '../model/url.js'
+
 export default {
   name: 'login',
   data() {
@@ -22,7 +24,7 @@ export default {
   methods: {
     validate: function(e) {
       if (this.loginField.length > 0 && this.passwordField.length > 0) {
-        this.$router.push('dashboard');
+        this.$router.push(Url.getDashboard());
       } else {
         alert('Nope! You entered invalid data!');
       }

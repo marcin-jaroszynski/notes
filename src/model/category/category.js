@@ -1,6 +1,7 @@
 import Helper from '../helper.js'
 import Resource from '../resource/resource.js'
 import TagList from '../tag/list.js'
+import Url from '../url.js'
 
 export default class Category extends Resource {
   constructor(data) {
@@ -10,7 +11,7 @@ export default class Category extends Resource {
   }
 
   createUrl() {
-    return '/category/show/'+ this.code;
+    return Url.getCategoryShow(this.code);
   }
 
   setTitle(title) {

@@ -38,6 +38,7 @@
 <script>
   import Layout from './Layout'
   import Note from '../model/note/note.js'
+  import Url from '../model/url.js'
 
   export default {
     name: 'note-add',
@@ -61,10 +62,10 @@
         return this.$route.params.categoryId;
       },
       backToDashboard: function() {
-        this.$router.push('/dashboard');
+        this.$router.push(Url.getDashboard());
       },
       backToCategory: function() {
-        this.$router.push('/category/show/' + this.getCurrentCategoryId());
+        this.$router.push(Url.getCategoryShow(this.getCurrentCategoryId()));
       },
       getCategoryName: function() {
         return this.categoryStorage.getTitleFor(this.getCurrentCategoryId());

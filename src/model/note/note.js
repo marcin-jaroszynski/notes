@@ -1,4 +1,5 @@
 import TagList from '../tag/list.js'
+import Url from '../url.js'
 
 export default class Note {
   constructor() {
@@ -30,7 +31,7 @@ export default class Note {
   }
 
   createUrl() {
-    return '/note/show/' + this.id;
+    return Url.getNoteShow(this.id);
   }
 
   addTag(title) {

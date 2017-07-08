@@ -4,7 +4,7 @@
     <layout>
       <div slot="menu">
         <side-menu title="Categories" v-bind:items="categories()"></side-menu>
-        <li><router-link to="/category/add">Add category</router-link></li>
+        <li><button @click="getCategoryAddUrl()">Add category</button></li>
       </div>
       <div slot="content">
         <div>Dashboard</div>
@@ -32,6 +32,8 @@
 
 <script>
   import Layout from './Layout'
+  import Url from '../model/url.js'
+
   export default {
     props: ['categoryStorage'],
     name: 'dashboard',
@@ -53,6 +55,9 @@
       categories: function() {
         // this.foo();
         return this.categoryStorage.getList();
+      },
+      getCategoryAddUrl() {
+        this.$router.push(Url.getCategoryAdd());
       }
     }
   }

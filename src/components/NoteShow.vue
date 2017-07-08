@@ -25,6 +25,8 @@
 
 <script>
   import Layout from './Layout'
+  import Url from '../model/url.js'
+  
   export default {
     props: ['categoryStorage'],
     name: 'note-show', 
@@ -41,7 +43,7 @@
         return this.$route.params.noteId;
       },
       backToDashboard: function() {
-        this.$router.push('/dashboard');
+        this.$router.push(Url.getDashboard());
       },
       getNote: function() {
         return this.categoryStorage.getNoteFor(this.getNoteId());
@@ -50,7 +52,7 @@
         return this.categoryStorage.getTitleFor(this.note.getCategoryId());
       },
       backToCategory: function() {
-        this.$router.push('/category/show/' + this.note.getCategoryId());
+        this.$router.push(Url.getCategoryShow(this.note.getCategoryId()));
       },
     }
   }

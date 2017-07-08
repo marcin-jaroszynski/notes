@@ -7,12 +7,24 @@
       <div>
         <input type="text" placeholder="Search...">
         <button>Search</button>
-        <a class="logout" href="/login">Log out</a>
+        <button class="logout" @click="getLoginUrl()">Log out</button>
       </div>
       <slot name="content"></slot>
     </div>
   </article>
 </template>
+
+<script>
+  import Url from '../model/url.js'
+
+  export default {
+    methods: {
+      getLoginUrl: function() {
+        this.$router.push(Url.getLogin());
+      }
+    }
+  }
+</script>
 
 <style>
 .menu {

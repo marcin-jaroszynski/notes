@@ -11,6 +11,7 @@ Vue.use(Router)
 
 import CategoryStorage from '../model/category/storage.js'
 let categoryStorage = new CategoryStorage();
+import Url from '../model/url.js'
 
 export default new Router({
   mode: 'history',
@@ -23,13 +24,13 @@ export default new Router({
       component: Login
     },
     {
-      path: '/login',
+      path: Url.getLogin(),
       name: 'Login',
       title: 'Login',
       component: Login
     },
     {
-      path: '/dashboard',
+      path: Url.getDashboard(),
       name: 'Dashboard',
       title: 'Dashboard',
       component: Dashboard,
@@ -38,7 +39,7 @@ export default new Router({
       }
     },
     {
-      path: '/category/show/:categoryId/',
+      path: Url.getCategoryShow(':categoryId/'),
       name: 'CategoryShow',
       component: CategoryShow,
       props: {
@@ -46,7 +47,7 @@ export default new Router({
       }
     },
     {
-      path: '/category/add/',
+      path: Url.getCategoryAdd(),
       name: 'CategoryAdd',
       component: CategoryAdd,
       props: {
@@ -54,7 +55,7 @@ export default new Router({
       }
     },
     {
-      path: '/note/add/:categoryId/',
+      path: Url.getNoteAdd(':categoryId/'),
       name: 'NoteAdd',
       component: NoteAdd,
       props: {
@@ -62,7 +63,7 @@ export default new Router({
       }
     },
     {
-      path: '/note/show/:noteId/',
+      path: Url.getNoteShow(':noteId/'),
       name: 'NoteShow',
       component: NoteShow,
       props: {

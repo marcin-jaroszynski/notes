@@ -22,4 +22,8 @@ export default class Url {
   static getNoteAdd(categoryId) {
     return '/note/add/' + categoryId;
   }
+
+  static getNoteEdit(noteId) {
+    return '/note/edit/' + noteId;
+  }
 }

@@ -12,8 +12,14 @@ export default class TagList extends ResourceList {
   }
 
   addMany(tags) {
-    for (let i = 0; i < tags.length; i++){
+    for (let i = 0; i < tags.length; i++) {
       this.add(tags[i].title);
+    }
+  }
+
+  removeMany(tags) {
+    for (let i = 0; i < tags.length; i++) {
+      this.remove(tags[i].title);
     }
   }
 } 

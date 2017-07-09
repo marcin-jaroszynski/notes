@@ -6,6 +6,7 @@ import CategoryShow from '@/components/CategoryShow'
 import CategoryAdd from '@/components/CategoryAdd'
 import NoteAdd from '@/components/NoteAdd'
 import NoteShow from '@/components/NoteShow'
+import NoteEdit from '@/components/NoteEdit'
 
 Vue.use(Router)
 
@@ -69,7 +70,14 @@ export default new Router({
       props: {
         categoryStorage: categoryStorage
       }
+    },
+    {
+      path: Url.getNoteEdit(':noteId/'),
+      name: 'NoteEdit',
+      component: NoteEdit,
+      props: {
+        categoryStorage: categoryStorage
+      }
     }
-
   ]
 });

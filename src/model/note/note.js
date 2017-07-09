@@ -42,6 +42,14 @@ export default class Note {
     return this.tags.remove(title);
   }
 
+  addTags(tags) {
+    this.tags.addMany(tags);
+  }
+
+  removeTags(tags) {
+    this.tags.removeMany(tags);
+  }
+
   getId() {
     return this.id;
   }

@@ -7,6 +7,7 @@
         <button @click="backToDashboard()">Back to Dashboard</button>
       </div>
       <div slot="content">
+        <div><button @click="goToNoteEdit()">Edit</button></div>
         <div>Note: {{ note.getTitle() }}</div>
         <div>Category: {{ getTitleCategory() }}</div>
         <div>
@@ -54,6 +55,9 @@
       backToCategory: function() {
         this.$router.push(Url.getCategoryShow(this.note.getCategoryId()));
       },
+      goToNoteEdit: function() {
+        this.$router.push(Url.getNoteEdit(this.getNoteId()));
+      }
     }
   }
 </script>

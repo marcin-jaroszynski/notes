@@ -1,6 +1,7 @@
 import Helper from '../helper.js'
 import Resource from '../resource/resource.js'
 import TagList from '../tag/list.js'
+import Note from '../note/note.js'
 import Url from '../url.js'
 
 export default class Category extends Resource {
@@ -30,9 +31,40 @@ export default class Category extends Resource {
     return this.tags.get();
   }
 
+  addTags(tags) {
+    this.tags.addMany(tags);
+  }
+
+  removeTags(tags) {
+    this.tags.removeMany(tags);
+  }
+
   addNote(note) {
     note.setCategoryId(this.code);
     this.notes.push(note);
     this.tags.addMany(note.getTags());
+  }
+
+  getNote(noteId) {
+    for (let i = 0; i < this.notes.length; i++) {
+      if (this.notes[i].getId() == noteId) {
+        return this.notes[i];
+      }
+    }
+    return new Note();
+  }
+
+  editNote(noteToEdit) {
+    console.log('editNote - category');
+    let noteToFind = this.getNote(noteToEdit.getId());
+    if (noteToFind.getId()) {
+      noteToFind.setTitle(noteToEdit.getTitle())
+      noteToFind.setContent(noteToEdit.getContent());
+      noteToFind.setTags(noteToEdit.getTags());
+      // this.tags.removeMany(noteToEdit.tagsToRemove);
+      // this.tags.addMany(noteToEdit.tagsToAdd);
+      return true;
+    }
+    return false;
   }
 }

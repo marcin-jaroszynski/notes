@@ -46,6 +46,11 @@ export default class Note {
     this.tags.addMany(tags);
   }
 
+  setTags(tags) {
+    this.tags.reset();
+    this.tags.addMany(tags);
+  }
+
   removeTags(tags) {
     this.tags.removeMany(tags);
   }

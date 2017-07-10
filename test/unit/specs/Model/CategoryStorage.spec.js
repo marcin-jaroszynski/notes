@@ -1,4 +1,6 @@
 import CategoryStorage from '../../../../src/model/category/storage.js'
+import Note from '../../../../src/model/note/note.js'
+import TagList from '../../../../src/model/tag/list.js'
 
 describe('CategoryStorage', () => {
   it('add non-existing category', () => {
@@ -10,5 +12,40 @@ describe('CategoryStorage', () => {
     let categoryStorage = new CategoryStorage();
     expect(true).to.equal(categoryStorage.add('Foo'), 'add first Foo category');
     expect(false).to.equal(categoryStorage.add('Foo'), 'try to add second Foo category');
+  });
+
+  it('updateCategoryNote - update note and category tags', () => {
+    let categoryStorage = new CategoryStorage();
+    categoryStorage.add('Linux');
+    let note1 = new Note();
+    note1.setTitle('Note 1');
+    note1.setContent('Lorem ipsum');
+    note1.addTag('A');
+    note1.addTag('B');
+    note1.addTag('C');
+    categoryStorage.addNoteFor('linux', note1);
+    let noteToEdit = note1;
+    noteToEdit.setId(1);
+    noteToEdit.setCategoryId('linux');
+    noteToEdit.setTitle('Note 1 - edited');
+    noteToEdit.setContent('Lorem ipsum - edited');
+
+    let tagsToAdd = new TagList();
+    tagsToAdd.add('D');
+    tagsToAdd.add('E');
+    noteToEdit.addTags(tagsToAdd.get());
+
+    let tagsToRemove = new TagList();
+    tagsToRemove.add('B');
+    noteToEdit.removeTags(tagsToRemove.get());
+
+    let resultEdit = categoryStorage.editCategoryNote(noteToEdit, tagsToAdd, tagsToRemove);
+    expect(true).to.equal(resultEdit, 'Result edit');
+    let editedNote = categoryStorage.getNoteFor(noteToEdit.getId());
+    expect('Note 1 - edited').to.equal(editedNote.getTitle());
+    expect('Lorem ipsum - edited').to.equal(editedNote.getContent());
+    expect(4).to.equal(editedNote.getTags().length, 'Count of note tags'); 
+    let categoryTags = categoryStorage.getTagsFor('linux');
+    expect(4).to.equal(categoryTags.length, 'Count of category tags');
   });
 });

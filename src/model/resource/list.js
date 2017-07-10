@@ -5,6 +5,10 @@ export default class ResourceList {
     this.data = [];
   }
 
+  reset() {
+    this.data = [];
+  }
+
   add(title) {
     this.data.push(new Resource({title: title}));
   }

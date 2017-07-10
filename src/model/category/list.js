@@ -14,6 +14,15 @@ export default class CategoryList extends ResourceList {
     }
     return false;
   }
+
+  editNoteFor(categoryCode, note) {
+    let categoryToFind = this.findByCode(categoryCode);
+    if (categoryToFind.getTitle()) {
+      categoryToFind.editNote(note);
+      return true;
+    }
+    return false;
+  }
   
   changeTitle(currentCategoryTitle, newCategoryTitle) {
     let categoryToChangeTitle = this.checkIsExist(currentCategoryTitle);

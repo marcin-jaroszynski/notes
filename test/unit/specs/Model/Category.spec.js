@@ -1,5 +1,6 @@
 import Category from '../../../../src/model/category/category.js'
 import Note from '../../../../src/model/note/note.js'
+import TagList from '../../../../src/model/tag/list.js'
 
 describe('Category model', () => {
   let getCategory = () => {
@@ -49,5 +50,16 @@ describe('Category model', () => {
     category.addNote(note2);
 
     expect(5).to.equal(category.getTags().length);
+  });
+
+  it('Add many tags from list tag', () => {
+    let tagsList = new TagList();
+    tagsList.add('A');
+    tagsList.add('B');
+    tagsList.add('C');
+
+    let category = getCategory();
+    category.addTags(tagsList.get());
+    expect(tagsList.get().length).to.equal(category.getTags().length);
   });
 });

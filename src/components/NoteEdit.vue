@@ -106,12 +106,15 @@
       editNote: function() {
         console.log('Edit note'); 
         console.log('Title note: ' + this.noteTitle);
-        this.note.setTitle(this.noteTitle);
-        this.note.setContent(this.noteContent);
         console.log('tagsToAdd: ' + JSON.stringify(this.tagsToAdd.get()));
         console.log('tagsToRemove: ' + JSON.stringify(this.tagsToRemove.get()));
-        this.note.addTags(this.tagsToAdd.get());
-        this.note.removeTags(this.tagsToRemove.get());
+        let noteEdit = this.note;
+        // noteEdit.setId(this.note.getId());
+        // noteEdit.setCategoryId(this.note.getCategoryId());
+        noteEdit.setTitle(this.noteTitle);
+        noteEdit.setContent(this.noteContent);
+        noteEdit.setTags(this.tagEditList.get());
+        this.categoryStorage.editCategoryNote(noteEdit, this.tagsToAdd, this.tagsToRemove);
       }
     }
   }

@@ -22,6 +22,10 @@ export default class CategoryStorage {
     return this.list.getTitleFor(categoryCode);
   }
 
+  getFor(categoryCode) {
+    return this.list.findByCode(categoryCode);
+  }
+
   add(title) {
     let categoryToAdd = new Category(title);
     let result = this.list.checkIsExist(title);
@@ -40,6 +44,10 @@ export default class CategoryStorage {
     note.setId(this.freeNoteId);
     this.freeNoteId++;
     return this.list.addNoteFor(categoryCode, note);
+  }
+
+  editNoteFor(categoryCode, note) {
+    return this.list.editNoteFor(categoryCode, note);
   }
 
   getNotesFor(categoryCode) {
@@ -64,4 +72,17 @@ export default class CategoryStorage {
     }
     return new Note();
   }
-}
+
+  editCategoryNote(noteEdit, tagsToAdd, tagsToRemove) {
+    let resultEdit = this.editNoteFor(noteEdit.getCategoryId(), noteEdit);
+    if (resultEdit) {
+      let categoryNote = this.getFor(noteEdit.getCategoryId());
+      if (categoryNote.getCode()) {
+        categoryNote.removeTags(tagsToRemove.get());
+        categoryNote.addTags(tagsToAdd.get());
+        return true;
+      }
+    }
+    return false;
+  }
+} 

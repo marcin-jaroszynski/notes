@@ -48,7 +48,9 @@ export default class Category extends Resource {
       note.setCategoryId(this.code);
       this.notes.push(note);
       this.tags.addMany(note.getTags());
+      return true;
     }
+    return false;
   }
 
   getNote(noteId) {
@@ -67,12 +69,8 @@ export default class Category extends Resource {
         noteToFind.setTitle(noteToEdit.getTitle())
         noteToFind.setContent(noteToEdit.getContent());
         noteToFind.setTags(noteToEdit.getTags());
-        // this.tags.removeMany(noteToEdit.tagsToRemove);
-        // this.tags.addMany(noteToEdit.tagsToAdd);
         return true;
       }
-    } else {
-      console.log('editNote: B');
     }
     return false;
   }

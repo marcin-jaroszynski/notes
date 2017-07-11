@@ -20,10 +20,11 @@ describe('CategoryStorage', () => {
     let note1 = new Note();
     note1.setTitle('Note 1');
     note1.setContent('Lorem ipsum');
+    note1.setCategoryId('linux');
     note1.addTag('A');
     note1.addTag('B');
     note1.addTag('C');
-    categoryStorage.addNoteFor('linux', note1);
+    categoryStorage.addNote(note1);
     let noteToEdit = new Note();
     noteToEdit.setId(1);
     noteToEdit.setCategoryId('linux');
@@ -56,10 +57,11 @@ describe('CategoryStorage', () => {
     let note1 = new Note();
     note1.setTitle('Note 1');
     note1.setContent('Lorem ipsum');
+    note1.setCategoryId('linux');
     note1.addTag('A');
     note1.addTag('B');
     note1.addTag('C');
-    categoryStorage.addNoteFor('linux', note1);
+    categoryStorage.addNote(note1);
     let noteToEdit = new Note();
     noteToEdit.setId(1);
     noteToEdit.setCategoryId('non-existing-category-code');
@@ -92,10 +94,11 @@ describe('CategoryStorage', () => {
     let note1 = new Note();
     note1.setTitle('Note 1');
     note1.setContent('Lorem ipsum');
+    note1.setCategoryId('linux');
     note1.addTag('A');
     note1.addTag('B');
     note1.addTag('C');
-    categoryStorage.addNoteFor('linux', note1);
+    categoryStorage.addNote(note1);
     let noteToEdit = new Note();
     noteToEdit.setId(15234);
     noteToEdit.setCategoryId('linux');

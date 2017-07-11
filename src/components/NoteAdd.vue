@@ -81,11 +81,12 @@
       },
       addNote: function() {
         console.log('Add note!');
+        this.note.setCategoryId(this.getCurrentCategoryId());
         this.note.setTitle(this.titleField);
         this.note.setContent(this.contentField);
         console.log('Note title: '+ this.note.getTitle());
         console.log('Note content: '+ this.note.getContent());
-        this.categoryStorage.addNoteFor(this.getCurrentCategoryId(), this.note);
+        this.categoryStorage.addNote(this.note);
         this.resetFields();
       },
       resetFields: function() {

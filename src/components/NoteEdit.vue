@@ -42,9 +42,6 @@
   import TagList from '../model/tag/list.js'
   import Url from '../model/url.js'
 
-  // let categoryStorage = new CategoryStorage();
-  // let note = ;
-  // console.log('noteId: ' + this.$route.params.noteId);
   export default {
     name: 'note-edit',
     props: ['categoryStorage'],

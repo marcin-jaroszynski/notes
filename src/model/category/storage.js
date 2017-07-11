@@ -40,10 +40,12 @@ export default class CategoryStorage {
     return this.list.changeTitle(currentCategoryTitle, newCategoryTitle);
   }
 
-  addNoteFor(categoryCode, note) {
+  addNote(note) {
     note.setId(this.freeNoteId);
     this.freeNoteId++;
-    return this.list.addNoteFor(categoryCode, note);
+    let category = this.getFor(note.getCategoryId());
+    return category.addNote(note);
+    // return this.list.addNoteFor(note);
   }
 
   getNotesFor(categoryCode) {

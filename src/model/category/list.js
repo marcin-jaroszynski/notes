@@ -44,4 +44,12 @@ export default class CategoryList extends ResourceList {
     }
     return categoryTitle;
   }
+
+  findByCode(code) {
+    let result = super.findByCode(code);
+    if (!result.getCode()) {
+      return new Category();
+    }
+    return result;
+  }
 }

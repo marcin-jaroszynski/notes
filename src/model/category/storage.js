@@ -46,10 +46,6 @@ export default class CategoryStorage {
     return this.list.addNoteFor(categoryCode, note);
   }
 
-  editNoteFor(categoryCode, note) {
-    return this.list.editNoteFor(categoryCode, note);
-  }
-
   getNotesFor(categoryCode) {
     let categoryToFind = this.list.findByCode(categoryCode);
     return categoryToFind.getNotes();
@@ -73,16 +69,14 @@ export default class CategoryStorage {
     return new Note();
   }
 
-  editCategoryNote(noteEdit, tagsToAdd, tagsToRemove) {
-    let resultEdit = this.editNoteFor(noteEdit.getCategoryId(), noteEdit);
-    if (resultEdit) {
-      let categoryNote = this.getFor(noteEdit.getCategoryId());
-      if (categoryNote.getCode()) {
-        categoryNote.removeTags(tagsToRemove.get());
-        categoryNote.addTags(tagsToAdd.get());
-        return true;
-      }
+  editNote(noteEdit, tagsToAdd, tagsToRemove) {
+    let categoryNote = this.getFor(noteEdit.getCategoryId());
+    let resultEdit = categoryNote.editNote(noteEdit);
+    if (resultEdit) { 
+      categoryNote.removeTags(tagsToRemove.get());
+      categoryNote.addTags(tagsToAdd.get());
+      return true;
     }
     return false;
   }
-} 
+}  

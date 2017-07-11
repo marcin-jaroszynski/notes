@@ -32,17 +32,23 @@ export default class Category extends Resource {
   }
 
   addTags(tags) {
-    this.tags.addMany(tags);
+    if (this.code) {
+      this.tags.addMany(tags);
+    }
   }
 
   removeTags(tags) {
-    this.tags.removeMany(tags);
+    if (this.code) {
+      this.tags.removeMany(tags);
+    }
   }
 
   addNote(note) {
-    note.setCategoryId(this.code);
-    this.notes.push(note);
-    this.tags.addMany(note.getTags());
+    if (this.code) {
+      note.setCategoryId(this.code);
+      this.notes.push(note);
+      this.tags.addMany(note.getTags());
+    }
   }
 
   getNote(noteId) {
@@ -55,15 +61,18 @@ export default class Category extends Resource {
   }
 
   editNote(noteToEdit) {
-    console.log('editNote - category');
-    let noteToFind = this.getNote(noteToEdit.getId());
-    if (noteToFind.getId()) {
-      noteToFind.setTitle(noteToEdit.getTitle())
-      noteToFind.setContent(noteToEdit.getContent());
-      noteToFind.setTags(noteToEdit.getTags());
-      // this.tags.removeMany(noteToEdit.tagsToRemove);
-      // this.tags.addMany(noteToEdit.tagsToAdd);
-      return true;
+    if (this.code) {
+      let noteToFind = this.getNote(noteToEdit.getId());
+      if (noteToFind.getId()) {
+        noteToFind.setTitle(noteToEdit.getTitle())
+        noteToFind.setContent(noteToEdit.getContent());
+        noteToFind.setTags(noteToEdit.getTags());
+        // this.tags.removeMany(noteToEdit.tagsToRemove);
+        // this.tags.addMany(noteToEdit.tagsToAdd);
+        return true;
+      }
+    } else {
+      console.log('editNote: B');
     }
     return false;
   }

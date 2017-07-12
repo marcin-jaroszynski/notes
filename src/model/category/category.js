@@ -74,4 +74,11 @@ export default class Category extends Resource {
     }
     return false;
   }
+
+  removeNote(noteId) {
+    if (this.code) {
+      return true;
+    }
+    return false;
+  }
 }

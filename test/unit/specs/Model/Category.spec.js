@@ -62,4 +62,15 @@ describe('Category model', () => {
     category.addTags(tagsList.get());
     expect(tagsList.get().length).to.equal(category.getTags().length);
   });
+
+  it('Remove note', () => {
+    let category = getCategory();
+    let note = new Note();
+    note.setTitle('Note 1');
+    category.addNote(note);
+    expect(1).to.equal(category.getNotes().length);
+    let resultRemove = category.removeNote(1);
+    expect(true).to.equal(resultRemove);
+    expect(0).to.equal(category.getNotes().length);
+  });
 });

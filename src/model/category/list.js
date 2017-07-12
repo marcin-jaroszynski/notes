@@ -5,24 +5,6 @@ export default class CategoryList extends ResourceList {
   add(title) {
     this.data.push(new Category({title: title}));
   }
-
-  addNoteFor(categoryCode, note) {
-    let categoryToFind = this.findByCode(categoryCode);
-    if (categoryToFind.getTitle()) {
-      categoryToFind.addNote(note);
-      return true;
-    }
-    return false;
-  }
-
-  editNoteFor(categoryCode, note) {
-    let categoryToFind = this.findByCode(categoryCode);
-    if (categoryToFind.getTitle()) {
-      categoryToFind.editNote(note);
-      return true;
-    }
-    return false;
-  }
   
   changeTitle(currentCategoryTitle, newCategoryTitle) {
     let categoryToChangeTitle = this.checkIsExist(currentCategoryTitle);

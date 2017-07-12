@@ -8,7 +8,12 @@
         <button @click="backToDashboard()">Back to Dashboard</button>
       </div>
       <div slot="content">
-        <div>Category: {{ getCategoryName }}</div>
+        <div>
+          Categories
+          <select v-model="currentCategory">
+            <option v-for="category in categories" :value="category.code">{{ category.title }}</option>
+          </select>
+        </div>
         <div>
           <label for="note-title">Title:</label>
           <input v-model.trim="noteTitle" id="note-title" type="text"> 
@@ -50,6 +55,8 @@
     },
     data() { 
       return {
+        currentCategory: '',
+        categories: this.categoryStorage.getList(),
         note: this.categoryStorage.getNoteFor(this.$route.params.noteId),
         noteTitle: '',
         noteContent: '',
@@ -63,6 +70,7 @@
       this.noteTitle = this.note.getTitle();
       this.noteContent = this.note.getContent();
       this.tagEditList.addMany(this.note.getTags());
+      this.currentCategory = this.note.getCategoryId();
     },
     computed: {
       getTitleNote: function() {

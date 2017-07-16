@@ -66,11 +66,17 @@ describe('Category model', () => {
   it('Remove note', () => {
     let category = getCategory();
     let note = new Note();
+    note.setId(1);
     note.setTitle('Note 1');
+    note.addTag('A');
+    note.addTag('B');
+    note.addTag('C');
     category.addNote(note);
     expect(1).to.equal(category.getNotes().length);
-    let resultRemove = category.removeNote(1);
+    expect(note.getTags().length).to.equal(category.getTags().length);
+    let resultRemove = category.removeNote(note.getId());
     expect(true).to.equal(resultRemove);
     expect(0).to.equal(category.getNotes().length);
+    expect(0).to.equal(category.getTags().length);
   });
 });

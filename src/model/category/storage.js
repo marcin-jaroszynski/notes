@@ -41,8 +41,10 @@ export default class CategoryStorage {
   }
 
   addNote(note) {
-    note.setId(this.freeNoteId);
-    this.freeNoteId++;
+    if (note.getId() === 0) {
+      note.setId(this.freeNoteId);
+      this.freeNoteId++;
+    }
     let category = this.getFor(note.getCategoryId());
     return category.addNote(note);
     // return this.list.addNoteFor(note);
@@ -71,14 +73,36 @@ export default class CategoryStorage {
     return new Note();
   }
 
-  editNote(noteEdit, tagsToAdd, tagsToRemove) {
-    let categoryNote = this.getFor(noteEdit.getCategoryId());
-    let resultEdit = categoryNote.editNote(noteEdit);
-    if (resultEdit) { 
-      categoryNote.removeTags(tagsToRemove.get());
-      categoryNote.addTags(tagsToAdd.get());
+  updateNote(noteEdit, tagsToAdd, tagsToRemove) {
+    let categoryEditedNote = this.getFor(noteEdit.getCategoryId());
+    let resultEdit = categoryEditedNote.editNote(noteEdit);
+    if (resultEdit) {
+      categoryEditedNote.removeTags(tagsToRemove.get());
+      categoryEditedNote.addTags(tagsToAdd.get());
       return true;
     }
+    return false
+  }
+
+  changeNoteCategory(noteEdit, currentNote) {
+    let categoryEditedNote = this.getFor(noteEdit.getCategoryId());
+    if (categoryEditedNote.getTitle()) {
+      let currentCategoryNote = this.getFor(currentNote.getCategoryId());
+      let resultRemoveNote = currentCategoryNote.removeNote(currentNote.getId());
+      if (resultRemoveNote) {
+        return this.addNote(noteEdit);
+      }
+    }
     return false;
+  }
+
+  editNote(noteEdit, tagsToAdd, tagsToRemove) {
+    let currentNote = this.getNoteFor(noteEdit.getId());
+    if (currentNote.getCategoryId() === noteEdit.getCategoryId()) {
+      return this.updateNote(noteEdit, tagsToAdd, tagsToRemove);
+    } else {
+      return this.changeNoteCategory(noteEdit, currentNote);
+    }
+    return false
   }
 }  

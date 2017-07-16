@@ -2,12 +2,13 @@ import Helper from '../helper.js'
 import Resource from '../resource/resource.js'
 import TagList from '../tag/list.js'
 import Note from '../note/note.js'
+import NoteList from '../note/list.js'
 import Url from '../url.js'
 
 export default class Category extends Resource {
   constructor(data) {
     super(data);
-    this.notes = [];
+    this.notes = new NoteList();
     this.tags = new TagList();
   }
 
@@ -24,7 +25,7 @@ export default class Category extends Resource {
   }
 
   getNotes() {
-    return this.notes;
+    return this.notes.get();
   }
 
   getTags() {
@@ -46,7 +47,7 @@ export default class Category extends Resource {
   addNote(note) {
     if (this.code) {
       note.setCategoryId(this.code);
-      this.notes.push(note);
+      this.notes.add(note);
       this.tags.addMany(note.getTags());
       return true;
     }
@@ -54,12 +55,7 @@ export default class Category extends Resource {
   }
 
   getNote(noteId) {
-    for (let i = 0; i < this.notes.length; i++) {
-      if (this.notes[i].getId() == noteId) {
-        return this.notes[i];
-      }
-    }
-    return new Note();
+    return this.notes.getFor(noteId);
   }
 
   editNote(noteToEdit) {
@@ -77,7 +73,10 @@ export default class Category extends Resource {
 
   removeNote(noteId) {
     if (this.code) {
-      return true;
+      console.log('[CODE]: ' + this.code);
+      let noteToRemove = this.getNote(noteId);
+      this.removeTags(noteToRemove.getTags());
+      return this.notes.remove(noteId);
     }
     return false;
   }

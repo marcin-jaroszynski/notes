@@ -111,11 +111,12 @@
       editNote: function() {
         console.log('Edit note'); 
         console.log('Title note: ' + this.noteTitle);
+        console.log('Current category: ' + this.currentCategory);
         console.log('tagsToAdd: ' + JSON.stringify(this.tagsToAdd.get()));
         console.log('tagsToRemove: ' + JSON.stringify(this.tagsToRemove.get()));
         let noteEdit = new Note();
         noteEdit.setId(this.note.getId());
-        noteEdit.setCategoryId(this.note.getCategoryId());
+        noteEdit.setCategoryId(this.currentCategory);
         noteEdit.setTitle(this.noteTitle);
         noteEdit.setContent(this.noteContent);
         noteEdit.setTags(this.tagEditList.get());

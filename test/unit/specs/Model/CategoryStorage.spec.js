@@ -252,4 +252,64 @@ describe('CategoryStorage', () => {
     expect(noteToEdit.getTags().length).to.equal(noteInAnotherCategory.getTags().length);
     expect(4).to.equal(categoryWithNewNote.getTags().length);
   });
-});
+
+  it('Remove note', () => {
+    let categoryStorage = new CategoryStorage();
+    categoryStorage.add('Linux');
+    let note1 = new Note();
+    note1.setTitle('Note 1');
+    note1.setContent('Note 1 content');
+    note1.setCategoryId('linux');
+    note1.addTag('A');
+    note1.addTag('B');
+    note1.addTag('C');
+    categoryStorage.addNote(note1);
+
+    let note2 = new Note();
+    note2.setTitle('Note 2');
+    note2.setContent('Note 2 content');
+    note2.setCategoryId('linux');
+    note2.addTag('D');
+    note2.addTag('E');
+    categoryStorage.addNote(note2);
+
+    let categoryWithNotes = categoryStorage.getFor('linux');
+    expect(2).to.equal(categoryWithNotes.getNotes().length);
+    expect(5).to.equal(categoryWithNotes.getTags().length);
+
+    let resultRemove = categoryStorage.removeNote(note2.getId());
+    expect(true).to.equal(resultRemove);
+    expect(1).to.equal(categoryWithNotes.getNotes().length);
+    expect(note1.getTags().length).to.equal(categoryWithNotes.getTags().length);
+  });
+
+  it('Remove note - given non-existing id', () => {
+    let categoryStorage = new CategoryStorage();
+    categoryStorage.add('Linux');
+    let note1 = new Note();
+    note1.setTitle('Note 1');
+    note1.setContent('Note 1 content');
+    note1.setCategoryId('linux');
+    note1.addTag('A');
+    note1.addTag('B');
+    note1.addTag('C');
+    categoryStorage.addNote(note1);
+
+    let note2 = new Note();
+    note2.setTitle('Note 2');
+    note2.setContent('Note 2 content');
+    note2.setCategoryId('linux');
+    note2.addTag('D');
+    note2.addTag('E');
+    categoryStorage.addNote(note2);
+
+    let categoryWithNotes = categoryStorage.getFor('linux');
+    expect(2).to.equal(categoryWithNotes.getNotes().length);
+    expect(5).to.equal(categoryWithNotes.getTags().length);
+
+    let resultRemove = categoryStorage.removeNote(777);
+    expect(false).to.equal(resultRemove);
+    expect(2).to.equal(categoryWithNotes.getNotes().length);
+    expect(5).to.equal(categoryWithNotes.getTags().length);
+  });
+}); 

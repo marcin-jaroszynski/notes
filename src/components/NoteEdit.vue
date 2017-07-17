@@ -34,6 +34,7 @@
           <textarea v-model="noteContent" id="note-content"></textarea>
           <div>
             <button @click="editNote">Edit</button>
+            <button @click="removeNote">Remove</button>
           </div>
         </div>
       </div>
@@ -97,23 +98,16 @@
         this.$router.push(Url.getNoteShow(this.note.getId()));
       },
       addTag: function() {
-        console.log('Add tag: ' + this.tagField);
         if (this.tagEditList.add(this.tagField)) {
           this.tagsToAdd.add(this.tagField);
         }
         this.tagField = '';
       },
       removeTag: function(event) {
-        console.log('Remove tag! value: ' + event.target.dataset.title);
         this.tagEditList.remove(event.target.dataset.title);
         this.tagsToRemove.add(event.target.dataset.title);
       },
       editNote: function() {
-        console.log('Edit note'); 
-        console.log('Title note: ' + this.noteTitle);
-        console.log('Current category: ' + this.currentCategory);
-        console.log('tagsToAdd: ' + JSON.stringify(this.tagsToAdd.get()));
-        console.log('tagsToRemove: ' + JSON.stringify(this.tagsToRemove.get()));
         let noteEdit = new Note();
         noteEdit.setId(this.note.getId());
         noteEdit.setCategoryId(this.currentCategory);
@@ -121,6 +115,12 @@
         noteEdit.setContent(this.noteContent);
         noteEdit.setTags(this.tagEditList.get());
         this.categoryStorage.editNote(noteEdit, this.tagsToAdd, this.tagsToRemove);
+      },
+      removeNote: function() {
+        let resultRemove = this.categoryStorage.removeNote(this.note.getId());
+        if (resultRemove) {
+          this.backToCategory();
+        } 
       }
     }
   }

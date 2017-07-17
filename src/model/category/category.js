@@ -73,7 +73,6 @@ export default class Category extends Resource {
 
   removeNote(noteId) {
     if (this.code) {
-      console.log('[CODE]: ' + this.code);
       let noteToRemove = this.getNote(noteId);
       this.removeTags(noteToRemove.getTags());
       return this.notes.remove(noteId);

@@ -105,4 +105,10 @@ export default class CategoryStorage {
     }
     return false
   }
+
+  removeNote(noteId) {
+    let noteToRemove = this.getNoteFor(noteId);
+    let category = this.getFor(noteToRemove.getCategoryId());
+    return category.removeNote(noteId);
+  }
 }  

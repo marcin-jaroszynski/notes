@@ -17,6 +17,10 @@ export default class ResourceList {
     return this.data;
   }
 
+  length() {
+    return this.data.length;
+  }
+
   checkIsExist(title) {
     let tagToFind = new Resource({title: title});
     return this.findByCode(tagToFind.getCode());

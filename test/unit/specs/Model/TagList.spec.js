@@ -42,4 +42,17 @@ describe('Tag list model', () => {
     expect(true).to.equal(tagList.remove('Front end'));
     expect(1).to.equal(tagList.get().length);
   });
+
+  it('Set tags', () => {
+    let tagList = new TagList();
+    tagList.add('A');
+    tagList.add('B');
+    expect(2).to.equal(tagList.length());
+    let tagListToSet = new TagList();
+    tagListToSet.add('C');
+    tagListToSet.add('D');
+    tagListToSet.add('E');
+    tagList.set(tagListToSet.get());
+    expect(3).to.equal(tagList.length());
+  });
 });

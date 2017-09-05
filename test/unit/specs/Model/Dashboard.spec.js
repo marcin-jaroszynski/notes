@@ -1,11 +1,11 @@
 import Dashboard from '../../../../src/model/dashboard/dashboard.js'
-import CategoryStorage from '../../../../src/model/category/storage.js'
+import Storage from '../../../../src/model/storage/storage.js'
 import Note from '../../../../src/model/note/note.js'
 
 describe('Dashboard model', () => {
   it('add', () => {
-    let categoryStorage = new CategoryStorage();
-    categoryStorage.add('Linux');
+    let storage = new Storage();
+    storage.categories.add('Linux');
 
     let dashboard = new Dashboard();
     let iterations = 10;

@@ -42,7 +42,7 @@
 
   export default {
     name: 'note-add',
-    props: ['categoryStorage'],
+    props: ['storage'],
     components: {
       layout: Layout
     },
@@ -56,7 +56,7 @@
     },
     methods: {
       getTagList: function() {
-        return this.note.getTags();
+        return this.note.tags.get();
       },
       getCurrentCategoryId: function() {
         return this.$route.params.categoryId;
@@ -68,25 +68,20 @@
         this.$router.push(Url.getCategoryShow(this.getCurrentCategoryId()));
       },
       getCategoryName: function() {
-        return this.categoryStorage.getTitleFor(this.getCurrentCategoryId());
+        return this.storage.categories.getTitleFor(this.getCurrentCategoryId());
       },
       addTag: function() {
-        console.log('Add tag: ' + this.tagField);
-        this.note.addTag(this.tagField);
+        this.note.tags.add(this.tagField);
         this.tagField = '';
       },
       removeTag: function(event) {
-        console.log('Remove tag! value: ' + event.target.dataset.title);
-        this.note.removeTag(event.target.dataset.title);
+        this.note.tags.remove(event.target.dataset.title);
       },
       addNote: function() {
-        console.log('Add note!');
         this.note.setCategoryId(this.getCurrentCategoryId());
         this.note.setTitle(this.titleField);
         this.note.setContent(this.contentField);
-        console.log('Note title: '+ this.note.getTitle());
-        console.log('Note content: '+ this.note.getContent());
-        this.categoryStorage.addNote(this.note);
+        this.storage.notes.add(this.note);
         this.resetFields();
       },
       resetFields: function() {

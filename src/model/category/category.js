@@ -1,15 +1,14 @@
 import Helper from '../helper.js'
 import Resource from '../resource/resource.js'
-import TagList from '../tag/list.js'
-import Note from '../note/note.js'
-import NoteList from '../note/list.js'
+import Tags from './tags.js';
+import Notes from './notes.js'
 import Url from '../url.js'
 
-export default class Category extends Resource {
+export default class CategoryNew extends Resource {
   constructor(data) {
     super(data);
-    this.notes = new NoteList();
-    this.tags = new TagList();
+    this.tags = new Tags(this.code);
+    this.notes = new Notes();
   }
 
   createUrl() {
@@ -24,59 +23,32 @@ export default class Category extends Resource {
     }
   }
 
-  getNotes() {
-    return this.notes.get();
-  }
-
-  getTags() {
-    return this.tags.get();
-  }
-
-  addTags(tags) {
-    if (this.code) {
-      this.tags.addMany(tags);
-    }
-  }
-
-  removeTags(tags) {
-    if (this.code) {
-      this.tags.removeMany(tags);
-    }
-  }
-
   addNote(note) {
     if (this.code) {
-      note.setCategoryId(this.code);
       this.notes.add(note);
-      this.tags.addMany(note.getTags());
+      this.tags.addMany(note.tags.get());
       return true;
     }
     return false;
   }
 
-  getNote(noteId) {
-    return this.notes.getFor(noteId);
-  }
-
-  editNote(noteToEdit) {
+  editNote(editedNote, tagsToAdd, tagsToRemove) {
     if (this.code) {
-      let noteToFind = this.getNote(noteToEdit.getId());
-      if (noteToFind.getId()) {
-        noteToFind.setTitle(noteToEdit.getTitle())
-        noteToFind.setContent(noteToEdit.getContent());
-        noteToFind.setTags(noteToEdit.getTags());
+      if (this.notes.edit(editedNote)) {
+        this.tags.removeMany(tagsToRemove.get());
+        this.tags.addMany(tagsToAdd.get());
         return true;
       }
     }
-    return false;
+    return false; 
   }
 
   removeNote(noteId) {
     if (this.code) {
-      let noteToRemove = this.getNote(noteId);
-      this.removeTags(noteToRemove.getTags());
+      let noteToRemove = this.notes.get(noteId);
+      this.tags.removeMany(noteToRemove.tags.get());
       return this.notes.remove(noteId);
-    }
+    } 
     return false;
   }
 }

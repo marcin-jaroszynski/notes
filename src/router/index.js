@@ -10,8 +10,8 @@ import NoteEdit from '@/components/NoteEdit'
 
 Vue.use(Router)
 
-import CategoryStorage from '../model/category/storage.js'
-let categoryStorage = new CategoryStorage();
+import Storage from '../model/storage/storage.js'
+let storage = new Storage();
 import Url from '../model/url.js'
 
 export default new Router({
@@ -36,7 +36,7 @@ export default new Router({
       title: 'Dashboard',
       component: Dashboard,
       props: {
-        categoryStorage: categoryStorage
+        storage: storage
       }
     },
     {
@@ -44,7 +44,7 @@ export default new Router({
       name: 'CategoryShow',
       component: CategoryShow,
       props: {
-        categoryStorage: categoryStorage
+        storage: storage
       }
     },
     {
@@ -52,7 +52,7 @@ export default new Router({
       name: 'CategoryAdd',
       component: CategoryAdd,
       props: {
-        categoryStorage: categoryStorage
+        storage: storage
       }
     },
     {
@@ -60,7 +60,7 @@ export default new Router({
       name: 'NoteAdd',
       component: NoteAdd,
       props: {
-        categoryStorage: categoryStorage
+        storage: storage
       }
     },
     {
@@ -68,7 +68,7 @@ export default new Router({
       name: 'NoteShow',
       component: NoteShow,
       props: {
-        categoryStorage: categoryStorage
+        storage: storage
       }
     },
     {
@@ -76,7 +76,7 @@ export default new Router({
       name: 'NoteEdit',
       component: NoteEdit,
       props: {
-        categoryStorage: categoryStorage
+        storage: storage
       }
     }
   ]

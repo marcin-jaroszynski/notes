@@ -50,15 +50,15 @@
 
   export default {
     name: 'note-edit',
-    props: ['categoryStorage'],
+    props: ['storage'],
     components: {
       layout: Layout
     },
     data() { 
       return {
         currentCategory: '',
-        categories: this.categoryStorage.getList(),
-        note: this.categoryStorage.getNoteFor(this.$route.params.noteId),
+        categories: this.storage.categories.getAll(),
+        note: this.storage.notes.get(this.$route.params.noteId),
         noteTitle: '',
         noteContent: '',
         tagField: '',
@@ -70,7 +70,7 @@
     mounted: function() {
       this.noteTitle = this.note.getTitle();
       this.noteContent = this.note.getContent();
-      this.tagEditList.addMany(this.note.getTags());
+      this.tagEditList.addMany(this.note.tags.get());
       this.currentCategory = this.note.getCategoryId();
     },
     computed: {
@@ -81,7 +81,7 @@
         return this.note.getContent();
       },
       getCategoryName: function() {
-        return this.categoryStorage.getTitleFor(this.note.getCategoryId());
+        return this.storage.categories.getTitleFor(this.note.getCategoryId());
       }
     },
     methods: {
@@ -113,11 +113,11 @@
         noteEdit.setCategoryId(this.currentCategory);
         noteEdit.setTitle(this.noteTitle);
         noteEdit.setContent(this.noteContent);
-        noteEdit.setTags(this.tagEditList.get());
-        this.categoryStorage.editNote(noteEdit, this.tagsToAdd, this.tagsToRemove);
+        noteEdit.tags.set(this.tagEditList.get());
+        this.storage.notes.edit(noteEdit, this.tagsToAdd, this.tagsToRemove);
       },
       removeNote: function() {
-        let resultRemove = this.categoryStorage.removeNote(this.note.getId());
+        let resultRemove = this.storage.notes.remove(this.note.getId());
         if (resultRemove) {
           this.backToCategory();
         } 

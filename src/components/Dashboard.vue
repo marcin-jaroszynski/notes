@@ -1,4 +1,4 @@
-<template>
+<template> 
   <article>
     <title-page title="Dashboard"></title-page>
     <layout>
@@ -35,7 +35,7 @@
   import Url from '../model/url.js'
 
   export default {
-    props: ['categoryStorage'],
+    props: ['storage'],
     name: 'dashboard',
     components: {
       layout: Layout
@@ -53,8 +53,7 @@
     },
     methods: {
       categories: function() {
-        // this.foo();
-        return this.categoryStorage.getList();
+        return this.storage.categories.getAll();
       },
       getCategoryAddUrl() {
         this.$router.push(Url.getCategoryAdd());

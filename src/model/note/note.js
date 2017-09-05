@@ -34,26 +34,6 @@ export default class Note {
     return Url.getNoteShow(this.id);
   }
 
-  addTag(title) {
-    return this.tags.add(title);
-  } 
-
-  removeTag(title) {
-    return this.tags.remove(title);
-  }
-
-  addTags(tags) {
-    this.tags.addMany(tags);
-  }
-
-  setTags(tags) {
-    this.tags.reset();
-    this.tags.addMany(tags);
-  }
-
-  removeTags(tags) {
-    this.tags.removeMany(tags);
-  }
 
   getId() {
     return this.id;
@@ -71,12 +51,12 @@ export default class Note {
     return this.content;
   }
 
-  getTags() {
-    return this.tags.get();
-  }
-
   getDateAdded() {
     return this.dateAdded;
+  }
+
+  getUrl() {
+    return this.url;
   }
 
   getEmptyObject() {

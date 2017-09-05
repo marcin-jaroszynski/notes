@@ -40,14 +40,14 @@
   import Url from '../model/url.js'
 
   export default {
-    props: ['categoryStorage'],
+    props: ['storage'],
     name: 'category-show', 
     components: {
       layout: Layout
     },
     data() {
       return {
-        categories: this.categoryStorage.getList(),
+        categories: this.storage.categories.getAll(),
       }
     },
     methods: {
@@ -55,10 +55,10 @@
         return this.getCategoryNotes().length;
       },
       getCategoryNotes: function() {
-        return this.categoryStorage.getNotesFor(this.getCurrentCategoryId());
+        return this.storage.categories.getNotesFor(this.getCurrentCategoryId());
       },
       getCategoryTags: function() {
-        return this.categoryStorage.getTagsFor(this.getCurrentCategoryId());
+        return this.storage.categories.getTagsFor(this.getCurrentCategoryId());
       },
       getCurrentCategoryId: function() {
         return this.$route.params.categoryId;
@@ -67,7 +67,7 @@
         this.$router.push(Url.getDashboard());
       },
       getCategoryName: function() {
-        return this.categoryStorage.getTitleFor(this.getCurrentCategoryId());
+        return this.storage.categories.getTitleFor(this.getCurrentCategoryId());
       },
       addNewNote: function() {
         this.$router.push(Url.getNoteAdd(this.getCurrentCategoryId()));

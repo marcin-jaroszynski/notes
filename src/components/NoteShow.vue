@@ -14,7 +14,7 @@
           Date added: {{ note.getDateAdded() }}
         </div>
         <div>
-          Tags: <span v-for="tag in note.getTags()"><router-link :to="tag.url">{{ tag.title }} </router-link></span>
+          Tags: <span v-for="tag in note.tags.get()"><router-link :to="tag.url">{{ tag.title }} </router-link></span>
         </div>
         <p>
           {{ note.getContent() }}
@@ -29,7 +29,7 @@
   import Url from '../model/url.js'
   
   export default {
-    props: ['categoryStorage'],
+    props: ['storage'],
     name: 'note-show', 
     components: {
       layout: Layout
@@ -47,10 +47,10 @@
         this.$router.push(Url.getDashboard());
       },
       getNote: function() {
-        return this.categoryStorage.getNoteFor(this.getNoteId());
+        return this.storage.notes.get(this.getNoteId());
       },
       getTitleCategory: function() {
-        return this.categoryStorage.getTitleFor(this.note.getCategoryId());
+        return this.storage.categories.getTitleFor(this.note.getCategoryId());
       },
       backToCategory: function() {
         this.$router.push(Url.getCategoryShow(this.note.getCategoryId()));

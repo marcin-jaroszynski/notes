@@ -29,14 +29,14 @@
   import Url from '../model/url.js'
 
   export default {
-    props: ['categoryStorage'],
+    props: ['storage'],
     name: 'category-add', 
     components: {
       layout: Layout
     },
     data() {
       return {
-        categories: this.categoryStorage.getList(),
+        categories: this.storage.categories.getAll(),
         categoryNameFromField: '',
         categoryNameFromSelect: '',
         isDisabledAddBtn: false,
@@ -48,7 +48,7 @@
         this.$router.push(Url.getDashboard());
       },
       addCategory: function() {
-        if (this.categoryStorage.add(this.categoryNameFromField)) {
+        if (this.storage.categories.add(this.categoryNameFromField)) {
           console.log('Category added');
           this.categoryNameFromField = '';
         } else {
@@ -65,14 +65,12 @@
         } else {
           this.isDisabledAddBtn = true;
           this.isDisabledEditBtn = false;
-          this.categoryNameFromSelect = this.categoryStorage.getTitleFor(categoryCode);
-          this.categoryNameFromField = this.categoryStorage.getTitleFor(categoryCode);
+          this.categoryNameFromSelect = this.storage.categories.getTitleFor(categoryCode);
+          this.categoryNameFromField = this.storage.categories.getTitleFor(categoryCode);
         }
       },
       changeCategoryTitle: function() {
-        console.log('current category name: ' + this.categoryNameFromSelect);
-        console.log('new category name: ' + this.categoryNameFromField);
-        let result = this.categoryStorage.changeTitle(this.categoryNameFromSelect, this.categoryNameFromField);
+        let result = this.storage.categories.changeTitle(this.categoryNameFromSelect, this.categoryNameFromField);
         if (result.getTitle() == this.categoryNameFromField) {
           alert('Category title changed!');
           this.categoryNameFromSelect = result.getTitle();

@@ -8,6 +8,6 @@
     expect('').to.equal(note.title);
     expect('').to.equal(note.content);
     expect('').to.equal(note.url);
-    expect(0).to.equal(note.getTags().length);
+    expect(0).to.equal(note.tags.length());
   });
  });

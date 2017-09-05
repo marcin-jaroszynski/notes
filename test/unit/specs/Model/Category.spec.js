@@ -21,37 +21,6 @@ describe('Category model', () => {
     expect(newCategoryTitle).to.equal(category.getTitle());
   });
 
-  it('addNote', () => {
-    let category = getCategory();
-    let note = new Note();
-    note.setTitle('Note 1');
-    category.addNote(note);
-    let addedNote = category.getNotes()[0];
-    expect(category.getCode()).to.equal(addedNote.getCategoryId());
-  });
-
-  it('Add few notes with many tags', () => {
-    let category = getCategory();
-
-    let note1 = new Note();
-    note1.setTitle('Note 1');
-    note1.addTag('A');
-    note1.addTag('B');
-    note1.addTag('C');
-    category.addNote(note1);
-    
-    expect(3).to.equal(category.getTags().length);
-
-    let note2 = new Note();
-    note2.setTitle('Note 2');
-    note2.addTag('D');
-    note2.addTag('E');
-    note2.addTag('A');
-    category.addNote(note2);
-
-    expect(5).to.equal(category.getTags().length);
-  });
-
   it('Add many tags from list tag', () => {
     let tagsList = new TagList();
     tagsList.add('A');
@@ -59,8 +28,36 @@ describe('Category model', () => {
     tagsList.add('C');
 
     let category = getCategory();
-    category.addTags(tagsList.get());
-    expect(tagsList.get().length).to.equal(category.getTags().length);
+    category.tags.addMany(tagsList.get());
+    expect(tagsList.get().length).to.equal(category.tags.get().length);
+  });
+
+  it('Edit note', () => {
+    let category = getCategory();
+    let note = new Note();
+    note.setId(1);
+    note.setTitle('Note 1');
+    note.tags.add('A');
+    note.tags.add('B');
+    note.tags.add('C');
+    category.addNote(note);
+    expect(note.tags.get().length).to.equal(category.tags.get().length);
+
+    let editedNote = new Note();
+    editedNote.setId(note.getId());
+    editedNote.setTitle('Note 1 - edited');
+    editedNote.tags.set(note.tags.get());
+    let tagsToRemove = new TagList();
+    tagsToRemove.add('A');
+    editedNote.tags.removeMany(tagsToRemove.get());
+    let tagsToAdd = new TagList();
+    tagsToAdd.add('D');
+    tagsToAdd.add('E');
+    editedNote.tags.addMany(tagsToAdd.get());
+    let resultEdit = category.editNote(editedNote, tagsToAdd, tagsToRemove);
+    expect(true).to.equal(resultEdit);
+    let noteAfterEdit = category.notes.get(editedNote.getId());
+    expect(category.tags.get().length).to.equal(noteAfterEdit.tags.get().length);
   });
 
   it('Remove note', () => {
@@ -68,15 +65,15 @@ describe('Category model', () => {
     let note = new Note();
     note.setId(1);
     note.setTitle('Note 1');
-    note.addTag('A');
-    note.addTag('B');
-    note.addTag('C');
+    note.tags.add('A');
+    note.tags.add('B');
+    note.tags.add('C');
     category.addNote(note);
-    expect(1).to.equal(category.getNotes().length);
-    expect(note.getTags().length).to.equal(category.getTags().length);
+    expect(1).to.equal(category.notes.getAll().length);
+    expect(note.tags.get().length).to.equal(category.tags.get().length);
     let resultRemove = category.removeNote(note.getId());
     expect(true).to.equal(resultRemove);
-    expect(0).to.equal(category.getNotes().length);
-    expect(0).to.equal(category.getTags().length);
+    expect(0).to.equal(category.notes.getAll().length);
+    expect(0).to.equal(category.tags.get().length);
   });
 });

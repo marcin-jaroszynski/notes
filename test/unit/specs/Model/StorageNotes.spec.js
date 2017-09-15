@@ -36,6 +36,9 @@ describe('Storage notes', () => {
     expect(1).to.equal(categoryToFind.notes.getAll().length);
     expect(3).to.equal(noteToAdd.tags.get().length, 'Count of note tags');
     expect(3).to.equal(categoryToFind.tags.get().length, 'Count of category tags');
+    expect(1).to.equal(storage.dashboard.length());
+    let topNoteInDashboard = storage.dashboard.peek();
+    expect(noteToAdd.getTitle()).to.equal(topNoteInDashboard.getNoteTitle());
   });
 
   it('Add two notes with many tags', () => {
@@ -49,6 +52,10 @@ describe('Storage notes', () => {
     note1Tags.add('C');
     let note1ToAdd = getNote('Note 1', category.getCode(), note1Tags);
     storage.notes.add(note1ToAdd);
+
+    expect(1).to.equal(storage.dashboard.length());
+    let topNoteInDashboard = storage.dashboard.peek();
+    expect(note1ToAdd.getTitle()).to.equal(topNoteInDashboard.getNoteTitle(), 'First note added is on top in dashobard');
     
     let categoryToFind = storage.categories.get(category.getCode());
     expect(note1ToAdd.tags.get().length).to.equal(categoryToFind.tags.get().length);
@@ -61,6 +68,9 @@ describe('Storage notes', () => {
     storage.notes.add(note2ToAdd);
 
     expect(5).to.equal(categoryToFind.tags.get().length);
+    expect(2).to.equal(storage.dashboard.length());
+    topNoteInDashboard = storage.dashboard.peek();
+    expect(note2ToAdd.getTitle()).to.equal(topNoteInDashboard.getNoteTitle(), 'Second note added is on top in dashobard');
   });
 
   it('Try to get non-exisiting note - should return empty note object', () => {

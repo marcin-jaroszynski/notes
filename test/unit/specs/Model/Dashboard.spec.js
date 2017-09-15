@@ -7,27 +7,29 @@ describe('Dashboard model', () => {
     let storage = new Storage();
     storage.categories.add('Linux');
 
+    let category = storage.categories.get('linux');
+
     let dashboard = new Dashboard();
     let iterations = 10;
     for (let i = 1; i <= iterations; i++) {
       let note = new Note();
       note.setId(1);
-      note.setCategoryId('linux');
+      note.setCategoryId(category.getCode());
       note.setTitle('Note ' + i);
       note.setContent('Lorem ipsum');
-      dashboard.add(note);
+      dashboard.add(note, category);
     }
     expect(iterations).to.equal(dashboard.get().length());
     let lastInsertedNote = new Note();
     lastInsertedNote.setId(11);
-    lastInsertedNote.setCategoryId('linux');
+    lastInsertedNote.setCategoryId(category.getCode());
     lastInsertedNote.setTitle('Note 11');
     lastInsertedNote.setContent('Lorem ipsum');
-    dashboard.add(lastInsertedNote);
+    dashboard.add(lastInsertedNote, category);
     expect(iterations).to.equal(dashboard.get().length());
     let topNote = dashboard.peek();
-    expect(lastInsertedNote.getTitle()).to.equal(topNote.getTitle());
+    expect(lastInsertedNote.getTitle()).to.equal(topNote.getNoteTitle());
     let lastNoteInDashboard = dashboard.floor();
-    expect('Note 2').to.equal(lastNoteInDashboard.getTitle());
+    expect('Note 2').to.equal(lastNoteInDashboard.getNoteTitle());
   });
 });

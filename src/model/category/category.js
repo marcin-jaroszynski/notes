@@ -4,7 +4,7 @@ import Tags from './tags.js';
 import Notes from './notes.js'
 import Url from '../url.js'
 
-export default class CategoryNew extends Resource {
+export default class Category extends Resource {
   constructor(data) {
     super(data);
     this.tags = new Tags(this.code);

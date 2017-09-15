@@ -17,10 +17,10 @@
                 <td>Category</td>
                 <td>Date added</td>
               </tr>
-              <tr v-for="entry in entries">
-                <td><router-link :to="entry.note_url">{{ entry.title }}</router-link></td>
-                <td><router-link :to="entry.category_url">{{ entry.category }}</router-link></td>
-                <td>{{ entry.date_added }}</td>
+              <tr v-for="entry in reverseItems">
+                <td><router-link :to="entry.noteUrl">{{ entry.noteTitle }}</router-link></td>
+                <td><router-link :to="entry.categoryUrl">{{ entry.categoryTitle }}</router-link></td>
+                <td>{{ entry.noteDateAdded }}</td>
               </tr>
             </tbody>
           </table>
@@ -42,18 +42,22 @@
     },
     data() {
       return {
-        entries: [
-          { title: 'Entry 1', category: 'CSS', note_url: '/note/show/1', category_url: '/category/show/css', date_added:'26.05.2017 22:36:56' },
-          { title: 'Entry 2', category: 'MySQL', note_url: '/note/show/2', category_url: '/category/show/mysql', date_added:'26.05.2017 22:36:56' },
-          { title: 'Entry 3', category: 'PHP', note_url: '/note/show/3', category_url: '/category/show/php', date_added:'26.05.2017 22:36:56' },
-          { title: 'Entry 4', category: 'HTML 5', note_url: '/note/show/4', category_url: '/category/show/html5', date_added:'26.05.2017 22:36:56' },
-          { title: 'Entry 5', category: 'JavaScript', note_url: '/note/show/5', category_url: '/category/show/javascript', date_added:'26.05.2017 22:36:56' },
-        ]
+        dashboardEntries: this.storage.dashboard.get(),
       }
+    },
+    computed: {
+        reverseItems() {
+          return this.dashboardEntries.slice().reverse();
+      }     
     },
     methods: {
       categories: function() {
         return this.storage.categories.getAll();
+      },
+      getDashboardsItems: function() {
+        let x = this.storage.dashboard.get();
+        console.log('X: ' + JSON.stringify(x));
+        return x;
       },
       getCategoryAddUrl() {
         this.$router.push(Url.getCategoryAdd());

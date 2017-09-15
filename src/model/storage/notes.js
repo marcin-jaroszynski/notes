@@ -2,8 +2,9 @@ import Note from '../note/note.js'
 import NoteList from '../note/list.js'
 
 export default class Notes {
-  constructor(categories) {
+  constructor(categories, dashboard) {
     this.categories = categories;
+    this.dashboard = dashboard;
     this.freeNoteId = 1;
   }
 
@@ -26,7 +27,11 @@ export default class Notes {
       this.freeNoteId++;
     }
     let category = this.categories.get(note.getCategoryId());
-    return category.addNote(note);
+    if (category.addNote(note)) {
+      this.dashboard.add(note, category);
+      return true;
+    }
+    return false;
   }
 
   remove(noteId) {

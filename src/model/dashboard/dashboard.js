@@ -1,4 +1,5 @@
 import Stack from '../stack.js'
+import DashboardItem from './item.js'
 
 export default class Dashboard {
   constructor() {
@@ -6,11 +7,17 @@ export default class Dashboard {
   }
 
   get() {
-    return this.data;
+    return this.data.getAll();
   }
 
-  add(note) {
-    this.data.push(note);
+  add(note, category) {
+    let newDashboardItem = new DashboardItem();
+    newDashboardItem.setNoteTitle(note.getTitle());
+    newDashboardItem.setNoteUrl(note.getUrl());
+    newDashboardItem.setNoteDateAdded(note.getDateAdded());
+    newDashboardItem.setCategoryTitle(category.getTitle());
+    newDashboardItem.setCategoryUrl(category.getUrl());
+    this.data.push(newDashboardItem);
   }
 
   peek() {
@@ -19,5 +26,9 @@ export default class Dashboard {
 
   floor() {
     return this.data.floor();
+  }
+
+  length() {
+    return this.data.length();
   }
 }

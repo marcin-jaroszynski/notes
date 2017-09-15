@@ -40,4 +40,8 @@ export default class Stack {
   length() {
     return this.data.length;
   }
+
+  getAll() {
+    return this.data;
+  }
 }

@@ -257,4 +257,40 @@ describe('Storage notes', () => {
     let nonExistingCategory = storage.categories.get(nonExistingCategoryCode);
     expect(0).to.equal(nonExistingCategory.tags.get().length);
   });
+
+  it('Change title category should change category code in all notes of edited category', () => {
+    let fooCategory = getCategory('Foo');
+    let storage = getStorage();
+    storage.categories.add(fooCategory.getTitle());
+
+    let note1Tags = new TagList();
+    note1Tags.add('A');
+    let note1ToAdd = getNote('Note 1', fooCategory.getCode(), note1Tags);
+    storage.notes.add(note1ToAdd);
+
+    let note2Tags = new TagList();
+    note2Tags.add('B');
+    let note2ToAdd = getNote('Note 2', fooCategory.getCode(), note2Tags);
+    storage.notes.add(note2ToAdd);
+
+    let notesFooCategory = storage.categories.getNotesFor(fooCategory.getCode());
+    expect(2).to.equal(notesFooCategory.length, 'Amount of notes added to Foo category');
+
+    let barCategory = new getCategory('Bar');
+    storage.categories.changeTitle(fooCategory.getTitle(), barCategory.getTitle());
+
+    let notesFooCategoryAfterTitleChanged = storage.categories.getNotesFor(fooCategory.getCode());
+    expect(0).to.equal(notesFooCategoryAfterTitleChanged.length, 'Amount of notes Foo category after title changed');
+
+    let notesOfBarCategory = storage.categories.getNotesFor(barCategory.getCode());
+    expect(2).to.equal(notesOfBarCategory.length, 'Amount of notes Bar category after title changed of Foo category');
+
+    let amountOfUpdatedNotesCategoryId = 0;
+    for (let i = 0; i < notesOfBarCategory.length; i++) {
+        if (barCategory.getCode() == notesOfBarCategory[i].categoryId) {
+            amountOfUpdatedNotesCategoryId++;
+        }
+    }
+    expect(2).to.equal(amountOfUpdatedNotesCategoryId, 'Amount of notes updated their category id');
+  });
 });

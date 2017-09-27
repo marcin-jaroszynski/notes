@@ -72,6 +72,7 @@
       this.noteContent = this.note.getContent();
       this.tagEditList.addMany(this.note.tags.get());
       this.currentCategory = this.note.getCategoryId();
+      console.log('NOTE: ' + JSON.stringify(this.note.getCategoryId()));
     },
     computed: {
       getTitleNote: function() {

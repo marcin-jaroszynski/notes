@@ -17,7 +17,7 @@
                 <td>Category</td>
                 <td>Date added</td>
               </tr>
-              <tr v-for="entry in reverseItems">
+              <tr v-for="entry in getDashboardEntries">
                 <td><router-link :to="entry.noteUrl">{{ entry.noteTitle }}</router-link></td>
                 <td><router-link :to="entry.categoryUrl">{{ entry.categoryTitle }}</router-link></td>
                 <td>{{ entry.noteDateAdded }}</td>
@@ -46,18 +46,13 @@
       }
     },
     computed: {
-        reverseItems() {
-          return this.dashboardEntries.slice().reverse();
+      getDashboardEntries() {
+        return this.dashboardEntries.slice().reverse();
       }     
     },
     methods: {
       categories: function() {
         return this.storage.categories.getAll();
-      },
-      getDashboardsItems: function() {
-        let x = this.storage.dashboard.get();
-        console.log('X: ' + JSON.stringify(x));
-        return x;
       },
       getCategoryAddUrl() {
         this.$router.push(Url.getCategoryAdd());

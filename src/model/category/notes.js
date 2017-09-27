@@ -31,4 +31,11 @@ export default class Notes {
   remove(id) {
     return this.data.remove(id);
   }
+
+  updateAllCategoryId(newCategoryId) {
+    let notes = this.getAll();
+    for (let i = 0; i < notes.length; i++) {
+        notes[i].setCategoryId(newCategoryId);
+    }
+  }
 }

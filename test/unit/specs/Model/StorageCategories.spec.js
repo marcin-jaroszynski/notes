@@ -6,16 +6,20 @@ describe('Storage categories', () => {
     return new Category({ title: 'Foo' });
   };
 
+  let getStorageCategories = () => {
+    return new StorageCategories(); 
+  };
+
   let getStorageCategoriesWithAddedFooCategory = () => {
     let categoryToAdd = getFooCategory();
-    let storageCategories = new StorageCategories();
+    let storageCategories = getStorageCategories();
     storageCategories.add(categoryToAdd.getTitle());
     return storageCategories;
   };
 
   it('Add category', () => {
     let categoryToAdd = new Category({ title: 'Foo' });
-    let storageCategories = new StorageCategories();
+    let storageCategories = getStorageCategories();
     let result = storageCategories.add(categoryToAdd.getTitle());
     expect(true).to.equal(result);
     let addedCategory = storageCategories.get(categoryToAdd.getCode());
@@ -24,7 +28,7 @@ describe('Storage categories', () => {
   });
 
   it('Try to add category with the title that exist - should fail', () => {
-    let storageCategories = new StorageCategories();
+    let storageCategories = getStorageCategories();
     expect(true).to.equal(storageCategories.add('Foo'), 'add first Foo category');
     expect(false).to.equal(storageCategories.add('Foo'), 'try to add second Foo category');
   });

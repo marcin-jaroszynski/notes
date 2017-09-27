@@ -20,6 +20,7 @@ export default class Category extends Resource {
       this.code = Helper.slugify(title);
       this.url = this.createUrl();
       this.title = title;
+      this.notes.updateAllCategoryId(this.code);
     }
   }
 

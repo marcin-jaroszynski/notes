@@ -1,5 +1,6 @@
 import Category from '../../../../src/model/category/category.js'
 import StorageCategories from '../../../../src/model/storage/categories.js'
+import Dashboard from '../../../../src/model/dashboard/dashboard.js'
 
 describe('Storage categories', () => {
   let getFooCategory = () => {
@@ -7,7 +8,8 @@ describe('Storage categories', () => {
   };
 
   let getStorageCategories = () => {
-    return new StorageCategories(); 
+    let dashboard = new Dashboard();
+    return new StorageCategories(dashboard); 
   };
 
   let getStorageCategoriesWithAddedFooCategory = () => {

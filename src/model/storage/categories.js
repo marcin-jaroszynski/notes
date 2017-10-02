@@ -2,8 +2,9 @@ import Category from '../category/category.js'
 import CategoryList from '../category/list.js'
 
 export default class Categories {
-  constructor() {
+  constructor(dashboard) {
     this.categories = new CategoryList();
+    this.dashboard = dashboard;
   }
 
   get(categoryId) {
@@ -44,6 +45,7 @@ export default class Categories {
       let categoryWithNewTitle = this.categories.checkIsExist(newCategoryTitle);
       if (categoryWithNewTitle.getTitle() == '') {
         categoryToChangeTitle.setTitle(newCategoryTitle);
+        this.dashboard.updateCategories(currentCategoryTitle, newCategoryTitle);
         return categoryToChangeTitle;
       }
     }

@@ -1,11 +1,15 @@
 export default class DashboardItem {
-  constructor() {
-    let data = this._getEmpty();
-    this.noteTitle = data.noteTitle;
-    this.noteUrl = data.noteUrl;
-    this.noteDateAdded = data.noteDateAdded;
-    this.categoryTitle = data.category;
-    this.categoryUrl = data.categoryUrl;
+  constructor(note, category) {
+    this.noteId = note.getId();
+    this.noteTitle = note.getTitle();
+    this.noteUrl = note.getUrl();
+    this.noteDateAdded = note.getDateAdded();
+    this.categoryTitle = category.getTitle();
+    this.categoryUrl = category.getUrl();
+  }
+
+  getNoteId() {
+    return this.noteId;
   }
 
   getNoteTitle() {
@@ -28,6 +32,10 @@ export default class DashboardItem {
     return this.categoryUrl;
   }
 
+  setNoteId(noteId) {
+    this.noteId = noteId;
+  }
+
   setNoteTitle(title) {
     this.noteTitle = title;
   }
@@ -46,15 +54,5 @@ export default class DashboardItem {
 
   setCategoryUrl(url) {
     this.categoryUrl = url;
-  }
-
-  _getEmpty() {
-    return {
-      noteTitle: '',
-      noteUrl: '',
-      noteDateAdded: '',
-      categoryTitle: '',
-      categoryUrl: ''
-    };
   }
 }

@@ -12,13 +12,7 @@ export default class Dashboard {
   }
 
   add(note, category) {
-    let newDashboardItem = new DashboardItem();
-    newDashboardItem.setNoteTitle(note.getTitle());
-    newDashboardItem.setNoteUrl(note.getUrl());
-    newDashboardItem.setNoteDateAdded(note.getDateAdded());
-    newDashboardItem.setCategoryTitle(category.getTitle());
-    newDashboardItem.setCategoryUrl(category.getUrl());
-    this.data.push(newDashboardItem);
+    this.data.push(new DashboardItem(note, category));
   }
 
   updateCategories(oldTitleCategory, newTitleCategory) {
@@ -30,6 +24,28 @@ export default class Dashboard {
         dasboardItems[i].setCategoryUrl(newCategory.getUrl());
       }
     }
+  }
+
+  updateEntry(note, category) {
+    let dashboardItemToEdit = this.find(note.getId());
+    if (dashboardItemToEdit) {
+      dashboardItemToEdit.setNoteTitle(note.getTitle());
+      dashboardItemToEdit.setNoteUrl(note.getUrl());
+      dashboardItemToEdit.setCategoryTitle(category.getTitle());
+      dashboardItemToEdit.setCategoryUrl(category.getUrl());
+      return true;
+    }
+    return false;
+  }
+
+  find(noteId) {
+    let dasboardItems = this.data.getAll();
+    for (let i = 0; i < dasboardItems.length; i++) {
+      if (dasboardItems[i].getNoteId() === noteId) {
+        return dasboardItems[i];
+      }
+    }
+    return false;
   }
 
   peek() {

@@ -62,4 +62,34 @@ describe('Dashboard model', () => {
     }
     expect(2).to.equal(counterUpdateDashbordItems);
   });
+
+  it('update - update specific note data in dashboard', () => {
+    let storage = new Storage();
+    let categoryLinux = getCategory('Linux');
+    storage.categories.add(categoryLinux.getTitle());
+    let dashboard = new Dashboard();
+    let nNotes = 2;
+    for (let i = 1; i <= nNotes; i++) {
+      let note = getNote(i, categoryLinux.getCode());
+      dashboard.add(note, categoryLinux);
+    }
+    let categoryPython = getCategory('Python');
+    storage.categories.add(categoryPython.getTitle());
+    
+    let noteEditId = 1;
+    let noteEdit = getNote(noteEditId, categoryPython.getCode());
+    let resultUpdateDashboardEntry = dashboard.updateEntry(noteEdit, categoryPython); 
+    expect(true).to.equal(resultUpdateDashboardEntry);   
+
+    let dashboardItems = dashboard.get();
+    let isDashboardEntryUpdated = false;
+    for (let i = 0; i < nNotes; i++) {
+      if (dashboardItems[i].getNoteId() === noteEditId && 
+          dashboardItems[i].getCategoryTitle() == categoryPython.getTitle()) {
+          isDashboardEntryUpdated = true;
+      }
+    }
+    expect(true).to.equal(isDashboardEntryUpdated);
+  });
+
 });

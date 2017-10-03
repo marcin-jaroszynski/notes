@@ -44,20 +44,27 @@ export default class Notes {
     let currentNote = this.get(noteEdit.getId());
     let categoryEditedNote = this.categories.get(noteEdit.getCategoryId());
     if (currentNote.getCategoryId() === noteEdit.getCategoryId()) {
-      return categoryEditedNote.editNote(noteEdit, tagsToAdd, tagsToRemove);
+      if (categoryEditedNote.editNote(noteEdit, tagsToAdd, tagsToRemove)) {
+        this.dashboard.updateEntry(noteEdit, categoryEditedNote);
+        return true;
+      }
     } else {
       if (categoryEditedNote.getTitle()) {
         return this._changeCategory(noteEdit, currentNote);
       }
     }
     return false; 
-  } 
+  }
 
   _changeCategory(noteEdit, currentNote) {
     let currentCategoryNote = this.categories.get(currentNote.getCategoryId());
     let resultRemoveNote = currentCategoryNote.removeNote(currentNote.getId());
     if (resultRemoveNote) {
-      return this.add(noteEdit);
+      let newCategory = this.categories.get(noteEdit.getCategoryId());
+      if (newCategory.addNote(noteEdit)) {
+        this.dashboard.updateEntry(noteEdit, newCategory);
+        return true;
+      }
     }
     return false;
   }

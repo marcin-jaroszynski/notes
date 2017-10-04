@@ -92,4 +92,20 @@ describe('Dashboard model', () => {
     expect(true).to.equal(isDashboardEntryUpdated);
   });
 
+  it('remove specific entry from dashboard', () => {
+    let storage = new Storage();
+    let categoryLinux = getCategory('Linux');
+    storage.categories.add(categoryLinux.getTitle());
+    let dashboard = new Dashboard();
+    let nNotes = 2;
+    for (let i = 1; i <= nNotes; i++) {
+      let note = getNote(i, categoryLinux.getCode());
+      dashboard.add(note, categoryLinux);
+    }
+    expect(2).to.equal(dashboard.length());
+    let noteIdToRemove = 1;
+    dashboard.remove(noteIdToRemove);
+    expect(1).to.equal(dashboard.length());
+  });
+
 });

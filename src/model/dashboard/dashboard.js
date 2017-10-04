@@ -38,12 +38,20 @@ export default class Dashboard {
     return false;
   }
 
+  remove(noteId) {
+    let dasboardItemIndexToRemove = this._getIndexFor(noteId);
+    if (dasboardItemIndexToRemove !== -1) {
+      let dasboardItems = this.data.getAll();
+      dasboardItems.splice(dasboardItemIndexToRemove, 1);
+      return true;
+    }
+    return false;
+  }
+
   find(noteId) {
-    let dasboardItems = this.data.getAll();
-    for (let i = 0; i < dasboardItems.length; i++) {
-      if (dasboardItems[i].getNoteId() === noteId) {
-        return dasboardItems[i];
-      }
+    let dasboardItemIndexToFind = this._getIndexFor(noteId);
+    if (dasboardItemIndexToFind !== -1) {
+      return this.data.getAll()[dasboardItemIndexToFind];
     }
     return false;
   }
@@ -58,5 +66,16 @@ export default class Dashboard {
 
   length() {
     return this.data.length();
+  }
+
+  _getIndexFor(noteId) {
+    let notFound = -1;
+    let dasboardItems = this.data.getAll(); 
+    for (let i = 0; i < dasboardItems.length; i++) {
+      if (dasboardItems[i].getNoteId() == noteId) {
+        return i;
+      }
+    }
+    return notFound;
   }
 }

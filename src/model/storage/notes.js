@@ -37,7 +37,11 @@ export default class Notes {
   remove(noteId) {
     let noteToRemove = this.get(noteId);
     let category = this.categories.get(noteToRemove.getCategoryId());
-    return category.removeNote(noteId);
+    if (category.removeNote(noteId)) {
+      this.dashboard.remove(noteId);
+      return true;
+    }
+    return false;
   }
 
   edit(noteEdit, tagsToAdd, tagsToRemove) {

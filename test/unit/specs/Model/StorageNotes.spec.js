@@ -103,6 +103,9 @@ describe('Storage notes', () => {
     let resultNote2Add = storage.notes.add(note2);
     expect(true).to.equal(resultNote2Add);
 
+    let dashboardItems = storage.dashboard.get();
+    expect(2).to.equal(dashboardItems.length);
+
     let categoryWithNotes = storage.categories.get(category.getCode());
     expect(2).to.equal(categoryWithNotes.notes.getAll().length);
     expect(5).to.equal(categoryWithNotes.tags.get().length);
@@ -111,6 +114,7 @@ describe('Storage notes', () => {
     expect(true).to.equal(resultRemove, 'Result of remove note');
     expect(1).to.equal(categoryWithNotes.notes.getAll().length);
     expect(note1.tags.get().length).to.equal(categoryWithNotes.tags.get().length);
+    expect(1).to.equal(dashboardItems.length);
   });
 
   it('Remove note - given non-existing id', () => {
@@ -170,6 +174,16 @@ describe('Storage notes', () => {
     let editNoteResult = storage.notes.edit(noteToEdit, tagsToAdd, tagsToRemove);
     expect(true).to.equal(editNoteResult);
 
+    let dashboardItems = storage.dashboard.get();
+    let isDashboardItemUpdated = false;
+    for (let i = 0; i < dashboardItems.length; i++) {
+        if (dashboardItems[i].getNoteId() == noteToEdit.getId() && 
+            dashboardItems[i].getNoteTitle() == noteToEdit.getTitle()) {
+            isDashboardItemUpdated = true;
+        }
+    }
+    expect(true).to.equal(isDashboardItemUpdated);
+
     let noteAfterEdit = storage.notes.get(noteToEdit.getId());
     expect(noteToEdit.getTitle()).to.equal(noteAfterEdit.getTitle());
     expect(noteToEdit.getContent()).to.equal(noteAfterEdit.getContent());
@@ -203,12 +217,22 @@ describe('Storage notes', () => {
     tagsToAdd.add('E');
     noteToEdit.tags.addMany(tagsToAdd.get());
 
-    let tagsToRemove = new TagList();
+    let tagsToRemove = new TagList(); 
     tagsToRemove.add('B');
     noteToEdit.tags.removeMany(tagsToRemove.get());
 
     let editNoteResult = storage.notes.edit(noteToEdit, tagsToAdd, tagsToRemove)
     expect(true).to.equal(editNoteResult);
+
+    let dashboardItems = storage.dashboard.get();
+    let isDashboardItemCategoryUpdated = false;
+    for (let i = 0; i < dashboardItems.length; i++) {
+        if (dashboardItems[i].getNoteId() == noteToEdit.getId() && 
+            dashboardItems[i].getCategoryTitle() == categoryBar.getTitle()) {
+            isDashboardItemCategoryUpdated = true;
+        }
+    }
+    expect(true).to.equal(isDashboardItemCategoryUpdated);
 
     let categoryWithMovedNote = storage.categories.get(noteToEdit.getCategoryId()); 
     expect(1).to.equal(categoryWithMovedNote.notes.getAll().length);
@@ -276,21 +300,30 @@ describe('Storage notes', () => {
     let notesFooCategory = storage.categories.getNotesFor(fooCategory.getCode());
     expect(2).to.equal(notesFooCategory.length, 'Amount of notes added to Foo category');
 
-    let barCategory = new getCategory('Bar');
-    storage.categories.changeTitle(fooCategory.getTitle(), barCategory.getTitle());
+    let categoryBar = new getCategory('Bar');
+    storage.categories.changeTitle(fooCategory.getTitle(), categoryBar.getTitle());
 
     let notesFooCategoryAfterTitleChanged = storage.categories.getNotesFor(fooCategory.getCode());
     expect(0).to.equal(notesFooCategoryAfterTitleChanged.length, 'Amount of notes Foo category after title changed');
 
-    let notesOfBarCategory = storage.categories.getNotesFor(barCategory.getCode());
+    let notesOfBarCategory = storage.categories.getNotesFor(categoryBar.getCode());
     expect(2).to.equal(notesOfBarCategory.length, 'Amount of notes Bar category after title changed of Foo category');
 
     let amountOfUpdatedNotesCategoryId = 0;
     for (let i = 0; i < notesOfBarCategory.length; i++) {
-        if (barCategory.getCode() == notesOfBarCategory[i].categoryId) {
+        if (categoryBar.getCode() == notesOfBarCategory[i].categoryId) {
             amountOfUpdatedNotesCategoryId++;
         }
     }
     expect(2).to.equal(amountOfUpdatedNotesCategoryId, 'Amount of notes updated their category id');
+
+    let dashboardItems = storage.dashboard.get();
+    let counterUpdatedItemsInDashboard = 0;
+    for (let i = 0; i < dashboardItems.length; i++) {
+        if (dashboardItems[i].getCategoryTitle() == categoryBar.getTitle()) {
+            counterUpdatedItemsInDashboard++;
+        }
+    }
+    expect(notesOfBarCategory.length).to.equal(counterUpdatedItemsInDashboard);
   });
 });

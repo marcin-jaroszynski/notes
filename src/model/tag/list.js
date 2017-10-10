@@ -3,10 +3,12 @@ import ResourceList from '../resource/list.js'
 
 export default class TagList extends ResourceList {
   add(title) {
-    let tagToFind = this.checkIsExist(title);
-    if (!tagToFind.getTitle()) {
-      this.data.push(new Tag({title: title}));
-      return true;
+    if (title) {
+      let tagToFind = this.checkIsExist(title);
+      if (!tagToFind.getTitle()) {
+        this.data.push(new Tag({title: title}));
+        return true;
+      }
     }
     return false;
   }

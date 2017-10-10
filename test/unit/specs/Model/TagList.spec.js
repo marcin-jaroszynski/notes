@@ -20,6 +20,11 @@ describe('Tag list model', () => {
     expect(false).to.equal(tagList.add('Front end'));
   });
 
+  it('Try to add empty tag - should fail', () => {
+    let tagList = new TagList();
+    expect(false).to.equal(tagList.add(''));
+  });
+
   it('Add many tags', () => {
     let tagList1 = new TagList();
     tagList1.add('A');

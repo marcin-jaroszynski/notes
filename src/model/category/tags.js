@@ -1,9 +1,9 @@
-import TagList from '../tag/list.js'
+import CategoryTagList from './tagList.js'
 
 export default class Tags {
   constructor(categoryId) {
     this.categoryId = categoryId;
-    this.data = new TagList();
+    this.data = new CategoryTagList();
   }
 
   get() {

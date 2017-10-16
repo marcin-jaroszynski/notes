@@ -7,16 +7,15 @@ describe('Category tag list model', () => {
     return new Tag({title: title});
   };
 
-  it('Add same tag two times should increment counter', () => {
+  it('Add same tag twice times should increment counter', () => {
     let tagFoo = getTag('Foo');
     let categoryTagList = new CategoryTagList();
     categoryTagList.add(tagFoo.getTitle());
     categoryTagList.add(tagFoo.getTitle());
-    let categoryTags = categoryTagList.get();
-    expect(2).to.equal(categoryTags[tagFoo.getCode()]);
+    expect(2).to.equal(categoryTagList.getCounterFor(tagFoo.getCode()));
   });
 
-  it('Remove tag should decrement coutner', () => {
+  it('Remove tag should decrement counter', () => {
     let tagFoo = getTag('Foo');
     let categoryTagList = new CategoryTagList();
     categoryTagList.add(tagFoo.getTitle());
@@ -25,9 +24,8 @@ describe('Category tag list model', () => {
     categoryTagList.add(tagBar.getTitle());
     categoryTagList.remove(tagFoo.getTitle());
     categoryTagList.remove(tagBar.getTitle());
-    let categoryTags = categoryTagList.get();
-    expect(0).to.equal(categoryTags[tagFoo.getCode()], 'Amount of tag foo');
-    expect(1).to.equal(categoryTags[tagBar.getCode()], 'Amount of tag bar');
+    expect(0).to.equal(categoryTagList.getCounterFor(tagFoo.getCode()), 'Amount of tag foo');
+    expect(1).to.equal(categoryTagList.getCounterFor(tagBar.getCode()), 'Amount of tag bar');
   });
 
   it('Add many tags from tag list', () => {
@@ -37,10 +35,9 @@ describe('Category tag list model', () => {
     tagList.add('C');
     let categoryTagList = new CategoryTagList();
     categoryTagList.addMany(tagList.get());
-    let categoryTags = categoryTagList.get();
-    expect(1).to.equal(categoryTags['a']);
-    expect(1).to.equal(categoryTags['b']);
-    expect(1).to.equal(categoryTags['c']);
+    expect(1).to.equal(categoryTagList.getCounterFor('a'));
+    expect(1).to.equal(categoryTagList.getCounterFor('b'));
+    expect(1).to.equal(categoryTagList.getCounterFor('c'));
   });
 
   it('Remove many tags from tag list', () => {
@@ -55,9 +52,19 @@ describe('Category tag list model', () => {
     tagListToRemove.add('A');
     tagListToRemove.add('B');
     categoryTagList.removeMany(tagListToRemove.get());
-    let categoryTags = categoryTagList.get();
-    expect(1).to.equal(categoryTags['a']);
-    expect(0).to.equal(categoryTags['b']);
-    expect(1).to.equal(categoryTags['c']);
+    expect(1).to.equal(categoryTagList.getCounterFor('a'));
+    expect(0).to.equal(categoryTagList.getCounterFor('b'));
+    expect(1).to.equal(categoryTagList.getCounterFor('c'));
+  });
+
+  it('Should return only tags its counter is higher than 0', () => {
+    let tagListToAdd = new TagList();
+    tagListToAdd.add('A');
+    tagListToAdd.add('B');
+    tagListToAdd.add('C');
+    let categoryTagList = new CategoryTagList();
+    categoryTagList.addMany(tagListToAdd.get());
+    categoryTagList.remove('A');
+    expect(2).to.equal(categoryTagList.get().length);
   });
 });

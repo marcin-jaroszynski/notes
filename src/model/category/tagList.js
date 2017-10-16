@@ -6,13 +6,26 @@ export default class CategoryTagList {
   }
 
   get() {
-    return this.data;
+    let tags = [];
+    for (let tagCode in this.data) {
+      if (this.data[tagCode].counter > 0) {
+        tags.push(this.data[tagCode].object);
+      }
+    }
+    return tags;
+  }
+
+  getCounterFor(tagCode) {
+    if (this.data[tagCode]) {
+      return this.data[tagCode].counter;
+    }
+    return 0;
   }
 
   add(title) {
     let tag = new Tag({title: title});
     if (!this.checkIsExist(tag.getCode())) {
-      this.init(tag.getCode());
+      this.init(tag);
     }
     this.incrementCounter(tag.getCode());
   }
@@ -40,17 +53,20 @@ export default class CategoryTagList {
     return this.data[tagCode];
   }
 
-  init(tagCode) {
-    this.data[tagCode] = 0;
+  init(tag) {
+    this.data[tag.getCode()] = {
+      object: tag,
+      counter: 0
+    };
   }
 
   incrementCounter(tagCode) {
-    this.data[tagCode]++;
+    this.data[tagCode].counter++;
   }
 
   decrementCounter(tagCode) {
-    if (this.data[tagCode] > 0) {
-      this.data[tagCode]--;
+    if (this.data[tagCode].counter > 0) {
+      this.data[tagCode].counter--;
     }
   }
 }

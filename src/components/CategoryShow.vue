@@ -27,7 +27,7 @@
             </tbody>
           </table>
           <div>
-          Tags: <a v-for="tag in getCategoryTags()" :href="tag.url">{{ tag.title }} </a>
+          Tags: <span v-for="tag in getCategoryTags()"><router-link :to="tag.url">{{ tag.title }}</router-link> </span>
           </div>
         </p>
       </div>

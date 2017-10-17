@@ -26,4 +26,8 @@ export default class Url {
   static getNoteEdit(noteId) {
     return '/note/edit/' + noteId;
   }
+
+  static getTagsResult(tagCode) {
+    return '/tags/' + tagCode;
+  }
 }

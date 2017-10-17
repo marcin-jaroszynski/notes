@@ -7,6 +7,7 @@ import CategoryAdd from '@/components/CategoryAdd'
 import NoteAdd from '@/components/NoteAdd'
 import NoteShow from '@/components/NoteShow'
 import NoteEdit from '@/components/NoteEdit'
+import TagsResult from '@/components/TagsResult'
 
 Vue.use(Router)
 
@@ -75,6 +76,14 @@ export default new Router({
       path: Url.getNoteEdit(':noteId/'),
       name: 'NoteEdit',
       component: NoteEdit,
+      props: {
+        storage: storage
+      }
+    },
+    {
+      path: Url.getTagsResult(':tagCode/'),
+      name: 'TagsResult',
+      component: TagsResult,
       props: {
         storage: storage
       }

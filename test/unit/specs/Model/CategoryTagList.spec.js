@@ -7,6 +7,16 @@ describe('Category tag list model', () => {
     return new Tag({title: title});
   };
 
+  let getCategoryTagList = (tagsToAdd) => {
+    let tagList = new TagList();
+    for (let i = 0; i < tagsToAdd.length; i++) {
+      tagList.add(tagsToAdd[i]);
+    }
+    let categoryTagList = new CategoryTagList();
+    categoryTagList.addMany(tagList.get());
+    return categoryTagList;
+  };
+
   it('Add same tag twice times should increment counter', () => {
     let tagFoo = getTag('Foo');
     let categoryTagList = new CategoryTagList();
@@ -29,24 +39,14 @@ describe('Category tag list model', () => {
   });
 
   it('Add many tags from tag list', () => {
-    let tagList = new TagList();
-    tagList.add('A');
-    tagList.add('B');
-    tagList.add('C');
-    let categoryTagList = new CategoryTagList();
-    categoryTagList.addMany(tagList.get());
+    let categoryTagList = getCategoryTagList(['A', 'B', 'C']);
     expect(1).to.equal(categoryTagList.getCounterFor('a'));
     expect(1).to.equal(categoryTagList.getCounterFor('b'));
     expect(1).to.equal(categoryTagList.getCounterFor('c'));
   });
 
   it('Remove many tags from tag list', () => {
-    let tagListToAdd = new TagList();
-    tagListToAdd.add('A');
-    tagListToAdd.add('B');
-    tagListToAdd.add('C');
-    let categoryTagList = new CategoryTagList();
-    categoryTagList.addMany(tagListToAdd.get());
+    let categoryTagList = getCategoryTagList(['A', 'B', 'C']);
     categoryTagList.add('A');
     let tagListToRemove = new TagList();
     tagListToRemove.add('A');
@@ -58,13 +58,17 @@ describe('Category tag list model', () => {
   });
 
   it('Should return only tags its counter is higher than 0', () => {
-    let tagListToAdd = new TagList();
-    tagListToAdd.add('A');
-    tagListToAdd.add('B');
-    tagListToAdd.add('C');
-    let categoryTagList = new CategoryTagList();
-    categoryTagList.addMany(tagListToAdd.get());
+    let categoryTagList = getCategoryTagList(['A', 'B', 'C']);
     categoryTagList.remove('A');
     expect(2).to.equal(categoryTagList.get().length);
+  });
+
+  it('Checks is category list contain specific tag', () => {
+    let categoryTagList = getCategoryTagList(['A', 'B', 'C']);
+    let tagA = getTag('A');
+    expect(true).to.equal(categoryTagList.isInclude(tagA.getCode()), 'Tag should contain "A" tag');
+    let tagB = getTag('B');
+    categoryTagList.remove(tagB.getTitle());
+    expect(false).to.equal(categoryTagList.isInclude(tagB.getCode()), 'Tag should not contain "B" tag');
   });
 });

@@ -1,13 +1,13 @@
 import Helper from '../helper.js'
 import Resource from '../resource/resource.js'
-import Tags from './tags.js';
+import CategoryTagList from './tagList.js'
 import Notes from './notes.js'
 import Url from '../url.js'
 
 export default class Category extends Resource {
   constructor(data) {
     super(data);
-    this.tags = new Tags(this.code);
+    this.tags = new CategoryTagList();
     this.notes = new Notes();
   }
 

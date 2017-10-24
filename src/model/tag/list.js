@@ -31,4 +31,12 @@ export default class TagList extends ResourceList {
     }
     return true;
   }
+
+  isInclude(tagCode) {
+    let tagToFind = this.findByCode(tagCode);
+    if (tagToFind.getTitle()) {
+      return true;
+    }
+    return false;
+  }
 } 

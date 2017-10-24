@@ -45,7 +45,7 @@
     },
     computed: {
       getEntriesForTag() {
-        return [];
+        return this.storage.notes.getForTag(this.tagCode);
       }     
     },
     methods: {

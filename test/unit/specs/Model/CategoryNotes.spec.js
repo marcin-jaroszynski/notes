@@ -1,4 +1,3 @@
-import Tags from '../../../../src/model/category/tags.js'
 import Note from '../../../../src/model/note/note.js'
 import CategoryNotes from '../../../../src/model/category/notes.js'
 import Category from '../../../../src/model/category/category.js'

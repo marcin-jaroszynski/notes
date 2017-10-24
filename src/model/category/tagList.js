@@ -50,7 +50,12 @@ export default class CategoryTagList {
   }
 
   checkIsExist(tagCode) {
-    return this.data[tagCode];
+    if (this.data[tagCode]) {
+      if (this.data[tagCode].counter > 0) {
+        return true;
+      }
+    }
+    return false;
   }
 
   init(tag) {
@@ -68,5 +73,12 @@ export default class CategoryTagList {
     if (this.data[tagCode].counter > 0) {
       this.data[tagCode].counter--;
     }
+  }
+
+  isInclude(tagCode) {
+    if (this.checkIsExist(tagCode)) {
+      return true;
+    }
+    return false;
   }
 }

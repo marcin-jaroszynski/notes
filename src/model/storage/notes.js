@@ -26,20 +26,16 @@ export default class Notes {
     let categories = this.categories.getAll();
     for (let i = 0; i < categories.length; i++) {
       if (categories[i].tags.isInclude(tagCode)) {
-        let noteRow = {
-          categoryTitle: categories[i].getTitle(),
-          categoryUrl: categories[i].getUrl(),
-          noteTitle: '',
-          noteUrl: '',
-          noteDateAdded: ''
-        };
         let notes = categories[i].notes.getAll();
         for (let j = 0; j < notes.length; j++) {
           if (notes[j].tags.isInclude(tagCode)) {
-            noteRow.noteTitle = notes[j].getTitle();
-            noteRow.noteUrl = notes[j].getUrl();
-            noteRow.noteDateAdded = notes[j].getDateAdded();
-            notesList.push(noteRow);
+            notesList.push({
+              categoryTitle: categories[i].getTitle(),
+              categoryUrl: categories[i].getUrl(),
+              noteTitle: notes[j].getTitle(),
+              noteUrl: notes[j].getUrl(),
+              noteDateAdded: notes[j].getDateAdded()
+            });
           }
         }
       }

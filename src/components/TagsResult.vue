@@ -6,7 +6,7 @@
         <li><button @click="backToDashboard()">Back to Dashboard</button></li>
       </div>
       <div slot="content">
-        <div>Entries for tag: XXX</div>
+        <div>Entries for tag: {{ getTitleTag }}</div>
         <p>
           <table>
             <tbody>
@@ -45,7 +45,12 @@
     },
     computed: {
       getEntriesForTag() {
-        return this.storage.notes.getForTag(this.tagCode);
+        let noteList = this.storage.notes.getForTag(this.tagCode);
+        return noteList;
+      },
+      getTitleTag() {
+        let tagInfo = this.storage.tags.tag(this.tagCode);
+        return tagInfo.getTitle();
       }     
     },
     methods: {

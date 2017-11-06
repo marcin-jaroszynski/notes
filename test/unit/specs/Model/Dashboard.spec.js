@@ -20,7 +20,8 @@ describe('Dashboard model', () => {
 
   it('add', () => {
     let storage = new Storage();
-    storage.categories.add('Linux');
+    let categoryLinux = getCategory('Linux');
+    storage.categories.add(categoryLinux);
 
     let category = storage.categories.get('linux');
 
@@ -43,7 +44,7 @@ describe('Dashboard model', () => {
   it('update - change name of category', () => {
     let storage = new Storage();
     let categoryLinux = getCategory('Linux');
-    storage.categories.add(categoryLinux.getTitle());
+    storage.categories.add(categoryLinux);
     let dashboard = new Dashboard();
     let nNotes = 2;
     for (let i = 1; i <= nNotes; i++) {
@@ -66,7 +67,7 @@ describe('Dashboard model', () => {
   it('update - update specific note data in dashboard', () => {
     let storage = new Storage();
     let categoryLinux = getCategory('Linux');
-    storage.categories.add(categoryLinux.getTitle());
+    storage.categories.add(categoryLinux);
     let dashboard = new Dashboard();
     let nNotes = 2;
     for (let i = 1; i <= nNotes; i++) {
@@ -74,7 +75,7 @@ describe('Dashboard model', () => {
       dashboard.add(note, categoryLinux);
     }
     let categoryPython = getCategory('Python');
-    storage.categories.add(categoryPython.getTitle());
+    storage.categories.add(categoryPython);
     
     let noteEditId = 1;
     let noteEdit = getNote(noteEditId, categoryPython.getCode());
@@ -95,7 +96,7 @@ describe('Dashboard model', () => {
   it('remove specific entry from dashboard', () => {
     let storage = new Storage();
     let categoryLinux = getCategory('Linux');
-    storage.categories.add(categoryLinux.getTitle());
+    storage.categories.add(categoryLinux);
     let dashboard = new Dashboard();
     let nNotes = 2;
     for (let i = 1; i <= nNotes; i++) {

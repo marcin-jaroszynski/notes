@@ -30,23 +30,23 @@ export default class Categories {
       return categoryToFind.getTitle();
   }
 
-  add(title) {
-    let result = this.categories.checkIsExist(title);
+  add(category) {
+    let result = this.categories.checkIsExist(category.getTitle());
     if (!result.getTitle()) {
-      this.categories.add(title);
+      this.categories.add(category);
       return true;
     }
     return false; 
   }
 
   changeTitle(currentCategoryTitle, newCategoryTitle) {
-    let categoryToChangeTitle = this.categories.checkIsExist(currentCategoryTitle);
-    if (categoryToChangeTitle.getTitle() == currentCategoryTitle) {
+    let categoryForWhichToChangeTitle = this.categories.checkIsExist(currentCategoryTitle);
+    if (categoryForWhichToChangeTitle.getTitle() == currentCategoryTitle) {
       let categoryWithNewTitle = this.categories.checkIsExist(newCategoryTitle);
       if (categoryWithNewTitle.getTitle() == '') {
-        categoryToChangeTitle.setTitle(newCategoryTitle);
+        categoryForWhichToChangeTitle.setTitle(newCategoryTitle);
         this.dashboard.updateCategories(currentCategoryTitle, newCategoryTitle);
-        return categoryToChangeTitle;
+        return categoryForWhichToChangeTitle;
       }
     }
     return new Category();

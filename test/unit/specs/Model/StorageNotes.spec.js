@@ -24,7 +24,7 @@ describe('Storage notes', () => {
   it('Add one note', () => {
     let storage = getStorage();
     let category = getCategory('Foo');
-    storage.categories.add(category.getTitle());
+    storage.categories.add(category);
     let noteTags = new TagList();
     noteTags.add('A');
     noteTags.add('B');
@@ -44,7 +44,7 @@ describe('Storage notes', () => {
   it('Add two notes with many tags', () => {
     let storage = getStorage();
     let category = getCategory('Foo');
-    storage.categories.add(category.getTitle());
+    storage.categories.add(category);
 
     let note1Tags = new TagList();
     note1Tags.add('A');
@@ -86,7 +86,7 @@ describe('Storage notes', () => {
   it('Remove note', () => {
     let storage = getStorage();
     let category = getCategory('Foo');
-    storage.categories.add(category.getTitle());
+    storage.categories.add(category);
 
     let note1Tags = new TagList();
     note1Tags.add('A');
@@ -120,7 +120,7 @@ describe('Storage notes', () => {
   it('Remove note - given non-existing id', () => {
     let storage = getStorage();
     let category = getCategory('Foo');
-    storage.categories.add(category.getTitle());
+    storage.categories.add(category);
 
     let note1Tags = new TagList();
     note1Tags.add('A');
@@ -150,7 +150,7 @@ describe('Storage notes', () => {
   it('Update note and category tags', () => {
     let storage = getStorage();
     let category = getCategory('Foo');
-    storage.categories.add(category.getTitle());
+    storage.categories.add(category);
 
     let note1Tags = new TagList();
     note1Tags.add('A');
@@ -195,7 +195,7 @@ describe('Storage notes', () => {
   it('Change note category', () => {
     let storage = getStorage();
     let categoryFoo = getCategory('Foo');
-    storage.categories.add(categoryFoo.getTitle());
+    storage.categories.add(categoryFoo);
 
     let note1Tags = new TagList();
     note1Tags.add('A');
@@ -205,7 +205,7 @@ describe('Storage notes', () => {
     storage.notes.add(note1);
 
     let categoryBar = getCategory('Bar');
-    storage.categories.add(categoryBar.getTitle());
+    storage.categories.add(categoryBar);
 
     expect(2).to.equal(storage.categories.getAll().length, 'Amount of categories');
 
@@ -249,7 +249,7 @@ describe('Storage notes', () => {
   it('Edit note - for non-existing category - failure', () => {
     let storage = getStorage();
     let category = getCategory('Foo');
-    storage.categories.add(category.getTitle());
+    storage.categories.add(category);
 
     let note1Tags = new TagList();
     note1Tags.add('A');
@@ -283,28 +283,28 @@ describe('Storage notes', () => {
   });
 
   it('Change title category should change category code in all notes of edited category', () => {
-    let fooCategory = getCategory('Foo');
+    let categoryFoo = getCategory('Foo');
     let storage = getStorage();
-    storage.categories.add(fooCategory.getTitle());
+    storage.categories.add(categoryFoo);
 
     let note1Tags = new TagList();
     note1Tags.add('A');
-    let note1ToAdd = getNote('Note 1', fooCategory.getCode(), note1Tags);
+    let note1ToAdd = getNote('Note 1', categoryFoo.getCode(), note1Tags);
     storage.notes.add(note1ToAdd);
 
     let note2Tags = new TagList();
     note2Tags.add('B');
-    let note2ToAdd = getNote('Note 2', fooCategory.getCode(), note2Tags);
+    let note2ToAdd = getNote('Note 2', categoryFoo.getCode(), note2Tags);
     storage.notes.add(note2ToAdd);
 
-    let notesFooCategory = storage.categories.getNotesFor(fooCategory.getCode());
-    expect(2).to.equal(notesFooCategory.length, 'Amount of notes added to Foo category');
+    let notesCategoryFoo = storage.categories.getNotesFor(categoryFoo.getCode());
+    expect(2).to.equal(notesCategoryFoo.length, 'Amount of notes added to Foo category');
 
     let categoryBar = new getCategory('Bar');
-    storage.categories.changeTitle(fooCategory.getTitle(), categoryBar.getTitle());
-
-    let notesFooCategoryAfterTitleChanged = storage.categories.getNotesFor(fooCategory.getCode());
-    expect(0).to.equal(notesFooCategoryAfterTitleChanged.length, 'Amount of notes Foo category after title changed');
+    storage.categories.changeTitle(categoryFoo.getTitle(), categoryBar.getTitle());
+    
+    let notesCategoryFooAfterTitleChanged = storage.categories.getNotesFor(categoryFoo.getCode());
+    expect(0).to.equal(notesCategoryFooAfterTitleChanged.length, 'Amount of notes Foo category after title changed');
 
     let notesOfBarCategory = storage.categories.getNotesFor(categoryBar.getCode());
     expect(2).to.equal(notesOfBarCategory.length, 'Amount of notes Bar category after title changed of Foo category');

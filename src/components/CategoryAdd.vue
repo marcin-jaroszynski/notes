@@ -27,6 +27,7 @@
 <script>
   import Layout from './Layout'
   import Url from '../model/url.js'
+  import Category from '../model/category/category.js'
 
   export default {
     props: ['storage'],
@@ -48,11 +49,11 @@
         this.$router.push(Url.getDashboard());
       },
       addCategory: function() {
-        if (this.storage.categories.add(this.categoryNameFromField)) {
-          console.log('Category added');
+        let categoryToAdd = new Category({title: this.categoryNameFromField});
+        if (this.storage.categories.add(categoryToAdd)) {
           this.categoryNameFromField = '';
         } else {
-          console.log('Category already exist! Not added');
+          alert('Category already exist! Not added');
         }
       },
       chooseFromCategoryList: function(event) {

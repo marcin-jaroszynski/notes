@@ -30,6 +30,13 @@ export default class CategoryTagList {
     this.incrementCounter(tag.getCode());
   }
 
+  findByCode(tagCode) {
+    if (this.checkIsExist(tagCode)) {
+      return this.data[tagCode].object;
+    }
+    return new Tag();
+  }
+
   remove(title) {
     let tag = new Tag({title: title});
     if (this.checkIsExist(tag.getCode())) {

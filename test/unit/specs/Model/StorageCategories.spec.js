@@ -1,10 +1,29 @@
 import Category from '../../../../src/model/category/category.js'
 import StorageCategories from '../../../../src/model/storage/categories.js'
+import TagList from '../../../../src/model/tag/list.js'
+import Note from '../../../../src/model/note/note.js'
 import Dashboard from '../../../../src/model/dashboard/dashboard.js'
 
 describe('Storage categories', () => {
-  let getFooCategory = () => {
-    return new Category({ title: 'Foo' });
+  let getCategory = (title) => {
+    return new Category({ title: title });
+  }; 
+
+  let getNote = (title, categoryId, tags) => {
+    let note = new Note();
+    note.setTitle(title);
+    note.setContent(title +' - Content');
+    note.setCategoryId(categoryId);
+    note.tags.addMany(tags.get());
+    return note;
+  };
+
+  let getTagList = (tags) => {
+    let tagList = new TagList();
+    for (let i = 0; i < tags.length; i++) {
+      tagList.add(tags[i]);
+    }
+    return tagList;
   };
 
   let getStorageCategories = () => {
@@ -13,33 +32,39 @@ describe('Storage categories', () => {
   };
 
   let getStorageCategoriesWithAddedFooCategory = () => {
-    let categoryToAdd = getFooCategory();
+    let categoryToAdd = getCategory('Foo');
     let storageCategories = getStorageCategories();
-    storageCategories.add(categoryToAdd.getTitle());
+    storageCategories.add(categoryToAdd);
     return storageCategories;
   };
 
-  it('Add category', () => {
-    let categoryToAdd = new Category({ title: 'Foo' });
+  it('Add category with tags', () => {
+    let categoryToAdd = getCategory('Foo');
+    let note = getNote('Note 1', 1, getTagList(['A', 'B']));
+    categoryToAdd.addNote(note);
     let storageCategories = getStorageCategories();
-    let result = storageCategories.add(categoryToAdd.getTitle());
-    expect(true).to.equal(result);
+    let result = storageCategories.add(categoryToAdd);
+    expect(true).to.equal(result, 'Result of add new category should be successful');
     let addedCategory = storageCategories.get(categoryToAdd.getCode());
     expect(categoryToAdd.getTitle()).to.equal(addedCategory.getTitle());
     expect(categoryToAdd.getCode()).to.equal(addedCategory.getCode());
+    let tagsAddedCategory = addedCategory.tags.get();
+    // console.log('tagsAddedCategory: ' + JSON.stringify(tagsAddedCategory));
+    expect(2).to.equal(tagsAddedCategory.length);
   });
 
   it('Try to add category with the title that exist - should fail', () => {
     let storageCategories = getStorageCategories();
-    expect(true).to.equal(storageCategories.add('Foo'), 'add first Foo category');
-    expect(false).to.equal(storageCategories.add('Foo'), 'try to add second Foo category');
+    let categoryFoo = getCategory('Foo');
+    expect(true).to.equal(storageCategories.add(categoryFoo), 'add first Foo category');
+    expect(false).to.equal(storageCategories.add(categoryFoo), 'try to add second Foo category');
   });
 
   it('getTitleFor should return valid title of category', () => {
-    let fooCategory = getFooCategory();
+    let categoryFoo = getCategory('Foo');
     let storageCategories = getStorageCategoriesWithAddedFooCategory();
 
-    expect('Foo').to.equal(storageCategories.getTitleFor(fooCategory.getCode()));
+    expect('Foo').to.equal(storageCategories.getTitleFor(categoryFoo.getCode()));
   });
 
   it('getTitleFor should return title category as empty string for invalid code category', () => {
@@ -48,18 +73,18 @@ describe('Storage categories', () => {
   });
 
   it('changeTitle returns true - success to change title', () => {
-    let fooCategory = getFooCategory();
+    let categoryFoo = getCategory('Foo');
     let storageCategories = getStorageCategoriesWithAddedFooCategory();
-    let currentTitleOfCategory = fooCategory.getTitle();
+    let currentTitleOfCategory = categoryFoo.getTitle();
     let newTitleOfCategory = 'New foo';
     let categoryWithChangedName = storageCategories.changeTitle(currentTitleOfCategory, newTitleOfCategory);
     expect(newTitleOfCategory).to.equal(categoryWithChangedName.getTitle());
   });
 
   it('Attempt to add two categories with the same title will failure', () => {
-    let fooCategory = getFooCategory();
+    let categoryFoo = getCategory('Foo');
     let storageCategories = getStorageCategoriesWithAddedFooCategory();
-    let result = storageCategories.add(fooCategory.getTitle());
+    let result = storageCategories.add(categoryFoo);
     expect(false).to.equal(result);
-  });
+  }); 
 });

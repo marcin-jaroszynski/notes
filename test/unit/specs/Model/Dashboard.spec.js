@@ -1,13 +1,9 @@
+import Helper from './Helper.js';
 import Dashboard from '../../../../src/model/dashboard/dashboard.js'
 import Storage from '../../../../src/model/storage/storage.js'
 import Note from '../../../../src/model/note/note.js'
-import Category from '../../../../src/model/category/category.js'
-
 
 describe('Dashboard model', () => {
-  let getCategory = (title) => {
-    return new Category({ title: title });
-  };
 
   let getNote = (id, categoryId) => {
     let note = new Note();
@@ -20,7 +16,7 @@ describe('Dashboard model', () => {
 
   it('add', () => {
     let storage = new Storage();
-    let categoryLinux = getCategory('Linux');
+    let categoryLinux = Helper.getCategory('Linux');
     storage.categories.add(categoryLinux);
 
     let category = storage.categories.get('linux');
@@ -28,11 +24,15 @@ describe('Dashboard model', () => {
     let dashboard = new Dashboard();
     let iterations = 10;
     for (let i = 1; i <= iterations; i++) {
-      let note = getNote(i, category.getCode());
+      let note = Helper.getNote('Note ' + i);
+      note.setId(i);
+      note.setCategoryId(category.getCode());
       dashboard.add(note, category);
     }
     expect(iterations).to.equal(dashboard.length());
-    let lastInsertedNote = getNote(11, category.getCode());
+    let lastInsertedNote = Helper.getNote('Note 11');
+    lastInsertedNote.setId(11);
+    lastInsertedNote.setCategoryId(category.getCode());
     dashboard.add(lastInsertedNote, category);
     expect(iterations).to.equal(dashboard.length());
     let topNote = dashboard.peek();
@@ -43,7 +43,7 @@ describe('Dashboard model', () => {
 
   it('update - change name of category', () => {
     let storage = new Storage();
-    let categoryLinux = getCategory('Linux');
+    let categoryLinux = Helper.getCategory('Linux');
     storage.categories.add(categoryLinux);
     let dashboard = new Dashboard();
     let nNotes = 2;
@@ -51,7 +51,7 @@ describe('Dashboard model', () => {
       let note = getNote(i, categoryLinux.getCode());
       dashboard.add(note, categoryLinux);
     }
-    let categoryPython = getCategory('Python');
+    let categoryPython = Helper.getCategory('Python');
     dashboard.updateCategories(categoryLinux.getTitle(), categoryPython.getTitle());
     let counterUpdateDashbordItems = 0;
     let dashboardItems = dashboard.get();
@@ -66,7 +66,7 @@ describe('Dashboard model', () => {
 
   it('update - update specific note data in dashboard', () => {
     let storage = new Storage();
-    let categoryLinux = getCategory('Linux');
+    let categoryLinux = Helper.getCategory('Linux');
     storage.categories.add(categoryLinux);
     let dashboard = new Dashboard();
     let nNotes = 2;
@@ -74,7 +74,7 @@ describe('Dashboard model', () => {
       let note = getNote(i, categoryLinux.getCode());
       dashboard.add(note, categoryLinux);
     }
-    let categoryPython = getCategory('Python');
+    let categoryPython = Helper.getCategory('Python');
     storage.categories.add(categoryPython);
     
     let noteEditId = 1;
@@ -95,7 +95,7 @@ describe('Dashboard model', () => {
 
   it('remove specific entry from dashboard', () => {
     let storage = new Storage();
-    let categoryLinux = getCategory('Linux');
+    let categoryLinux = Helper.getCategory('Linux');
     storage.categories.add(categoryLinux);
     let dashboard = new Dashboard();
     let nNotes = 2;

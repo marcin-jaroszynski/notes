@@ -49,7 +49,6 @@ describe('Storage categories', () => {
     expect(categoryToAdd.getTitle()).to.equal(addedCategory.getTitle());
     expect(categoryToAdd.getCode()).to.equal(addedCategory.getCode());
     let tagsAddedCategory = addedCategory.tags.get();
-    // console.log('tagsAddedCategory: ' + JSON.stringify(tagsAddedCategory));
     expect(2).to.equal(tagsAddedCategory.length);
   });
 

@@ -1,21 +1,17 @@
-import Category from '../../../../src/model/category/category.js'
+import Helper from './Helper.js';
 import Note from '../../../../src/model/note/note.js'
 import TagList from '../../../../src/model/tag/list.js'
 
 describe('Category model', () => {
-  let getCategory = () => {
-    return new Category({ title: 'Python' });
-  };
-
   it('Create category object with config data', () => {
-    let category = getCategory();
+    let category = Helper.getCategory('Python');
     expect('Python').to.equal(category.getTitle(), 'Non-empty title');
     expect('python').to.equal(category.getCode(), 'Non-empty code');
     expect('/category/show/python').to.equal(category.getUrl(), 'Non-empty url');
   });
 
   it('setTitle', () => {
-    let category = getCategory();
+    let category = Helper.getCategory('Python');
     let newCategoryTitle = 'JavaScript';
     category.setTitle(newCategoryTitle);
     expect(newCategoryTitle).to.equal(category.getTitle());
@@ -27,13 +23,13 @@ describe('Category model', () => {
     tagsList.add('B');
     tagsList.add('C');
 
-    let category = getCategory();
+    let category = Helper.getCategory('Python');
     category.tags.addMany(tagsList.get());
     expect(tagsList.get().length).to.equal(category.tags.get().length);
   });
 
   it('Edit note', () => {
-    let category = getCategory();
+    let category = Helper.getCategory('Python');
     let note = new Note();
     note.setId(1);
     note.setTitle('Note 1');
@@ -61,7 +57,7 @@ describe('Category model', () => {
   });
 
   it('Remove note', () => {
-    let category = getCategory();
+    let category = Helper.getCategory('Python');
     let note = new Note();
     note.setId(1);
     note.setTitle('Note 1');

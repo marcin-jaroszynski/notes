@@ -1,33 +1,16 @@
-import Note from '../../../../src/model/note/note.js'
+import Helper from './Helper.js';
 import CategoryNotes from '../../../../src/model/category/notes.js'
-import Category from '../../../../src/model/category/category.js'
 
 describe('Category Notes model', () => {
-  let getNote = (titleNote, categoryCode) => {
-    let note = new Note();
-    note.setId(1);
-    note.setTitle(titleNote);
-    note.setCategoryId(categoryCode);
-    note.tags.add('A');
-    note.tags.add('B');
-    return note;
-  };
-
-  let getNonEmptyCategoryNotes = () => {
-    let categoryNotes = new CategoryNotes();  
-    let fooCategory = getCategory('Foo');
-    categoryNotes.add(getNote('Note 1', fooCategory.getCode()));
+  let getNonEmptyCategoryNotes = (note) => {
+    let categoryNotes = new CategoryNotes();
+    categoryNotes.add(note);
     return categoryNotes;
   };
 
-  let getCategory = (title) => {
-    return new Category({ title: title });
-  };
-
   it('Add note', () => {
-    let categoryNotes = getNonEmptyCategoryNotes();
-    let fooCategory = getCategory('Foo');
-    let note = getNote('Note 1', fooCategory.getCode());
+    let note = Helper.getNote('Note 1');
+    let categoryNotes = getNonEmptyCategoryNotes(note);
     let addedNote = categoryNotes.get(note.getId());
     expect(note.getId()).to.equal(addedNote.getId());
     expect(note.getTitle()).to.equal(addedNote.getTitle());
@@ -35,13 +18,13 @@ describe('Category Notes model', () => {
   });
 
   it('Edit note', () => {
-    let categoryNotes = getNonEmptyCategoryNotes();
-    let fooCategory = getCategory('Foo');
-    let note = getNote('Note 2', fooCategory.getCode());
-    let editedNote = new Note();
-    editedNote.setId(note.getId());
+    let note1 = Helper.getNote('Note 1', ['A', 'B']);
+    note1.setId(1);
+    let categoryNotes = getNonEmptyCategoryNotes(note1);
+    let editedNote = Helper.getNote('Note 1');
+    editedNote.setId(note1.getId());
     editedNote.setTitle('Note 1 - edited');
-    editedNote.tags.addMany(note.tags.get());
+    editedNote.tags.addMany(note1.tags.get());
     editedNote.tags.remove('B');
     let resultEdit = categoryNotes.edit(editedNote);
     expect(true).to.equal(resultEdit);
@@ -50,32 +33,33 @@ describe('Category Notes model', () => {
   });
 
   it('Remove note - success', () => {
-    let categoryNotes = getNonEmptyCategoryNotes();
+    let note = Helper.getNote('Note 1');
+    let categoryNotes = getNonEmptyCategoryNotes(note);
     expect(1).to.equal(categoryNotes.getAll().length);
-    let fooCategory = getCategory('Foo');
-    let addedNote = getNote('Note 2', fooCategory.getCode());
+    let addedNote = Helper.getNote('Note 2');
     let resultRemove = categoryNotes.remove(addedNote.getId());
     expect(true).to.equal(resultRemove);
     expect(0).to.equal(categoryNotes.getAll().length);
   });
 
   it('Remove note - failure non-existing note', () => {
-    let categoryNotes = getNonEmptyCategoryNotes();
+    let note = Helper.getNote('Note 1');
+    let categoryNotes = getNonEmptyCategoryNotes(note);
     expect(1).to.equal(categoryNotes.getAll().length);
-    let fooCategory = getCategory('Foo');
-    let addedNote = getNote('Note 2', fooCategory.getCode());
+    let addedNote = Helper.getNote('Note 2');
     let resultRemove = categoryNotes.remove(123456);
     expect(false).to.equal(resultRemove);
     expect(1).to.equal(categoryNotes.getAll().length);
   });
 
   it('Update category id of all notes', () => {
-    let categoryNotes = getNonEmptyCategoryNotes();
-    let fooCategory = getCategory('Foo');
-    let note2 = getNote('Note 2', fooCategory.getCode());
+    let note = Helper.getNote('Note 1');
+    let categoryNotes = getNonEmptyCategoryNotes(note);
+    let fooCategory = Helper.getCategory('Foo');
+    let note2 = Helper.getNote('Note 2');
     categoryNotes.add(note2);
     expect(2).to.equal(categoryNotes.getAll().length);
-    let barCategory = getCategory('Bar');
+    let barCategory = Helper.getCategory('Bar');
     categoryNotes.updateAllCategoryId(barCategory.getCode());
     let amountOfUpdatedNotesCategoryId = 0;
     let notes = categoryNotes.getAll();

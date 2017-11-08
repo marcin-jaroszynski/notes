@@ -1,8 +1,8 @@
-import ResourceList from '../../../../src/model/resource/list.js'
+import Helper from './Helper.js';
 
 describe('Resource list model', () => {
   let getNonEmptyResourceList = () => {
-    let resourceList = new ResourceList();
+    let resourceList = Helper.getResourceList();
     resourceList.add('Front end');
     return resourceList;
   };

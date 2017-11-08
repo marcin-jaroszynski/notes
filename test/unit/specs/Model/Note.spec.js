@@ -1,13 +1,13 @@
- import Note from '../../../../src/model/note/note.js'
+import Helper from './Helper.js';
 
- describe('Note model', () => {
+describe('Note model', () => {
   it('Create empty object', () => {
-    let note = new Note();
-    expect(0).to.equal(note.id);
-    expect('').to.equal(note.categoryId);
-    expect('').to.equal(note.title);
-    expect('').to.equal(note.content);
-    expect('').to.equal(note.url);
-    expect(0).to.equal(note.tags.length());
+    let note = Helper.getNote();
+    expect(0).to.equal(note.id, 'Empty ID');
+    expect('').to.equal(note.categoryId, 'Empty category ID');
+    expect('').to.equal(note.title, 'Empty title');
+    expect('').to.equal(note.content, 'Empty content');
+    expect('').to.equal(note.url, 'Empty url');
+    expect(0).to.equal(note.tags.length(), 'Zero tags');
   });
- });
+});

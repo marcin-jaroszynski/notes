@@ -1,16 +1,15 @@
-import Note from '../../../../src/model/note/note.js'
-import NoteList from '../../../../src/model/note/list.js'
+import Helper from './Helper.js';
 
 describe('Note list model', () => {
   it('Get specific note', () => {
-    let noteList = new NoteList();
+    let noteList = Helper.getNoteList();
 
-    let note1 = new Note();
+    let note1 = Helper.getNote();
     note1.setId(1);
     note1.setTitle('Note 1');
     noteList.add(note1);
 
-    let note2 = new Note();
+    let note2 = Helper.getNote();
     note2.setId(2);
     note2.setTitle('Note 2');
     noteList.add(note2);
@@ -25,14 +24,14 @@ describe('Note list model', () => {
   });
 
   it('Remove note', () => {
-    let noteList = new NoteList();
+    let noteList = Helper.getNoteList();
 
-    let note1 = new Note();
+    let note1 = Helper.getNote();
     note1.setId(1);
     note1.setTitle('Note 1');
     noteList.add(note1);
 
-    let note2 = new Note();
+    let note2 = Helper.getNote();
     note2.setId(2);
     note2.setTitle('Note 2');
     noteList.add(note2);

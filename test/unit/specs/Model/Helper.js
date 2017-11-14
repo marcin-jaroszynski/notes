@@ -29,7 +29,7 @@ export default class Helper {
     return new Tag({title: title});
   };
 
-  static getTagList(tags) {
+  static getTagList(tags=[]) {
     let tagList = new TagList();
     for (let i = 0; i < tags.length; i++) {
       tagList.add(tags[i]);

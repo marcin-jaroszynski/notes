@@ -1,18 +1,6 @@
 import Helper from './Helper.js';
-import Note from '../../../../src/model/note/note.js'
-import TagList from '../../../../src/model/tag/list.js'
 
 describe('Storage notes', () => {
-
-  let getNote = (title, categoryId, tags) => {
-    let note = new Note();
-    note.setTitle(title);
-    note.setContent(title +' - Content');
-    note.setCategoryId(categoryId);
-    note.tags.addMany(tags.get());
-    return note;
-  };
-
   it('Add one note', () => {
     let storage = Helper.getStorage();
     let category = Helper.getCategory('Foo');
@@ -46,10 +34,6 @@ describe('Storage notes', () => {
     let categoryToFind = storage.categories.get(category.getCode());
     expect(note1ToAdd.tags.get().length).to.equal(categoryToFind.tags.get().length);
     
-    let note2Tags = new TagList();
-    note2Tags.add('D');
-    note2Tags.add('E');
-    note2Tags.add('A');
     let note2ToAdd = Helper.getNote('Note 2', ['D', 'E', 'A']);
     note2ToAdd.setCategoryId(category.getCode());
     storage.notes.add(note2ToAdd);
@@ -75,18 +59,13 @@ describe('Storage notes', () => {
     let category = Helper.getCategory('Foo');
     storage.categories.add(category);
 
-    let note1Tags = new TagList();
-    note1Tags.add('A');
-    note1Tags.add('B');
-    note1Tags.add('C');
-    let note1 = getNote('Note 1', category.getCode(), note1Tags);
+    let note1 = Helper.getNote('Note 1', ['A', 'B', 'C']);
+    note1.setCategoryId(category.getCode());
     let resultNote1Add = storage.notes.add(note1);
     expect(true).to.equal(resultNote1Add);
 
-    let note2Tags = new TagList();
-    note2Tags.add('D');
-    note2Tags.add('E');
-    let note2 = getNote('Note 2', category.getCode(), note2Tags);
+    let note2 = Helper.getNote('Note 2', ['D', 'E']);
+    note2.setCategoryId(category.getCode());
     let resultNote2Add = storage.notes.add(note2);
     expect(true).to.equal(resultNote2Add);
 
@@ -109,18 +88,13 @@ describe('Storage notes', () => {
     let category = Helper.getCategory('Foo');
     storage.categories.add(category);
 
-    let note1Tags = new TagList();
-    note1Tags.add('A');
-    note1Tags.add('B');
-    note1Tags.add('C');
-    let note1 = getNote('Note 1', category.getCode(), note1Tags);
+    let note1 = Helper.getNote('Note 1', ['A', 'B', 'C']);
+    note1.setCategoryId(category.getCode());
     let resultNote1Add = storage.notes.add(note1);
     expect(true).to.equal(resultNote1Add);
 
-    let note2Tags = new TagList();
-    note2Tags.add('D');
-    note2Tags.add('E');
-    let note2 = getNote('Note 2', category.getCode(), note2Tags);
+    let note2 = Helper.getNote('Note 2', ['D', 'E']);
+    note2.setCategoryId(category.getCode());
     let resultNote2Add = storage.notes.add(note2);
     expect(true).to.equal(resultNote2Add);
 
@@ -139,23 +113,19 @@ describe('Storage notes', () => {
     let category = Helper.getCategory('Foo');
     storage.categories.add(category);
 
-    let note1Tags = new TagList();
-    note1Tags.add('A');
-    note1Tags.add('B');
-    note1Tags.add('C');
-    let note1 = getNote('Note 1', category.getCode(), note1Tags);
+    let note1Tags = ['A', 'B', 'C'];
+    let note1 = Helper.getNote('Note 1', note1Tags);
+    note1.setCategoryId(category.getCode());
     storage.notes.add(note1);
 
-    let noteToEdit = getNote('Note 1 edited', category.getCode(), note1Tags);
+    let noteToEdit = Helper.getNote('Note 1 edited', note1Tags);
     noteToEdit.setId(note1.getId());
+    noteToEdit.setCategoryId(category.getCode());
 
-    let tagsToAdd = new TagList();
-    tagsToAdd.add('D');
-    tagsToAdd.add('E');
+    let tagsToAdd = Helper.getTagList(['D', 'E']);
     noteToEdit.tags.addMany(tagsToAdd.get());
 
-    let tagsToRemove = new TagList();
-    tagsToRemove.add('B');
+    let tagsToRemove = Helper.getTagList(['B']);
     noteToEdit.tags.removeMany(tagsToRemove.get());
 
     let editNoteResult = storage.notes.edit(noteToEdit, tagsToAdd, tagsToRemove);
@@ -184,11 +154,9 @@ describe('Storage notes', () => {
     let categoryFoo = Helper.getCategory('Foo');
     storage.categories.add(categoryFoo);
 
-    let note1Tags = new TagList();
-    note1Tags.add('A');
-    note1Tags.add('B');
-    note1Tags.add('C');
-    let note1 = getNote('Note 1', categoryFoo.getCode(), note1Tags);
+    let note1Tags = ['A', 'B', 'C'];
+    let note1 = Helper.getNote('Note 1', note1Tags);
+    note1.setCategoryId(categoryFoo.getCode());
     storage.notes.add(note1);
 
     let categoryBar = Helper.getCategory('Bar');
@@ -196,16 +164,14 @@ describe('Storage notes', () => {
 
     expect(2).to.equal(storage.categories.getAll().length, 'Amount of categories');
 
-    let noteToEdit = getNote('Note 1 edited', categoryBar.getCode(), note1Tags);
+    let noteToEdit = Helper.getNote('Note 1 edited', note1Tags);
     noteToEdit.setId(note1.getId());
+    noteToEdit.setCategoryId(categoryBar.getCode());
 
-    let tagsToAdd = new TagList();
-    tagsToAdd.add('D');
-    tagsToAdd.add('E');
+    let tagsToAdd = Helper.getTagList(['D', 'E']);
     noteToEdit.tags.addMany(tagsToAdd.get());
 
-    let tagsToRemove = new TagList(); 
-    tagsToRemove.add('B');
+    let tagsToRemove = Helper.getTagList(['B']);
     noteToEdit.tags.removeMany(tagsToRemove.get());
 
     let editNoteResult = storage.notes.edit(noteToEdit, tagsToAdd, tagsToRemove)
@@ -238,24 +204,20 @@ describe('Storage notes', () => {
     let category = Helper.getCategory('Foo');
     storage.categories.add(category);
 
-    let note1Tags = new TagList();
-    note1Tags.add('A');
-    note1Tags.add('B');
-    note1Tags.add('C');
-    let note1 = getNote('Note 1', category.getCode(), note1Tags);
+    let note1Tags = ['A', 'B', 'C'];
+    let note1 = Helper.getNote('Note 1', note1Tags);
+    note1.setCategoryId(category.getCode());
     storage.notes.add(note1);
 
     let nonExistingCategoryCode = 'non-existing-category-code';
-    let noteToEdit = getNote('Note 1 edited', nonExistingCategoryCode, note1Tags);
+    let noteToEdit = Helper.getNote('Note 1 edited', note1Tags);
     noteToEdit.setId(note1.getId());
+    noteToEdit.setCategoryId(nonExistingCategoryCode);
 
-    let tagsToAdd = new TagList();
-    tagsToAdd.add('D');
-    tagsToAdd.add('E');
+    let tagsToAdd = Helper.getTagList(['D', 'E']);
     noteToEdit.tags.addMany(tagsToAdd.get());
 
-    let tagsToRemove = new TagList();
-    tagsToRemove.add('B');
+    let tagsToRemove = Helper.getTagList(['B']);
     noteToEdit.tags.removeMany(tagsToRemove.get());
 
     let editNoteResult = storage.notes.edit(noteToEdit, tagsToAdd, tagsToRemove);
@@ -274,14 +236,12 @@ describe('Storage notes', () => {
     let storage = Helper.getStorage();
     storage.categories.add(categoryFoo);
 
-    let note1Tags = new TagList();
-    note1Tags.add('A');
-    let note1ToAdd = getNote('Note 1', categoryFoo.getCode(), note1Tags);
+    let note1ToAdd = Helper.getNote('Note 1', ['A']);
+    note1ToAdd.setCategoryId(categoryFoo.getCode());
     storage.notes.add(note1ToAdd);
 
-    let note2Tags = new TagList();
-    note2Tags.add('B');
-    let note2ToAdd = getNote('Note 2', categoryFoo.getCode(), note2Tags);
+    let note2ToAdd = Helper.getNote('Note 1', ['B']);
+    note2ToAdd.setCategoryId(categoryFoo.getCode());
     storage.notes.add(note2ToAdd);
 
     let notesCategoryFoo = storage.categories.getNotesFor(categoryFoo.getCode());

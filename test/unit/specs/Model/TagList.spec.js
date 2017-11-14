@@ -1,62 +1,42 @@
-import TagList from '../../../../src/model/tag/list.js'
+import Helper from './Helper.js';
 
 describe('Tag list model', () => {
-  let getNonEmptyTagList = () => {
-    let tagList = new TagList();
-    tagList.add('Front end');
-    return tagList;
-  };
-
   it('Add new tag', () => {
-    let tagList = getNonEmptyTagList();
+    let tagList = Helper.getTagList(['Front end']);
     let addedTag = tagList.get()[0]; 
     expect('Front end').to.equal(addedTag.getTitle());
     expect('/tags/front-end').to.equal(addedTag.getUrl());
   });
 
   it('Try to add the same tag', () => {
-    let tagList = new TagList();
+    let tagList = Helper.getTagList();
     expect(true).to.equal(tagList.add('Front end'));
     expect(false).to.equal(tagList.add('Front end'));
   });
 
   it('Try to add empty tag - should fail', () => {
-    let tagList = new TagList();
+    let tagList = Helper.getTagList();
     expect(false).to.equal(tagList.add(''));
   });
 
   it('Add many tags', () => {
-    let tagList1 = new TagList();
-    tagList1.add('A');
-    tagList1.add('B');
-    tagList1.add('C');
-
-    let tagList2 = new TagList();
-    tagList2.add('D');
-    tagList2.add('E');
-    tagList2.add('A');
+    let tagList1 = Helper.getTagList(['A', 'B', 'C']);
+    let tagList2 = Helper.getTagList(['D', 'E', 'A']);
     tagList2.addMany(tagList1.get());
     expect(5).to.equal(tagList2.get().length);
   });
 
   it('Remove tag', () => {
-    let tagList = new TagList();
-    tagList.add('Front end');
-    tagList.add('Grid');
+    let tagList = Helper.getTagList(['Front end', 'Grid']);
     expect(2).to.equal(tagList.get().length);
     expect(true).to.equal(tagList.remove('Front end'));
     expect(1).to.equal(tagList.get().length);
   });
 
   it('Set tags', () => {
-    let tagList = new TagList();
-    tagList.add('A');
-    tagList.add('B');
+    let tagList = Helper.getTagList(['A', 'B']);
     expect(2).to.equal(tagList.length());
-    let tagListToSet = new TagList();
-    tagListToSet.add('C');
-    tagListToSet.add('D');
-    tagListToSet.add('E');
+    let tagListToSet = Helper.getTagList(['C', 'D', 'E']);
     tagList.set(tagListToSet.get());
     expect(3).to.equal(tagList.length());
   });

@@ -40,4 +40,12 @@ describe('Tag list model', () => {
     tagList.set(tagListToSet.get());
     expect(3).to.equal(tagList.length());
   });
+
+  it('Return difference between two tags list', () => {
+    let tagsList1 = Helper.getTagList(['A', 'B', 'C']);
+    let tagsList2 = Helper.getTagList(['A', 'C', 'D', 'E']);
+    let comparedTags = tagsList1.compare(tagsList2);
+    expect(Helper.getTagList(['D', 'E']).get()).to.deep.equal(comparedTags.toAdd.get(), 'Tags to add');
+    expect(Helper.getTagList(['B']).get()).to.deep.equal(comparedTags.toRemove.get(), 'Tags to remove');
+  });
 });

@@ -12,7 +12,7 @@ describe('Storage notes', () => {
     let categoryToFind = storage.categories.get(category.getCode());
     expect(1).to.equal(categoryToFind.notes.getAll().length);
     expect(3).to.equal(noteToAdd.tags.get().length, 'Count of note tags');
-    expect(3).to.equal(categoryToFind.tags.get().length, 'Count of category tags');
+    expect(3).to.equal(categoryToFind.getTags().length, 'Count of category tags');
     expect(1).to.equal(storage.dashboard.length());
     let topNoteInDashboard = storage.dashboard.peek();
     expect(noteToAdd.getTitle()).to.equal(topNoteInDashboard.getNoteTitle());
@@ -32,13 +32,13 @@ describe('Storage notes', () => {
     expect(note1ToAdd.getTitle()).to.equal(topNoteInDashboard.getNoteTitle(), 'First note added is on top in dashobard');
     
     let categoryToFind = storage.categories.get(category.getCode());
-    expect(note1ToAdd.tags.get().length).to.equal(categoryToFind.tags.get().length);
+    expect(note1ToAdd.tags.get().length).to.equal(categoryToFind.getTags().length);
     
     let note2ToAdd = Helper.getNote('Note 2', ['D', 'E', 'A']);
     note2ToAdd.setCategoryId(category.getCode());
     storage.notes.add(note2ToAdd);
 
-    expect(5).to.equal(categoryToFind.tags.get().length);
+    expect(5).to.equal(categoryToFind.getTags().length);
     expect(2).to.equal(storage.dashboard.length());
     topNoteInDashboard = storage.dashboard.peek();
     expect(note2ToAdd.getTitle()).to.equal(topNoteInDashboard.getNoteTitle(), 'Second note added is on top in dashobard');
@@ -74,12 +74,12 @@ describe('Storage notes', () => {
 
     let categoryWithNotes = storage.categories.get(category.getCode());
     expect(2).to.equal(categoryWithNotes.notes.getAll().length);
-    expect(5).to.equal(categoryWithNotes.tags.get().length);
+    expect(5).to.equal(categoryWithNotes.getTags().length);
 
     let resultRemove = storage.notes.remove(note2.getId());
     expect(true).to.equal(resultRemove, 'Result of remove note');
     expect(1).to.equal(categoryWithNotes.notes.getAll().length);
-    expect(note1.tags.get().length).to.equal(categoryWithNotes.tags.get().length);
+    expect(note1.tags.get().length).to.equal(categoryWithNotes.getTags().length);
     expect(1).to.equal(dashboardItems.length);
   });
 
@@ -100,12 +100,12 @@ describe('Storage notes', () => {
 
     let categoryWithNotes = storage.categories.get(category.getCode());
     expect(2).to.equal(categoryWithNotes.notes.getAll().length);
-    expect(5).to.equal(categoryWithNotes.tags.get().length);
+    expect(5).to.equal(categoryWithNotes.getTags().length);
 
     let resultRemove = storage.notes.remove('non-existing-note-id');
     expect(false).to.equal(resultRemove);
     expect(2).to.equal(categoryWithNotes.notes.getAll().length);
-    expect(5).to.equal(categoryWithNotes.tags.get().length);
+    expect(5).to.equal(categoryWithNotes.getTags().length);
   });
 
   it('Update note and category tags', () => {
@@ -118,17 +118,17 @@ describe('Storage notes', () => {
     note1.setCategoryId(category.getCode());
     storage.notes.add(note1);
 
+    let testCategoryNote = storage.categories.get(category.getCode());
+
     let noteToEdit = Helper.getNote('Note 1 edited', note1Tags);
-    noteToEdit.setId(note1.getId());
-    noteToEdit.setCategoryId(category.getCode());
+    noteToEdit.setId(1);
+    noteToEdit.setCategoryId(note1.getCategoryId());
 
     let tagsToAdd = Helper.getTagList(['D', 'E']);
     noteToEdit.tags.addMany(tagsToAdd.get());
-
-    let tagsToRemove = Helper.getTagList(['B']);
-    noteToEdit.tags.removeMany(tagsToRemove.get());
-
-    let editNoteResult = storage.notes.edit(noteToEdit, tagsToAdd, tagsToRemove);
+    noteToEdit.tags.remove('B');
+    
+    let editNoteResult = storage.notes.edit(noteToEdit);
     expect(true).to.equal(editNoteResult);
 
     let dashboardItems = storage.dashboard.get();
@@ -144,9 +144,9 @@ describe('Storage notes', () => {
     let noteAfterEdit = storage.notes.get(noteToEdit.getId());
     expect(noteToEdit.getTitle()).to.equal(noteAfterEdit.getTitle());
     expect(noteToEdit.getContent()).to.equal(noteAfterEdit.getContent());
-    expect(4).to.equal(noteAfterEdit.tags.get().length);
+    expect(4).to.equal(noteAfterEdit.tags.get().length, 'Tags note after update');
     let categoryWithEditedNote = storage.categories.get(category.getCode());
-    expect(4).to.equal(categoryWithEditedNote.tags.get().length);
+    expect(4).to.equal(categoryWithEditedNote.getTags().length, 'Tags category after update');
   });
 
   it('Change note category', () => {
@@ -196,7 +196,7 @@ describe('Storage notes', () => {
     expect(noteToEdit.getContent()).to.equal(noteAfterEdit.getContent());
     expect(noteToEdit.tags.get().length).to.equal(noteAfterEdit.tags.get().length);
     let categoryWithEditedNote = storage.categories.get(categoryBar.getCode());
-    expect(noteAfterEdit.tags.get().length).to.equal(categoryWithEditedNote.tags.get().length);
+    expect(noteAfterEdit.tags.get().length).to.equal(categoryWithEditedNote.getTags().length);
   });
 
   it('Edit note - for non-existing category - failure', () => {
@@ -228,7 +228,7 @@ describe('Storage notes', () => {
     expect(note1.getContent()).to.equal(noteAfterEdit.getContent());
     expect(note1.tags.get().length).to.equal(noteAfterEdit.tags.get().length);
     let nonExistingCategory = storage.categories.get(nonExistingCategoryCode);
-    expect(0).to.equal(nonExistingCategory.tags.get().length);
+    expect(0).to.equal(nonExistingCategory.getTags().length);
   });
 
   it('Change title category should change category code in all notes of edited category', () => {

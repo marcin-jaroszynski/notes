@@ -7,7 +7,7 @@ import Url from '../url.js'
 export default class Category extends Resource {
   constructor(data) {
     super(data);
-    this.tags = new CategoryTagList();
+    this._tags = new CategoryTagList();
     this.notes = new Notes();
   }
 
@@ -27,17 +27,19 @@ export default class Category extends Resource {
   addNote(note) {
     if (this.code) {
       this.notes.add(note);
-      this.tags.addMany(note.tags.get());
+      this._tags.addMany(note.tags.get());
       return true;
     }
     return false;
   }
 
-  editNote(editedNote, tagsToAdd, tagsToRemove) {
+  editNote(editedNote) {
     if (this.code) {
+      let currentNote = this.notes.get(editedNote.getId());
+      let tagsToUpdate = currentNote.tags.compare(editedNote.tags);
       if (this.notes.edit(editedNote)) {
-        this.tags.removeMany(tagsToRemove.get());
-        this.tags.addMany(tagsToAdd.get());
+        this._tags.removeMany(tagsToUpdate.toRemove.get());
+        this._tags.addMany(tagsToUpdate.toAdd.get());
         return true;
       }
     }
@@ -47,9 +49,17 @@ export default class Category extends Resource {
   removeNote(noteId) {
     if (this.code) {
       let noteToRemove = this.notes.get(noteId);
-      this.tags.removeMany(noteToRemove.tags.get());
+      this._tags.removeMany(noteToRemove.tags.get());
       return this.notes.remove(noteId);
     } 
     return false;
+  }
+
+  getTags() {
+    return this._tags.get();
+  }
+
+  isHasTag(tagCode) {
+    return this._tags.findByCode(tagCode);
   }
 }

@@ -17,7 +17,7 @@ export default class Categories {
 
   getTagsFor(categoryId) {
     let categoryToFind = this.categories.findByCode(categoryId);
-    return categoryToFind.tags.get();
+    return categoryToFind.getTags();
   }
 
   getNotesFor(categoryId) {
@@ -32,11 +32,11 @@ export default class Categories {
 
   add(category) {
     let result = this.categories.checkIsExist(category.getTitle());
-    if (!result.getTitle()) {
-      this.categories.add(category);
-      return true;
+    if (result.getTitle()) {
+      return false;
     }
-    return false; 
+    this.categories.add(category);
+    return true;
   }
 
   changeTitle(currentCategoryTitle, newCategoryTitle) {

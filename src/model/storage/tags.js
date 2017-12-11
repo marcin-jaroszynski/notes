@@ -8,8 +8,9 @@ export default class Tags {
   tag(tagCode) {
     let categories = this.categories.getAll();
     for (let i = 0; i < categories.length; i++) {
-      if (categories[i].tags.isInclude(tagCode)) {
-        return categories[i].tags.findByCode(tagCode);
+      let tagToFind = categories[i].isHasTag(tagCode);
+      if (tagToFind.getTitle()) {
+        return tagToFind;
       }
     }
     return new Tag();

@@ -19,7 +19,7 @@ describe('Storage categories', () => {
     let addedCategory = storageCategories.get(categoryToAdd.getCode());
     expect(categoryToAdd.getTitle()).to.equal(addedCategory.getTitle());
     expect(categoryToAdd.getCode()).to.equal(addedCategory.getCode());
-    let tagsAddedCategory = addedCategory.tags.get();
+    let tagsAddedCategory = addedCategory.getTags();
     expect(2).to.equal(tagsAddedCategory.length);
   });
 

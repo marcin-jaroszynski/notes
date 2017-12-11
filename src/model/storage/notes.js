@@ -22,10 +22,10 @@ export default class Notes {
   }
 
   getForTag(tagCode) {
-    let notesList = [];
+    let notesList = []; 
     let categories = this.categories.getAll();
     for (let i = 0; i < categories.length; i++) {
-      if (categories[i].tags.isInclude(tagCode)) {
+      if (categories[i].isHasTag(tagCode)) {
         let notes = categories[i].notes.getAll();
         for (let j = 0; j < notes.length; j++) {
           if (notes[j].tags.isInclude(tagCode)) {
@@ -66,30 +66,34 @@ export default class Notes {
     return false;
   }
 
-  edit(noteEdit, tagsToAdd, tagsToRemove) {
-    let currentNote = this.get(noteEdit.getId());
-    let categoryEditedNote = this.categories.get(noteEdit.getCategoryId());
-    if (currentNote.getCategoryId() === noteEdit.getCategoryId()) {
-      if (categoryEditedNote.editNote(noteEdit, tagsToAdd, tagsToRemove)) {
-        this.dashboard.updateEntry(noteEdit, categoryEditedNote);
-        return true;
-      }
-    } else {
-      if (categoryEditedNote.getTitle()) {
-        return this._changeCategory(noteEdit, currentNote);
-      }
-    }
-    return false; 
+  edit(editedNote) {
+    let currentNote = this.get(editedNote.getId());
+    let isSameCategory = (currentNote.getCategoryId() === editedNote.getCategoryId());
+    if (isSameCategory) {
+        return this._updateNote(editedNote);
+    } 
+    return this._changeCategory(editedNote, currentNote);
   }
 
-  _changeCategory(noteEdit, currentNote) {
-    let currentCategoryNote = this.categories.get(currentNote.getCategoryId());
-    let resultRemoveNote = currentCategoryNote.removeNote(currentNote.getId());
-    if (resultRemoveNote) {
-      let newCategory = this.categories.get(noteEdit.getCategoryId());
-      if (newCategory.addNote(noteEdit)) {
-        this.dashboard.updateEntry(noteEdit, newCategory);
-        return true;
+  _updateNote(editedNote) {
+    let categoryEditedNote = this.categories.get(editedNote.getCategoryId());
+    if (categoryEditedNote.editNote(editedNote)) {
+      this.dashboard.updateEntry(editedNote, categoryEditedNote);
+      return true;
+    }
+    return false;
+  }
+
+  _changeCategory(editedNote, currentNote) {
+    let categoryEditedNote = this.categories.get(editedNote.getCategoryId());
+    if (categoryEditedNote.getTitle()) {
+      let currentCategoryNote = this.categories.get(currentNote.getCategoryId());
+      let resultRemoveNote = currentCategoryNote.removeNote(currentNote.getId());
+      if (resultRemoveNote) {
+        if (categoryEditedNote.addNote(editedNote)) {
+          this.dashboard.updateEntry(editedNote, categoryEditedNote);
+          return true;
+        }
       }
     }
     return false;

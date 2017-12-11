@@ -63,8 +63,6 @@
         noteContent: '',
         tagField: '',
         tagEditList: new TagList(),
-        tagsToAdd: new TagList(),
-        tagsToRemove: new TagList(),
       }
     },
     mounted: function() {
@@ -99,14 +97,11 @@
         this.$router.push(Url.getNoteShow(this.note.getId()));
       },
       addTag: function() {
-        if (this.tagEditList.add(this.tagField)) {
-          this.tagsToAdd.add(this.tagField);
-        }
+        this.tagEditList.add(this.tagField);
         this.tagField = '';
       },
       removeTag: function(event) {
         this.tagEditList.remove(event.target.dataset.title);
-        this.tagsToRemove.add(event.target.dataset.title);
       },
       editNote: function() {
         let noteEdit = new Note();
@@ -115,7 +110,7 @@
         noteEdit.setTitle(this.noteTitle);
         noteEdit.setContent(this.noteContent);
         noteEdit.tags.set(this.tagEditList.get());
-        this.storage.notes.edit(noteEdit, this.tagsToAdd, this.tagsToRemove);
+        this.storage.notes.edit(noteEdit);
       },
       removeNote: function() {
         let resultRemove = this.storage.notes.remove(this.note.getId());

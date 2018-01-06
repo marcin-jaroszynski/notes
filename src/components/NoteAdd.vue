@@ -19,7 +19,7 @@
           <div>
             List of tags:  
             <ul>
-              <li is="tag-item" v-for="tag in getTagList()" v-bind:item="tag" v-bind:key="tag" @remove="removeTag"></li>
+              <li is="tag-item" v-for="(tag, index) in getTagList()" v-bind:item="tag" v-bind:key="index" @remove="removeTag"></li>
             </ul>
           </div>
         </div>

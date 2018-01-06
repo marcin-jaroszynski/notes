@@ -3,7 +3,7 @@
     <title-page title="Dashboard"></title-page>
     <layout>
       <div slot="menu">
-        <side-menu title="Categories" v-bind:items="categories()"></side-menu>
+        <side-menu title="Categories" v-bind:items="getCategories"></side-menu>
         <li><button @click="getCategoryAddUrl()">Add category</button></li>
       </div>
       <div slot="content">
@@ -48,12 +48,12 @@
     computed: {
       getDashboardEntries() {
         return this.dashboardEntries.slice().reverse();
+      },
+      getCategories() {
+        return this.storage.categories.getAll();
       }     
     },
     methods: {
-      categories: function() {
-        return this.storage.categories.getAll();
-      },
       getCategoryAddUrl() {
         this.$router.push(Url.getCategoryAdd());
       }

@@ -49,9 +49,13 @@
         this.$router.push(Url.getDashboard());
       },
       addCategory: function() {
+        let that = this;
         let categoryToAdd = new Category({title: this.categoryNameFromField});
-        if (this.storage.categories.add(categoryToAdd)) {
-          this.categoryNameFromField = '';
+        if (!this.storage.categories.isExist(categoryToAdd)) {
+          this.$http.post('add/category', { title: categoryToAdd.getTitle() }, function(data) {
+            that.storage.categories.add(categoryToAdd)
+            that.categoryNameFromField = '';
+          });
         } else {
           alert('Category already exist! Not added');
         }
@@ -59,16 +63,23 @@
       chooseFromCategoryList: function(event) {
         let categoryCode = event.target.value;
         if (categoryCode == '') {
-          this.isDisabledAddBtn = false;
-          this.isDisabledEditBtn = true;
-          this.categoryNameFromField = '';
-          this.categoryNameFromSelect = '';
+          this.categoryListAddMode();
         } else {
-          this.isDisabledAddBtn = true;
-          this.isDisabledEditBtn = false;
-          this.categoryNameFromSelect = this.storage.categories.getTitleFor(categoryCode);
-          this.categoryNameFromField = this.storage.categories.getTitleFor(categoryCode);
+          this.categoryListEditMode(categoryCode); 
         }
+      },
+      categoryListAddMode: function() {
+        this.isDisabledAddBtn = false;
+        this.isDisabledEditBtn = true;
+        this.categoryNameFromField = '';
+        this.categoryNameFromSelect = '';
+      },
+      categoryListEditMode: function(categoryCode) {
+        this.isDisabledAddBtn = true;
+        this.isDisabledEditBtn = false;
+        let titleSelectedCategory = this.storage.categories.getTitleFor(categoryCode);
+        this.categoryNameFromSelect = titleSelectedCategory;
+        this.categoryNameFromField = titleSelectedCategory;
       },
       changeCategoryTitle: function() {
         let result = this.storage.categories.changeTitle(this.categoryNameFromSelect, this.categoryNameFromField);

@@ -2,7 +2,7 @@ import Helper from '../helper.js'
 import Resource from '../resource/resource.js'
 import CategoryTagList from './tagList.js'
 import Notes from './notes.js'
-import Url from '../url.js'
+import Url from '../url.js' 
 
 export default class Category extends Resource {
   constructor(data) {
@@ -61,5 +61,9 @@ export default class Category extends Resource {
 
   isHasTag(tagCode) {
     return this._tags.findByCode(tagCode);
+  }
+
+  isExist() {
+    return (this.getTitle() === '' && this.getCode() === '');
   }
 }

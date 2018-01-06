@@ -11,6 +11,9 @@ import StorageCategories from '../../../../src/model/storage/categories.js'
 
 export default class Helper {
   static getCategory(title) {
+    if (!title) {
+      title = '';
+    }
     return new Category({ title: title });
   }
 

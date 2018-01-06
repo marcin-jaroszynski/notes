@@ -23,13 +23,20 @@ export default new Router({
       path: '/',
       name: 'Login',
       title: 'Login',
-      component: Login
+      component: Login,
+      props: {
+        storage: storage
+      }
+      
     },
     {
       path: Url.getLogin(),
       name: 'Login',
       title: 'Login',
-      component: Login
+      component: Login,
+      props: {
+        storage: storage
+      }
     },
     {
       path: Url.getDashboard(),

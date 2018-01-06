@@ -14,6 +14,7 @@
 import Url from '../model/url.js'
 
 export default {
+  props: ['storage'],
   name: 'login',
   data() {
     return {
@@ -24,7 +25,12 @@ export default {
   methods: {
     validate: function(e) {
       if (this.loginField.length > 0 && this.passwordField.length > 0) {
-        this.$router.push(Url.getDashboard());
+        let that = this;
+        this.$http.get('storage/init', {}, function(data) {
+          that.storage.init(data);
+          that.$router.push(Url.getDashboard());
+        });
+        
       } else {
         alert('Nope! You entered invalid data!');
       }

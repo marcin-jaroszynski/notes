@@ -8,6 +8,13 @@ describe('Category model', () => {
     expect('/category/show/python').to.equal(category.getUrl(), 'Non-empty url');
   }); 
 
+  it('Is exist category?', () => {
+    let fooCategory = Helper.getCategory('Foo');
+    let emptyCategory = Helper.getCategory();
+    expect(false).to.equal(fooCategory.isExist(), 'Not empty category');
+    expect(true).to.equal(emptyCategory.isExist(), 'Empty category');
+  });
+
   it('setTitle', () => {
     let category = Helper.getCategory('Python');
     let newCategoryTitle = 'JavaScript';

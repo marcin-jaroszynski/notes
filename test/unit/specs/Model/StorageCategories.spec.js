@@ -14,8 +14,7 @@ describe('Storage categories', () => {
     categoryToAdd.addNote(note);
     
     let storageCategories = Helper.getStorageCategories();
-    let result = storageCategories.add(categoryToAdd);
-    expect(true).to.equal(result, 'Result of add new category should be successful');
+    storageCategories.add(categoryToAdd);
     let addedCategory = storageCategories.get(categoryToAdd.getCode());
     expect(categoryToAdd.getTitle()).to.equal(addedCategory.getTitle());
     expect(categoryToAdd.getCode()).to.equal(addedCategory.getCode());
@@ -26,8 +25,13 @@ describe('Storage categories', () => {
   it('Try to add category with the title that exist - should fail', () => {
     let storageCategories = Helper.getStorageCategories();
     let categoryFoo = Helper.getCategory('Foo');
-    expect(true).to.equal(storageCategories.add(categoryFoo), 'add first Foo category');
-    expect(false).to.equal(storageCategories.add(categoryFoo), 'try to add second Foo category');
+    storageCategories.add(categoryFoo);
+    let resultSecondAttemptToAddFooCategory = false;
+    if (!storageCategories.isExist(categoryFoo)) {
+      storageCategories.add(categoryFoo);
+      resultSecondAttemptToAddFooCategory = true;
+    }
+    expect(false).to.equal(resultSecondAttemptToAddFooCategory, 'try to add second Foo category');
   });
 
   it('getTitleFor should return valid title of category', () => {
@@ -50,11 +54,4 @@ describe('Storage categories', () => {
     let categoryWithChangedName = storageCategories.changeTitle(currentTitleOfCategory, newTitleOfCategory);
     expect(newTitleOfCategory).to.equal(categoryWithChangedName.getTitle());
   });
-
-  it('Attempt to add two categories with the same title will failure', () => {
-    let categoryFoo = Helper.getCategory('Foo');
-    let storageCategories = getStorageCategoriesWithAddedFooCategory();
-    let result = storageCategories.add(categoryFoo);
-    expect(false).to.equal(result);
-  }); 
 });

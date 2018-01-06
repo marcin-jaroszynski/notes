@@ -29,14 +29,17 @@ export default class Categories {
       let categoryToFind = this.categories.findByCode(categoryId);
       return categoryToFind.getTitle();
   }
+ 
+  isExist(category) {
+    let categoryToFind = this.categories.checkIsExist(category.getTitle());
+    if (!categoryToFind.isExist()) {
+      return true;
+    }
+    return false;
+  }
 
   add(category) {
-    let result = this.categories.checkIsExist(category.getTitle());
-    if (result.getTitle()) {
-      return false;
-    }
     this.categories.add(category);
-    return true;
   }
 
   changeTitle(currentCategoryTitle, newCategoryTitle) {

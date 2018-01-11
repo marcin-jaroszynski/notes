@@ -9,17 +9,17 @@ import { label } from '../../../server/util/colors.js';
 
 chai.use(chaiHttp);
 
-describe(label('Category'), () => {
+describe(label('API: Category'), () => {
   beforeEach(function(done) {
     CategoryModel.remove({}, function(err) {
       done();
     });
   });
 
-  it(label('POST: it should add new category'), (done) => {
+  it(label('POST: Request should add new category'), (done) => {
     const category =  { title: "Foo" };
     chai.request(server)
-        .post('/api/add/category')
+        .post('/api/category/add')
         .send(category)
         .end((err, res) => {
           res.should.have.status(200);
@@ -27,5 +27,59 @@ describe(label('Category'), () => {
           res.body.should.have.property('success').which.is.eql(true);
           done();
         });
+  });
+
+  describe('POST: Request change title', () => { 
+    it(label('Should change title for existing category'), (done) => {
+      const params = { currentTitle: 'Foo', newTitle: 'Bar' };
+      chai.request(server)
+          .post('/api/category/change-title')
+          .send(params)
+          .end((err, res) => {
+            res.should.have.status(200);
+            res.body.should.be.a('object');
+            res.body.should.have.property('success').which.is.eql(true);
+            done();
+          });
+    });
+
+    it(label('Should fail if currenTitle and newTitle params are empty'), (done) => {
+      const params = { currentTitle: '', newTitle: '' };
+      chai.request(server)
+          .post('/api/category/change-title')
+          .send(params)
+          .end((err, res) => {
+            res.should.have.status(200);
+            res.body.should.be.a('object');
+            res.body.should.have.property('success').which.is.eql(false);
+            done();
+          });
+    });
+
+    it(label('Should fail if currenTitle param is empty'), (done) => {
+      const params = { currentTitle: '', newTitle: 'Bar' };
+      chai.request(server)
+          .post('/api/category/change-title')
+          .send(params)
+          .end((err, res) => {
+            res.should.have.status(200);
+            res.body.should.be.a('object');
+            res.body.should.have.property('success').which.is.eql(false);
+            done();
+          });
+    });
+
+    it(label('Should fail if newTitle param is empty'), (done) => {
+      const params = { currentTitle: 'Foo', newTitle: '' };
+      chai.request(server)
+          .post('/api/category/change-title')
+          .send(params)
+          .end((err, res) => {
+            res.should.have.status(200);
+            res.body.should.be.a('object');
+            res.body.should.have.property('success').which.is.eql(false);
+            done();
+          });
+    });
   });
 });

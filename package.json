@@ -10,6 +10,7 @@
     "build": "node build/build.js",
     "test-unit": "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run",
     "test-api": "node_modules/mocha/bin/mocha --timeout 10000 --require babel-register test/integration/api/*.spec.js",
+    "test-db": "node_modules/mocha/bin/mocha --timeout 10000 --require babel-register test/integration/db/*.spec.js",
     "unit": "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js"
   },
   "dependencies": {
@@ -35,6 +36,7 @@
     "babel-register": "^6.22.0",
     "body-parser": "^1.18.2",
     "chai": "^3.5.0",
+    "chai-as-promised": "^7.1.1",
     "chai-http": "^3.0.0",
     "chalk": "^1.1.3",
     "connect-history-api-fallback": "^1.3.0",

@@ -52,7 +52,7 @@
         let that = this;
         let categoryToAdd = new Category({title: this.categoryNameFromField});
         if (!this.storage.categories.isExist(categoryToAdd)) {
-          this.$http.post('add/category', { title: categoryToAdd.getTitle() }, function(data) {
+          this.$http.post('category/add', { title: categoryToAdd.getTitle() }, function(data) {
             that.storage.categories.add(categoryToAdd)
             that.categoryNameFromField = '';
           });

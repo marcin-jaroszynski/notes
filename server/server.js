@@ -1,29 +1,20 @@
-import mongoose from 'mongoose';
 import express from 'express';
-const app = express();
+const app = express(); 
 import bodyParser from 'body-parser';
-import { getCategories, addCategory } from './routes/category';
+import { addCategory, changeTitleCategory } from './routes/category';
 import { initStorage } from './routes/storage';
-const config =  require('config');
-import { label, errorLog } from './util/colors';
+import { label } from './util/colors';
+import dbConnect from './db';
 
-mongoose.connect(config.get('DB_HOST'), config.get('DB_OPTIONS'), function(err) {
-  if (err) {
-    console.log(errorLog('UNABLE TO CONNECT WITH MONGODB!'));
-    console.log(errorLog('ERROR: ' + err));
-    process.exit(0);
-  }
-});
-
-mongoose.Promise = global.Promise;
+dbConnect();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.text());
 app.use(bodyParser.json({type: 'application/json'}));
 
-app.post('/api/add/category', addCategory);
-
+app.post('/api/category/add', addCategory);
+app.post('/api/category/change-title', changeTitleCategory);
 app.get('/api/storage/init', initStorage);
 
 if ('dev' !== process.env.NODE_ENV) {

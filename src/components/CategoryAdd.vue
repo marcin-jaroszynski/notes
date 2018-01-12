@@ -49,16 +49,16 @@
         this.$router.push(Url.getDashboard());
       },
       addCategory: function() {
-        let that = this;
         let categoryToAdd = new Category({title: this.categoryNameFromField});
-        if (!this.storage.categories.isExist(categoryToAdd)) {
-          this.$http.post('category/add', { title: categoryToAdd.getTitle() }, function(data) {
-            that.storage.categories.add(categoryToAdd)
-            that.categoryNameFromField = '';
-          });
-        } else {
+        if (this.storage.categories.isExist(categoryToAdd)) {
           alert('Category already exist! Not added');
+          return;
         }
+        let that = this; 
+        this.$http.post('category/add', { title: categoryToAdd.getTitle() }, function(data) {
+          that.storage.categories.add(categoryToAdd)
+          that.categoryNameFromField = '';
+        });
       },
       chooseFromCategoryList: function(event) {
         let categoryCode = event.target.value;
@@ -82,14 +82,18 @@
         this.categoryNameFromField = titleSelectedCategory;
       },
       changeCategoryTitle: function() {
-        let result = this.storage.categories.changeTitle(this.categoryNameFromSelect, this.categoryNameFromField);
-        if (result.getTitle() == this.categoryNameFromField) {
-          alert('Category title changed!');
-          this.categoryNameFromSelect = result.getTitle();
-          this.categoryNameFromField = result.getTitle();
-        } else {
+        let categoryWithNewTitle = new Category({title: this.categoryNameFromField});
+        if (this.storage.categories.isExist(categoryWithNewTitle)) {
           alert('Category with this title is already exist!');
+          return;
         }
+        let that = this;
+        this.$http.post('category/change-title', { currentTitle: this.categoryNameFromSelect, newTitle: categoryWithNewTitle.getTitle() }, function(data) {
+          let updatedCategory = that.storage.categories.changeTitle(that.categoryNameFromSelect, that.categoryNameFromField);
+          alert('Category title changed!');
+          that.categoryNameFromSelect = updatedCategory.getTitle();
+          that.categoryNameFromField = updatedCategory.getTitle();
+        });
       }
     }
   }

@@ -4,7 +4,8 @@ const Schema = mongoose.Schema
 const categoryTagSchema = new Schema({
   title: String,
   code: String,
-  counter: Number
+  counter: { type: Number, default: 1 }
 });
+
 
 export default categoryTagSchema;

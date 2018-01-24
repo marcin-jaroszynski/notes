@@ -10,7 +10,7 @@ chai.use(chaiHttp);
 
 describe(label('API: Notes'), () => {
   it(label('POST: Add note'), (done) => {
-    let params = {};
+    let params = { title: 'Note 1', content: 'Lorem ipsum', category: 'foo' };
     chai.request(server)
         .post('/api/note/add')
         .send(params)
@@ -18,6 +18,7 @@ describe(label('API: Notes'), () => {
           res.should.have.status(200);
           res.body.should.be.a('object');
           res.body.should.have.property('success').which.is.eql(true);
+          res.body.should.have.property('idAddedNote').which.is.not.empty;
           done();
         });
   });

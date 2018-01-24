@@ -11,8 +11,12 @@ const categorySchema = new Schema({
   created_date: { type: Date, default: Date.now() }
 });
 
-categorySchema.static('categories', function() {
-  return this.find({});
+categorySchema.static('categories', async function() {
+  let categories = await this.find({});
+  if (Object.keys(categories).length === 0) {
+    return [];
+  }
+  return categories;
 });
 
 categorySchema.static('category', function(categoryCode) {
@@ -28,26 +32,29 @@ categorySchema.static('changeTitle', function(currentCategory, updatedCategory) 
 categorySchema.static('addTags', async function(categoryCode, tagList) {
   try {
     let category = await this.findOne({code: categoryCode}, {tags: 1});
-    let tagsCategoryMap = new Map();
-    for (let i = 0; i < category.tags.length; i++) {
-      tagsCategoryMap.set(category.tags[i].code, category.tags[i]);
-    }
-    let tagsToAdd = [];
-    let tags = tagList.get();
-    let categoryTagsSchema = mongoose.model('categoryTagSchema', tagSchema);
-    for (let i = 0; i < tags.length; i++) {
-      if (tagsCategoryMap.has(tags[i].code)) {
-        let currentTag = tagsCategoryMap.get(tags[i].code);
-        currentTag.counter++;
-        tagsCategoryMap.set(currentTag.code, currentTag);
-      } else {
-        tagsCategoryMap.set(tags[i].code, new categoryTagsSchema({title: tags[i].title, code: tags[i].code}));        
+    if (category) {
+      let tagsCategoryMap = new Map();
+      for (let i = 0; i < category.tags.length; i++) {
+        tagsCategoryMap.set(category.tags[i].code, category.tags[i]);
       }
+      let tagsToAdd = [];
+      let tags = tagList.get();
+      let categoryTagsSchema = mongoose.model('categoryTagSchema', tagSchema);
+      for (let i = 0; i < tags.length; i++) {
+        if (tagsCategoryMap.has(tags[i].code)) {
+          let currentTag = tagsCategoryMap.get(tags[i].code);
+          currentTag.counter++;
+          tagsCategoryMap.set(currentTag.code, currentTag);
+        } else {
+          tagsCategoryMap.set(tags[i].code, new categoryTagsSchema({title: tags[i].title, code: tags[i].code}));        
+        }
+      }
+      tagsToAdd = Array.from(tagsCategoryMap.values());
+      let conditions = { code: categoryCode };
+      let update = { $set: { tags: tagsToAdd } };
+      return await this.update(conditions, update);
     }
-    tagsToAdd = Array.from(tagsCategoryMap.values());
-    let conditions = { code: categoryCode };
-    let update = { $set: { tags: tagsToAdd } };
-    return await this.update(conditions, update);
+    return;
   } catch(error) {
     console.log(error);
   }
@@ -56,58 +63,57 @@ categorySchema.static('addTags', async function(categoryCode, tagList) {
 categorySchema.static('editTags', async function(categoryCode, tagsToUpdate) {
   try {
     let category = await this.findOne({code: categoryCode}, { tags: 1 });
-    let tagsCategoryMap = new Map();
-    for (let i = 0; i < category.tags.length; i++) {
-      tagsCategoryMap.set(category.tags[i].code, category.tags[i]);
-    }
-    let tagsToAdd = tagsToUpdate.toAdd.data;
-    let categoryTagsSchema = mongoose.model('categoryTagSchema', tagSchema);
-    for (let i = 0; i < tagsToAdd.length; i++) {
-      if (tagsCategoryMap.has(tagsToAdd[i].code)) {
-        let currentTag = tagsCategoryMap.get(tagsToAdd[i].code);
-        currentTag.counter++;
-        tagsCategoryMap.set(currentTag.code, currentTag);
-      } else {
-        tagsCategoryMap.set(tagsToAdd[i].code, new categoryTagsSchema({title: tagsToAdd[i].title, code: tagsToAdd[i].code}));
+    if (category) {
+      let tagsCategoryMap = new Map();
+      for (let i = 0; i < category.tags.length; i++) {
+        tagsCategoryMap.set(category.tags[i].code, category.tags[i]);
       }
-    }
-    let tagsToRemove = tagsToUpdate.toRemove.data;
-    for (let i = 0; i < tagsToRemove.length; i++) {
-      if (tagsCategoryMap.has(tagsToRemove[i].code)) {
-        let currentTag = tagsCategoryMap.get(tagsToRemove[i].code);
-        currentTag.counter--;
-        if (currentTag.counter === 0) {
-          tagsCategoryMap.delete(currentTag.code);
+      let tagsToAdd = tagsToUpdate.toAdd.data;
+      let categoryTagsSchema = mongoose.model('categoryTagSchema', tagSchema);
+      for (let i = 0; i < tagsToAdd.length; i++) {
+        if (tagsCategoryMap.has(tagsToAdd[i].code)) {
+          let currentTag = tagsCategoryMap.get(tagsToAdd[i].code);
+          currentTag.counter++;
+          tagsCategoryMap.set(currentTag.code, currentTag);
+        } else {
+          tagsCategoryMap.set(tagsToAdd[i].code, new categoryTagsSchema({title: tagsToAdd[i].title, code: tagsToAdd[i].code}));
         }
-        tagsCategoryMap.set(currentTag.code, currentTag);
       }
+      let tagsToRemove = tagsToUpdate.toRemove.data;
+      for (let i = 0; i < tagsToRemove.length; i++) {
+        if (tagsCategoryMap.has(tagsToRemove[i].code)) {
+          let currentTag = tagsCategoryMap.get(tagsToRemove[i].code);
+          currentTag.counter--;
+          if (currentTag.counter === 0) {
+            tagsCategoryMap.delete(currentTag.code);
+          } else {
+            tagsCategoryMap.set(currentTag.code, currentTag);
+          }
+        }
+      }
+      let tagsToSet = Array.from(tagsCategoryMap.values());
+      // console.log('Category.editTags.tagsToSet: '+ JSON.stringify(tagsToSet));
+      let conditions = { code: categoryCode };
+      let update = { $set: { tags: tagsToSet } };
+      return await this.update(conditions, update);
     }
-    let tagsToSet = Array.from(tagsCategoryMap.values());
-    console.log('Category.editTags.tagsToSet: '+ JSON.stringify(tagsToSet));
-    let conditions = { code: categoryCode };
-    let update = { $set: { tags: tagsToSet } };
-    return await this.update(conditions, update);
+    return;
   } catch(error) {
     console.log(error);
   }
 });
 
 categorySchema.static('addNote', async function(note) {
-  try {
-    let addedNoteId = await noteSchema.add(note);
-    await this.addTags(note.getCategoryId(), note.tags);
-    let recordAfterUpdate = await this.findOne({code: note.getCategoryId()}, {tags: 1});
-    return addedNoteId;
-  } catch(error) {
-    console.log(error);
-  }
+  let addedNoteId = await noteSchema.add(note);
+  await this.addTags(note.getCategoryId(), note.tags);
+  let recordAfterUpdate = await this.findOne({code: note.getCategoryId()}, {tags: 1});
+  return addedNoteId;
 });
 
 categorySchema.static('updateNote', async function(note) {
   try {
     let tagsToUpdate = await noteSchema.edit(note);
-    await this.editTags(note.getCategoryId(), tagsToUpdate);
-    return;
+    return await this.editTags(note.getCategoryId(), tagsToUpdate);
   } catch(error) {
     console.log(error);
   }

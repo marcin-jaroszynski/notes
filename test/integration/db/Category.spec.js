@@ -23,6 +23,14 @@ describe(label('DB: Category'), () => {
     return categoryToAdd.save();
   };
 
+  let createCategoryTagsMap = (categoryTags) => {
+    let categoryTagsMap = new Map();
+    for (let i = 0; i < categoryTags.length; i++) {
+      categoryTagsMap.set(categoryTags[i].code, categoryTags[i]);
+    }
+    return categoryTagsMap;
+  };
+
   beforeEach(async () => {
     await clearDb();
   });
@@ -138,6 +146,50 @@ describe(label('DB: Category'), () => {
         await CategorySchema.updateNote(note);
         let categoryAfterUpdateNote = await CategorySchema.category(note.getCategoryId());
         expect(4).to.equal(categoryAfterUpdateNote.tags.length);
+      } catch(error) {
+        console.log(error);
+      }
+    });
+
+    it(label('Decrement counter tag after remove it from category'), async () => {
+      try {
+        let categoryFoo = HelperUnit.getCategory('Foo');
+        await addCategory(categoryFoo.getTitle());
+        let repeatedTag = HelperUnit.getTag('Tag 2');
+        let note1 = HelperUnit.getNote('Note 1', ['Tag 1', repeatedTag.getTitle()]); 
+        note1.setCategoryId(categoryFoo.getCode());
+        let note1Id = await CategorySchema.addNote(note1);
+        note1.setId(note1Id);
+        let note2 = HelperUnit.getNote('Note 2', [repeatedTag.getTitle(), 'Tag 3']); 
+        note2.setCategoryId(categoryFoo.getCode());
+        let note2Id = await CategorySchema.addNote(note2);
+        note2.setId(note2Id);
+        let category = await CategorySchema.category(categoryFoo.getCode());
+        let categoryTagsMap = createCategoryTagsMap(category.tags);
+        expect(2).to.equal(categoryTagsMap.get(repeatedTag.getCode()).counter);
+        note2.tags.remove(repeatedTag.getTitle());
+        await CategorySchema.updateNote(note2);
+        category = await CategorySchema.category(categoryFoo.getCode());
+        categoryTagsMap = createCategoryTagsMap(category.tags);
+        expect(1).to.equal(categoryTagsMap.get(repeatedTag.getCode()).counter);
+      } catch(error) {
+        console.log(error);
+      }
+    });
+
+    it(label('After decrement counter tag from category to zero, this tag should be removed'), async () => {
+      try {
+        let categoryFoo = HelperUnit.getCategory('Foo');
+        await addCategory(categoryFoo.getTitle());
+        let tag = HelperUnit.getTag('Tag 2');
+        let note = HelperUnit.getNote('Note 1', ['Tag 1', tag.getTitle()]); 
+        note.setCategoryId(categoryFoo.getCode());
+        let noteId = await CategorySchema.addNote(note);
+        note.setId(noteId);
+        note.tags.remove(tag.getTitle());
+        await CategorySchema.updateNote(note);
+        let category = await CategorySchema.category(categoryFoo.getCode());
+        expect(1).to.equal(category.tags.length);
       } catch(error) {
         console.log(error);
       }

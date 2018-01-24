@@ -1,5 +1,5 @@
 import CategorySchema from '../db/models/category';
-import CategoryModel from '../../src/model/category/category.js'
+import CategoryModel from '../../src/model/category/category';
 
 async function getCategories(req, res) {
   CategorySchema.categories(function(err, data) {

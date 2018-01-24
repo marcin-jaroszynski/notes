@@ -25,39 +25,30 @@ noteSchema.static('getTags', async function(noteId) {
 });
 
 noteSchema.static('add', async function(note) {
-  try {   
-    let noteToAdd = new this;
-    noteToAdd.title = note.getTitle();
-    noteToAdd.content = note.getContent();
-    noteToAdd.category = note.getCategoryId();
-    noteToAdd.tags = note.tags.get();
-    let addedNote = await noteToAdd.save();
-    return addedNote._id;
-  } catch(error) {
-    console.log(error);
-  }
+  let noteToAdd = new this;
+  noteToAdd.title = note.getTitle();
+  noteToAdd.content = note.getContent();
+  noteToAdd.category = note.getCategoryId();
+  noteToAdd.tags = note.tags.get();
+  let addedNote = await noteToAdd.save();
+  return addedNote._id;
 });
 
 noteSchema.static('edit', async function(note) {
-   try { 
-    let currentNote = await this.findOne({_id: note.getId()});
-    
-    let editedNoteTags = note.tags.get();
-    let currentNoteTagList = new TagList();
-    currentNoteTagList.set(currentNote.tags);
-    let comparedTags = currentNoteTagList.compare(note.tags);
-    // console.log('Note.edit.comparedTags: ' + JSON.stringify(comparedTags));
+  let currentNote = await this.findOne({_id: note.getId()});
+  
+  let editedNoteTags = note.tags.get();
+  let currentNoteTagList = new TagList();
+  currentNoteTagList.set(currentNote.tags);
+  let comparedTags = currentNoteTagList.compare(note.tags);
 
-    currentNote.title = note.getTitle();
-    currentNote.content = note.getContent();
-    currentNote.category = note.getCategoryId();
-    currentNote.tags = note.tags.get();
-    
-    await currentNote.save();
-    return comparedTags;
-  } catch(error) {
-    console.log(error);
-  }
+  currentNote.title = note.getTitle();
+  currentNote.content = note.getContent();
+  currentNote.category = note.getCategoryId();
+  currentNote.tags = note.tags.get();
+  
+  await currentNote.save();
+  return comparedTags;
 });
 
 export default mongoose.model('note', noteSchema);

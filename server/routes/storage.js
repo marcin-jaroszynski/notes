@@ -1,9 +1,12 @@
 import CategorySchema from '../db/models/category';
 
-function initStorage(req, res) {
-  CategorySchema.categories(function(err, data) {
-    res.json({ success: true, categories: data });
-  });
+async function initStorage(req, res) {
+  try {
+    let categories = await CategorySchema.categories();
+    res.json({ success: true, categories: categories });
+  } catch(error) {
+    console.log(error);
+  }
 }
 
 export { initStorage };

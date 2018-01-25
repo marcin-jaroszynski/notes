@@ -22,4 +22,17 @@ describe(label('API: Notes'), () => {
           done();
         });
   });
+
+  it(label('POST: Edit note'), (done) => {
+    let params = { id: '5a6a3f242f05ab23d4baf60e', title: 'Note 1 edited', content: 'Lorem ipsum edited', category: 'foo' };
+    chai.request(server)
+      .post('/api/note/edit')
+      .send(params)
+      .end((err, res) => {
+        res.should.have.status(200);
+        res.body.should.be.a('object');
+        res.body.should.have.property('success').which.is.eql(true);
+        done();
+      });
+  });
 });

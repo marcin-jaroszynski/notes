@@ -2,7 +2,7 @@
   <article>
     <title-page title="Note add section"></title-page>
     <layout>
-      <div slot="menu">
+      <div slot="menu"> 
         <button @click="backToCategory()">Back to category: {{ getCategoryName() }}</button>
         <button @click="backToDashboard()">Back to Dashboard</button>
       </div>
@@ -81,8 +81,27 @@
         this.note.setCategoryId(this.getCurrentCategoryId());
         this.note.setTitle(this.titleField);
         this.note.setContent(this.contentField);
-        this.storage.notes.add(this.note);
-        this.resetFields();
+        if (this.validate()) {
+          let that = this; 
+          let requestParams = {}
+          requestParams.title = this.note.getTitle();
+          requestParams.content = this.note.getContent();
+          requestParams.category = this.note.getCategoryId();
+          requestParams.tags = this.note.tags.get();
+          this.$http.post('note/add', requestParams, function(data) {
+            that.note.setId(data.idAddedNote);
+            that.storage.notes.add(that.note);
+            that.resetFields();
+          });
+        } else {
+          alert('Fill the required fields!');
+        }
+      },
+      validate: function() {
+        if (this.note.getCategoryId() && this.note.getTitle() && this.note.getContent()) {
+          return true;
+        }
+        return false;
       },
       resetFields: function() {
         this.note = new Note();

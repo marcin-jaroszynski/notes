@@ -39,10 +39,11 @@ describe('Category model', () => {
     let editedNote = Helper.getNote('Note 1 - edited');
     editedNote.setId(note.getId());
     editedNote.tags.set(note.tags.get());
-    let tagsToRemove = Helper.getTagList(['A']);
+    editedNote.tags.remove('A');
     let tagsToAdd = Helper.getTagList(['D', 'E']);
-    let resultEdit = category.editNote(editedNote, tagsToAdd, tagsToRemove);
-    expect(true).to.equal(resultEdit);
+    editedNote.tags.addMany(tagsToAdd.get()); 
+    let resultEdit = category.editNote(editedNote);
+    expect(true).to.equal(resultEdit); 
     let noteAfterEdit = category.notes.get(editedNote.getId());
     expect(category.getTags().length).to.equal(noteAfterEdit.tags.get().length);
   });

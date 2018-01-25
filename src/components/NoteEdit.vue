@@ -25,7 +25,7 @@
           <div>
             List of tags:  
             <ul>
-              <li is="tag-item" v-for="tag in getEditTagList()" v-bind:item="tag" v-bind:key="tag" @remove="removeTag"></li>
+              <li is="tag-item" v-for="(tag, index) in getEditTagList()" v-bind:item="tag" v-bind:key="index" @remove="removeTag"></li>
             </ul>
           </div>
         </div>
@@ -110,7 +110,28 @@
         noteEdit.setTitle(this.noteTitle);
         noteEdit.setContent(this.noteContent);
         noteEdit.tags.set(this.tagEditList.get());
-        this.storage.notes.edit(noteEdit);
+        if (this.validate()) {
+          let that = this; 
+          let requestParams = {}
+          requestParams.id = noteEdit.getId();
+          requestParams.title = noteEdit.getTitle();
+          requestParams.content = noteEdit.getContent();
+          requestParams.category = noteEdit.getCategoryId();
+          requestParams.tags = noteEdit.tags.get();
+          this.$http.post('note/edit', requestParams, function(data) {
+            that.storage.notes.edit(noteEdit);
+          });
+          
+        } else {
+          alert('Fill the required fields!');
+        }
+        
+      },
+      validate: function() {
+        if (this.note.getId() && this.note.getCategoryId() && this.note.getTitle() && this.note.getContent()) {
+          return true;
+        }
+        return false;
       },
       removeNote: function() {
         let resultRemove = this.storage.notes.remove(this.note.getId());

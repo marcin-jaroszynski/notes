@@ -17,10 +17,19 @@ chai.use(chaiAsPromised);
 dbConnect();
 
 describe(label('DB: Category'), () => {
-  let addCategory = (title) => {
+  let addCategory = async (title) => {
     let category = HelperUnit.getCategory(title);
     let categoryToAdd = new CategorySchema({ title: category.getTitle(), code: category.getCode() });
-    return categoryToAdd.save();
+    await categoryToAdd.save();
+    return category;
+  };
+
+  let addNote = async (title, category, tags) => {
+    let note = HelperUnit.getNote(title, tags); 
+    note.setCategoryId(category.getCode());
+    let noteId = await CategorySchema.addNote(note);
+    note.setId(noteId);
+    return note;
   };
 
   let createCategoryTagsMap = (categoryTags) => {
@@ -45,10 +54,9 @@ describe(label('DB: Category'), () => {
   });
 
   it(label('It should change title for existing category'), async () => {
-    let categoryFoo = HelperUnit.getCategory('Foo');
-    let categoryBar = HelperUnit.getCategory('Bar');
     try {
-      await addCategory(categoryFoo.getTitle());
+      let categoryFoo = await addCategory('Foo');
+      let categoryBar = HelperUnit.getCategory('Bar');
       await CategorySchema.changeTitle(categoryFoo, categoryBar);
       const recordFromDb = await CategorySchema.findOne({ code: categoryBar.getCode() });
       expect(categoryBar.getTitle()).to.equal(recordFromDb.title);
@@ -60,10 +68,8 @@ describe(label('DB: Category'), () => {
 
   it(label('It should throw exception when is try to change title for category, but another category is exist with that title'),  async () => {
     try {
-      let categoryFoo = HelperUnit.getCategory('Foo');;
-      let categoryBar = HelperUnit.getCategory('Bar');
-      await addCategory(categoryFoo.getTitle());
-      await addCategory(categoryBar.getTitle());
+      let categoryFoo = await addCategory('Foo');
+      let categoryBar = await addCategory('Bar');
       return expect(CategorySchema.changeTitle(categoryBar, categoryFoo)).is.rejected;
     } catch(error) {
       console.log(error);
@@ -73,8 +79,7 @@ describe(label('DB: Category'), () => {
   describe(label('Tags'), () => { 
     it(label('Add tags to category'), async () => {
       try {
-        let categoryFoo = HelperUnit.getCategory('Foo');
-        await addCategory(categoryFoo.getTitle());
+        let categoryFoo = await addCategory('Foo');
         let tagsToAdd = HelperUnit.getTagList(['Tag 1', 'Tag 2']);
         await CategorySchema.addTags(categoryFoo.getCode(), tagsToAdd);
         let categoryAfterAddTags = await CategorySchema.category(categoryFoo.getCode());
@@ -86,14 +91,11 @@ describe(label('DB: Category'), () => {
 
     it(label('After add note to specific category, it should has tags from that note'), async () => {
       try {
-        let categoryFoo = HelperUnit.getCategory('Foo');
-        await addCategory(categoryFoo.getTitle());
-        let noteToAdd = HelperUnit.getNote('Note 1', ['Tag 1', 'Tag 2']); 
-        noteToAdd.setCategoryId(categoryFoo.getCode());
-        await CategorySchema.addNote(noteToAdd);
+        let categoryFoo = await addCategory('Foo');
+        let addedNote = await addNote('Note 1', categoryFoo, ['Tag 1', 'Tag 2']);
         let categoryFromDb = await CategorySchema.category(categoryFoo.getCode());      
-        let noteFromDb = await NoteSchema.notes(noteToAdd.getCategoryId());
-        expect(noteToAdd.tags.get().length).to.equal(categoryFromDb.tags.length);
+        let noteFromDb = await NoteSchema.notes(addedNote.getCategoryId());
+        expect(addedNote.tags.get().length).to.equal(categoryFromDb.tags.length);
       } catch(error) {
         console.log(error);
       }
@@ -101,14 +103,9 @@ describe(label('DB: Category'), () => {
     
     it(label('Add two notes with tags to category'), async () => {
       try {
-        let categoryFoo = HelperUnit.getCategory('Foo');
-        await addCategory(categoryFoo.getTitle());
-        let noteToAdd1 = HelperUnit.getNote('Note 1', ['Tag 1', 'Tag 2']); 
-        noteToAdd1.setCategoryId(categoryFoo.getCode());
-        await CategorySchema.addNote(noteToAdd1);
-        let noteToAdd2 = HelperUnit.getNote('Note 2', ['Tag 3', 'Tag 4']); 
-        noteToAdd2.setCategoryId(categoryFoo.getCode());
-        await CategorySchema.addNote(noteToAdd2);
+        let categoryFoo = await addCategory('Foo');
+        let addedNote1 = await addNote('Note 1', categoryFoo, ['Tag 1', 'Tag 2']);
+        let addedNote2 = await addNote('Note 2', categoryFoo, ['Tag 3', 'Tag 4']);
         let categoryFromDb = await CategorySchema.category(categoryFoo.getCode());
         expect(4).to.equal(categoryFromDb.tags.length);
       } catch(error) {
@@ -118,14 +115,9 @@ describe(label('DB: Category'), () => {
 
     it(label('Add two notes with tag that repeats in each note - should increment counter of that tag'), async () => {
       try {
-        let categoryFoo = HelperUnit.getCategory('Foo');
-        await addCategory(categoryFoo.getTitle());
-        let noteToAdd1 = HelperUnit.getNote('Note 1', ['Tag 1', 'Tag 2']); 
-        noteToAdd1.setCategoryId(categoryFoo.getCode());
-        await CategorySchema.addNote(noteToAdd1);
-        let noteToAdd2 = HelperUnit.getNote('Note 2', ['Tag 2', 'Tag 3']); 
-        noteToAdd2.setCategoryId(categoryFoo.getCode());
-        await CategorySchema.addNote(noteToAdd2);
+        let categoryFoo = await addCategory('Foo');
+        let addedNote1 = await addNote('Note 1', categoryFoo, ['Tag 1', 'Tag 2']);
+        let addedNote2 = await addNote('Note 2', categoryFoo, ['Tag 2', 'Tag 3']);
         let categoryFromDb = await CategorySchema.category(categoryFoo.getCode());
         expect(3).to.equal(categoryFromDb.tags.length);
       } catch(error) {
@@ -135,16 +127,12 @@ describe(label('DB: Category'), () => {
 
     it(label('After update note should add new tags'), async () => {
       try {
-        let categoryFoo = HelperUnit.getCategory('Foo');
-        await addCategory(categoryFoo.getTitle());
-        let note = HelperUnit.getNote('Note 1', ['Tag 1', 'Tag 2']); 
-        note.setCategoryId(categoryFoo.getCode());
-        let addedNoteId = await CategorySchema.addNote(note);
-        note.setId(addedNoteId);
-        note.tags.add('Tag 3');
-        note.tags.add('Tag 4');
-        await CategorySchema.updateNote(note);
-        let categoryAfterUpdateNote = await CategorySchema.category(note.getCategoryId());
+        let categoryFoo = await addCategory('Foo');
+        let addedNote = await addNote('Note 1', categoryFoo, ['Tag 1', 'Tag 2']);
+        addedNote.tags.add('Tag 3');
+        addedNote.tags.add('Tag 4');
+        await CategorySchema.updateNote(addedNote);
+        let categoryAfterUpdateNote = await CategorySchema.category(addedNote.getCategoryId());
         expect(4).to.equal(categoryAfterUpdateNote.tags.length);
       } catch(error) {
         console.log(error);
@@ -153,22 +141,15 @@ describe(label('DB: Category'), () => {
 
     it(label('Decrement counter tag after remove it from category'), async () => {
       try {
-        let categoryFoo = HelperUnit.getCategory('Foo');
-        await addCategory(categoryFoo.getTitle());
+        let categoryFoo = await addCategory('Foo');
         let repeatedTag = HelperUnit.getTag('Tag 2');
-        let note1 = HelperUnit.getNote('Note 1', ['Tag 1', repeatedTag.getTitle()]); 
-        note1.setCategoryId(categoryFoo.getCode());
-        let note1Id = await CategorySchema.addNote(note1);
-        note1.setId(note1Id);
-        let note2 = HelperUnit.getNote('Note 2', [repeatedTag.getTitle(), 'Tag 3']); 
-        note2.setCategoryId(categoryFoo.getCode());
-        let note2Id = await CategorySchema.addNote(note2);
-        note2.setId(note2Id);
+        let addedNote1 = await addNote('Note 1', categoryFoo, ['Tag 1', repeatedTag.getTitle()]);
+        let addedNote2 = await addNote('Note 2', categoryFoo, [repeatedTag.getTitle(), 'Tag 3']);
         let category = await CategorySchema.category(categoryFoo.getCode());
         let categoryTagsMap = createCategoryTagsMap(category.tags);
         expect(2).to.equal(categoryTagsMap.get(repeatedTag.getCode()).counter);
-        note2.tags.remove(repeatedTag.getTitle());
-        await CategorySchema.updateNote(note2);
+        addedNote2.tags.remove(repeatedTag.getTitle());
+        await CategorySchema.updateNote(addedNote2);
         category = await CategorySchema.category(categoryFoo.getCode());
         categoryTagsMap = createCategoryTagsMap(category.tags);
         expect(1).to.equal(categoryTagsMap.get(repeatedTag.getCode()).counter);
@@ -179,21 +160,55 @@ describe(label('DB: Category'), () => {
 
     it(label('After decrement counter tag from category to zero, this tag should be removed'), async () => {
       try {
-        let categoryFoo = HelperUnit.getCategory('Foo');
-        await addCategory(categoryFoo.getTitle());
+        let categoryFoo = await addCategory('Foo');
         let tag = HelperUnit.getTag('Tag 2');
-        let note = HelperUnit.getNote('Note 1', ['Tag 1', tag.getTitle()]); 
-        note.setCategoryId(categoryFoo.getCode());
-        let noteId = await CategorySchema.addNote(note);
-        note.setId(noteId);
-        note.tags.remove(tag.getTitle());
-        await CategorySchema.updateNote(note);
+        let addedNote = await addNote('Note 1', categoryFoo, ['Tag 1', tag.getTitle()]);
+        addedNote.tags.remove(tag.getTitle());
+        await CategorySchema.updateNote(addedNote);
         let category = await CategorySchema.category(categoryFoo.getCode());
         expect(1).to.equal(category.tags.length);
       } catch(error) {
         console.log(error);
       }
     });
+  });
+
+  it(label('Update note - change category to another'), async () => {
+    try {
+      let categoryFoo = await addCategory('Foo');
+      let addedNote = await addNote('Note 1', categoryFoo, ['Tag 1', 'Tag 2']);
+      let categoryBar = await addCategory('Bar');
+      addedNote.setCategoryId(categoryBar.getCode());
+      await CategorySchema.updateNote(addedNote);
+      let notesCategoryFoo = await NoteSchema.notes(categoryFoo.getCode());
+      expect(0).to.equal(notesCategoryFoo.length, 'Amount notes for category Foo');
+      let categoryFooFromDb = await CategorySchema.category(categoryFoo.getCode());
+      expect(0).to.equal(categoryFooFromDb.tags.length, 'Number tags from Foo category');
+      let notesCategoryBar = await NoteSchema.notes(categoryBar.getCode());
+      expect(1).to.equal(notesCategoryBar.length, 'Amount notes for category Bar');
+      let categoryBarFromDb = await CategorySchema.category(categoryBar.getCode());
+      expect(2).to.equal(categoryBarFromDb.tags.length, 'Number tags from Bar category');
+    } catch(error) {
+      console.log(error);
+    }
+  });
+
+  it(label('Change category title should update category-code for all notes assigned to it category'), async () => {
+    try {
+      let categoryFoo = await addCategory('Foo');
+      let addedNote1 = await addNote('Note 1', categoryFoo, ['Tag 1', 'Tag 2']);
+      let addedNote2 = await addNote('Note 2', categoryFoo, ['Tag 3', 'Tag 4']);
+      let notesCategoryFoo = await NoteSchema.notes(categoryFoo.getCode());
+      expect(2).to.equal(notesCategoryFoo.length); 
+      let categoryBar = HelperUnit.getCategory('Bar');
+      await CategorySchema.changeTitle(categoryFoo, categoryBar);
+      let notesCategoryFooAfterChangeTitle = await NoteSchema.notes(categoryFoo.getCode());
+      expect(0).to.equal(notesCategoryFooAfterChangeTitle.length, 'Amount category Foo notes');
+      let notesCategoryBar = await NoteSchema.notes(categoryBar.getCode());
+      expect(2).to.equal(notesCategoryBar.length, 'Amount category Bar notes');
+    } catch(error) {
+      console.log(error);
+    }
   });
 
 });

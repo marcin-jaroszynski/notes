@@ -1,4 +1,6 @@
 import Category from '../../../../src/model/category/category.js'
+import CategoryTag from '../../../../src/model/category/tag.js'
+import CategoryTagList from '../../../../src/model/category/tagList.js'
 import Note from '../../../../src/model/note/note.js'
 import NoteList from '../../../../src/model/note/list.js'
 import Tag from '../../../../src/model/tag/tag.js'
@@ -31,6 +33,14 @@ export default class Helper {
   static getTag(title) {
     return new Tag({title: title});
   };
+
+  static getCategoryTag(title) {
+    return new CategoryTag({title: title});
+  }
+
+  static getCategoryTagList() {
+    return new CategoryTagList();
+  }
 
   static getTagList(tags=[]) {
     let tagList = new TagList();

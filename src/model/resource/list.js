@@ -22,8 +22,8 @@ export default class ResourceList {
   }
 
   checkIsExist(title) {
-    let tagToFind = new Resource({title: title});
-    return this.findByCode(tagToFind.getCode());
+    let resourceToFind = new Resource({title: title});
+    return this.findByCode(resourceToFind.getCode());
   }
 
   findByCode(code) {

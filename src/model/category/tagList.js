@@ -5,6 +5,13 @@ export default class CategoryTagList {
     this.data = {};
   }
 
+  set(categoryTag) {
+    this.data[categoryTag.getCode()] = {
+      object: categoryTag,
+      counter: categoryTag.getCounter()
+    };
+  }
+
   get() {
     let tags = [];
     for (let tagCode in this.data) {

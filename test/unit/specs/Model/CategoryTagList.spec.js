@@ -1,17 +1,16 @@
 import Helper from './Helper.js';
-import CategoryTagList from '../../../../src/model/category/tagList.js'
 
 describe('Category tag list model', () => {
   let getCategoryTagList = (tagsToAdd) => {
     let tagList = Helper.getTagList(tagsToAdd);
-    let categoryTagList = new CategoryTagList();
+    let categoryTagList = Helper.getCategoryTagList();
     categoryTagList.addMany(tagList.get());
     return categoryTagList;
   };
 
   it('Add same tag twice times should increment counter', () => {
     let tagFoo = Helper.getTag('Foo');
-    let categoryTagList = new CategoryTagList();
+    let categoryTagList = Helper.getCategoryTagList();
     categoryTagList.add(tagFoo.getTitle());
     categoryTagList.add(tagFoo.getTitle());
     expect(2).to.equal(categoryTagList.getCounterFor(tagFoo.getCode()));
@@ -19,7 +18,7 @@ describe('Category tag list model', () => {
 
   it('Remove tag should decrement counter', () => {
     let tagFoo = Helper.getTag('Foo');
-    let categoryTagList = new CategoryTagList();
+    let categoryTagList = Helper.getCategoryTagList();
     categoryTagList.add(tagFoo.getTitle());
     let tagBar = Helper.getTag('Bar');
     categoryTagList.add(tagBar.getTitle());
@@ -60,5 +59,19 @@ describe('Category tag list model', () => {
     let tagB = Helper.getTag('B');
     categoryTagList.remove(tagB.getTitle());
     expect(false).to.equal(categoryTagList.isInclude(tagB.getCode()), 'Tag should not contain "B" tag');
+  });
+
+  it('Set category tag to the list', () => {
+    let categoryTagFoo = Helper.getCategoryTag('Foo');
+    categoryTagFoo.setCounter(1);
+    let categoryTagList = Helper.getCategoryTagList();
+    categoryTagList.set(categoryTagFoo);
+    let categoryTagBar = Helper.getCategoryTag('Bar');
+    categoryTagBar.setCounter(2);
+    categoryTagList.set(categoryTagBar);
+    let categoryTags = categoryTagList.get();
+    expect(2).to.equal(categoryTags.length, 'Amount of tags category list');
+    expect(1).to.equal(categoryTagList.getCounterFor(categoryTagFoo.getCode()), 'Counter for tag Foo');
+    expect(2).to.equal(categoryTagList.getCounterFor(categoryTagBar.getCode()), 'Counter for tag Bar');
   });
 });

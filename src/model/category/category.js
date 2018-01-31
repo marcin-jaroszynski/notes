@@ -1,6 +1,7 @@
 import Helper from '../helper.js'
 import Resource from '../resource/resource.js'
 import CategoryTagList from './tagList.js'
+import CategoryTag from './tag.js'
 import Notes from './notes.js'
 import Url from '../url.js' 
 
@@ -57,6 +58,17 @@ export default class Category extends Resource {
 
   getTags() {
     return this._tags.get();
+  }
+
+  setTag(categoryTag) {
+    this._tags.set(categoryTag);
+  }
+
+  setTags(tags) {
+    for (let i = 0; i < tags.length; i++) {
+      let tag = new CategoryTag({ title: tags[i].title,  counter: tags[i].counter });
+      this._tags.set(tag);
+    }
   }
 
   isHasTag(tagCode) {

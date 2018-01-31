@@ -23,10 +23,11 @@ categorySchema.static('category', function(categoryCode) {
   return this.findOne({code: categoryCode});
 });
 
-categorySchema.static('changeTitle', function(currentCategory, updatedCategory) {
+categorySchema.static('changeTitle', async function(currentCategory, updatedCategory) {
   let conditions = { code: currentCategory.getCode() };
   let update = { $set: { title: updatedCategory.getTitle(), code: updatedCategory.getCode() } };
-  return this.update(conditions, update);
+  await this.update(conditions, update);
+  return await noteSchema.changeCategory(currentCategory.getCode(), updatedCategory.getCode());
 });
 
 categorySchema.static('addTags', async function(categoryCode, tagList) {
@@ -61,46 +62,67 @@ categorySchema.static('addTags', async function(categoryCode, tagList) {
 });
 
 categorySchema.static('editTags', async function(categoryCode, tagsToUpdate) {
-  try {
-    let category = await this.findOne({code: categoryCode}, { tags: 1 });
-    if (category) {
-      let tagsCategoryMap = new Map();
-      for (let i = 0; i < category.tags.length; i++) {
-        tagsCategoryMap.set(category.tags[i].code, category.tags[i]);
-      }
-      let tagsToAdd = tagsToUpdate.toAdd.data;
-      let categoryTagsSchema = mongoose.model('categoryTagSchema', tagSchema);
-      for (let i = 0; i < tagsToAdd.length; i++) {
-        if (tagsCategoryMap.has(tagsToAdd[i].code)) {
-          let currentTag = tagsCategoryMap.get(tagsToAdd[i].code);
-          currentTag.counter++;
-          tagsCategoryMap.set(currentTag.code, currentTag);
-        } else {
-          tagsCategoryMap.set(tagsToAdd[i].code, new categoryTagsSchema({title: tagsToAdd[i].title, code: tagsToAdd[i].code}));
-        }
-      }
-      let tagsToRemove = tagsToUpdate.toRemove.data;
-      for (let i = 0; i < tagsToRemove.length; i++) {
-        if (tagsCategoryMap.has(tagsToRemove[i].code)) {
-          let currentTag = tagsCategoryMap.get(tagsToRemove[i].code);
-          currentTag.counter--;
-          if (currentTag.counter === 0) {
-            tagsCategoryMap.delete(currentTag.code);
-          } else {
-            tagsCategoryMap.set(currentTag.code, currentTag);
-          }
-        }
-      }
-      let tagsToSet = Array.from(tagsCategoryMap.values());
-      // console.log('Category.editTags.tagsToSet: '+ JSON.stringify(tagsToSet));
-      let conditions = { code: categoryCode };
-      let update = { $set: { tags: tagsToSet } };
-      return await this.update(conditions, update);
+  let category = await this.findOne({code: categoryCode}, { tags: 1 });
+  if (category) {
+    let tagsCategoryMap = new Map();
+    for (let i = 0; i < category.tags.length; i++) {
+      tagsCategoryMap.set(category.tags[i].code, category.tags[i]);
     }
-    return;
-  } catch(error) {
-    console.log(error);
+    let tagsToAdd = tagsToUpdate.toAdd.data;
+    let categoryTagsSchema = mongoose.model('categoryTagSchema', tagSchema);
+    for (let i = 0; i < tagsToAdd.length; i++) {
+      if (tagsCategoryMap.has(tagsToAdd[i].code)) {
+        let currentTag = tagsCategoryMap.get(tagsToAdd[i].code);
+        currentTag.counter++;
+        tagsCategoryMap.set(currentTag.code, currentTag);
+      } else {
+        tagsCategoryMap.set(tagsToAdd[i].code, new categoryTagsSchema({title: tagsToAdd[i].title, code: tagsToAdd[i].code}));
+      }
+    }
+    let tagsToRemove = tagsToUpdate.toRemove.data;
+    for (let i = 0; i < tagsToRemove.length; i++) {
+      if (tagsCategoryMap.has(tagsToRemove[i].code)) {
+        let currentTag = tagsCategoryMap.get(tagsToRemove[i].code);
+        currentTag.counter--;
+        if (currentTag.counter === 0) {
+          tagsCategoryMap.delete(currentTag.code);
+        } else {
+          tagsCategoryMap.set(currentTag.code, currentTag);
+        }
+      }
+    }
+    let tagsToSet = Array.from(tagsCategoryMap.values());
+    let conditions = { code: categoryCode };
+    let update = { $set: { tags: tagsToSet } };
+    return await this.update(conditions, update);
   }
+  return;
+});
+
+categorySchema.static('removeTags', async function(categoryCode, tagsToRemove) {
+  let category = await this.findOne({code: categoryCode}, { tags: 1 });
+  if (category) {
+    let tagsCategoryMap = new Map();
+    for (let i = 0; i < category.tags.length; i++) {
+      tagsCategoryMap.set(category.tags[i].code, category.tags[i]);
+    }
+    for (let i = 0; i < tagsToRemove.length; i++) {
+      if (tagsCategoryMap.has(tagsToRemove[i].code)) {
+        let currentTag = tagsCategoryMap.get(tagsToRemove[i].code);
+        currentTag.counter--;
+        if (currentTag.counter === 0) {
+          tagsCategoryMap.delete(currentTag.code);
+        } else {
+          tagsCategoryMap.set(currentTag.code, currentTag);
+        }
+      }
+    }
+    let tagsToSet = Array.from(tagsCategoryMap.values());
+    let conditions = { code: categoryCode };
+    let update = { $set: { tags: tagsToSet } };
+    return await this.update(conditions, update);
+  }
+  return;
 });
 
 categorySchema.static('addNote', async function(note) {
@@ -110,10 +132,18 @@ categorySchema.static('addNote', async function(note) {
   return addedNoteId;
 });
 
-categorySchema.static('updateNote', async function(note) {
-  try {
-    let tagsToUpdate = await noteSchema.edit(note);
-    return await this.editTags(note.getCategoryId(), tagsToUpdate);
+categorySchema.static('updateNote', async function(editedNote) {
+  try { 
+    let currentNote = await noteSchema.note(editedNote.getId());
+    if (currentNote.category === editedNote.getCategoryId()) {
+      let tagsToUpdate = await noteSchema.edit(editedNote);
+      return await this.editTags(editedNote.getCategoryId(), tagsToUpdate);
+    } else {
+      await this.removeTags(currentNote.category, currentNote.tags);
+      await noteSchema.edit(editedNote);
+      return await this.addTags(editedNote.getCategoryId(), editedNote.tags);
+    }
+    
   } catch(error) {
     console.log(error);
   }

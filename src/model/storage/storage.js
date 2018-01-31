@@ -14,8 +14,9 @@ export default class Storage {
 
   init(data) {
     for (let i = 0; i < data.categories.length; i++) {
-      let newCategory = new Category({title: data.categories[i].title });
-      this.categories.add(newCategory);
+      let category = new Category({title: data.categories[i].title });
+      category.setTags(data.categories[i].tags);
+      this.categories.add(category); 
     }
   }
 }

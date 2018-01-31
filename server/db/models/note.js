@@ -15,13 +15,13 @@ noteSchema.static('notes', function(categoryCode) {
   return this.find({category: categoryCode});
 });
 
+noteSchema.static('note', async function(noteId) {
+  return await this.findOne({_id: noteId});
+});
+
 noteSchema.static('getTags', async function(noteId) {
-  try {
-    let note = await this.findOne({_id: noteId}, { tags: 1 });
-    return note.tags;
-  } catch(error) {
-    console.log(error);
-  }
+  let note = await this.findOne({_id: noteId}, { tags: 1 });
+  return note.tags;
 });
 
 noteSchema.static('add', async function(note) {
@@ -50,6 +50,10 @@ noteSchema.static('edit', async function(note) {
     await currentNote.save();
     return comparedTags;
   }
+});
+
+noteSchema.static('changeCategory', async function(currentCategoryCode, newCategoryCode) {
+  return await this.update({category: currentCategoryCode}, { $set: { category: newCategoryCode } }, { multi: true });
 });
 
 export default mongoose.model('note', noteSchema);

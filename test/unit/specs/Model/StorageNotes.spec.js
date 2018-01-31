@@ -149,7 +149,7 @@ describe('Storage notes', () => {
     expect(4).to.equal(categoryWithEditedNote.getTags().length, 'Tags category after update');
   });
 
-  it('Change note category', () => {
+  it('Change note category', () => {  
     let storage = Helper.getStorage();
     let categoryFoo = Helper.getCategory('Foo');
     storage.categories.add(categoryFoo);
@@ -240,7 +240,7 @@ describe('Storage notes', () => {
     note1ToAdd.setCategoryId(categoryFoo.getCode());
     storage.notes.add(note1ToAdd);
 
-    let note2ToAdd = Helper.getNote('Note 1', ['B']);
+    let note2ToAdd = Helper.getNote('Note 2', ['B']);
     note2ToAdd.setCategoryId(categoryFoo.getCode());
     storage.notes.add(note2ToAdd);
 

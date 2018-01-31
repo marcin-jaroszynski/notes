@@ -1,14 +1,14 @@
 import Category from './category.js'
 import ResourceList from '../resource/list.js'
+import Helper from '../helper.js'
 
 export default class CategoryList extends ResourceList {
   add(category) {
-    let newCategory = new Category({title: category.getTitle()});
-    let notes = category.notes.getAll();
-    for (let i = 0; i < notes.length; i++) {
-      newCategory.addNote(notes[i]);
-    }
-    this.data.push(newCategory);
+    this.data.push(Helper.clone(category));
+  }
+
+  set(category) {
+    this.data.push(category);
   }
 
   findByCode(code) {

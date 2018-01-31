@@ -8,20 +8,6 @@ describe('Storage categories', () => {
     return storageCategories;
   };
 
-  it('Add category with tags', () => {
-    let categoryToAdd = Helper.getCategory('Foo');
-    let note = Helper.getNote('Note 1', ['X', 'Y']);
-    categoryToAdd.addNote(note);
-    
-    let storageCategories = Helper.getStorageCategories();
-    storageCategories.add(categoryToAdd);
-    let addedCategory = storageCategories.get(categoryToAdd.getCode());
-    expect(categoryToAdd.getTitle()).to.equal(addedCategory.getTitle());
-    expect(categoryToAdd.getCode()).to.equal(addedCategory.getCode());
-    let tagsAddedCategory = addedCategory.getTags();
-    expect(2).to.equal(tagsAddedCategory.length);
-  });
-
   it('Try to add category with the title that exist - should fail', () => {
     let storageCategories = Helper.getStorageCategories();
     let categoryFoo = Helper.getCategory('Foo');

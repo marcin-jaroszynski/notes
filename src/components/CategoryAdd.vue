@@ -48,17 +48,18 @@
       backToDashboard: function() {
         this.$router.push(Url.getDashboard());
       },
-      addCategory: function() {
+      addCategory: async function() {
         let categoryToAdd = new Category({title: this.categoryNameFromField});
         if (this.storage.categories.isExist(categoryToAdd)) {
           alert('Category already exist! Not added');
           return;
         }
-        let that = this; 
-        this.$http.post('category/add', { title: categoryToAdd.getTitle() }, function(data) {
-          that.storage.categories.add(categoryToAdd)
-          that.categoryNameFromField = '';
-        });
+        try { 
+          await this.$http.post('category/add', { title: categoryToAdd.getTitle() }); 
+          this.storage.categories.add(categoryToAdd)
+          this.categoryNameFromField = '';
+        } catch (error) {
+        }
       },
       chooseFromCategoryList: function(event) {
         let categoryCode = event.target.value;

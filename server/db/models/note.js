@@ -19,6 +19,10 @@ noteSchema.static('note', async function(noteId) {
   return await this.findOne({_id: noteId});
 });
 
+noteSchema.static('getLatestEntries',  function(categoryCode) {
+  return this.find({category: categoryCode}, {title: 1, created_date: 1});
+});
+
 noteSchema.static('getTags', async function(noteId) {
   let note = await this.findOne({_id: noteId}, { tags: 1 });
   return note.tags;

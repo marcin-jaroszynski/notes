@@ -77,22 +77,23 @@
       removeTag: function(event) {
         this.note.tags.remove(event.target.dataset.title);
       },
-      addNote: function() {
+      addNote: async function() {
         this.note.setCategoryId(this.getCurrentCategoryId());
         this.note.setTitle(this.titleField);
         this.note.setContent(this.contentField);
         if (this.validate()) {
-          let that = this; 
           let requestParams = {}
           requestParams.title = this.note.getTitle();
           requestParams.content = this.note.getContent();
           requestParams.category = this.note.getCategoryId();
           requestParams.tags = this.note.tags.get();
-          this.$http.post('note/add', requestParams, function(data) {
-            that.note.setId(data.idAddedNote);
-            that.storage.notes.add(that.note);
-            that.resetFields();
-          });
+          try {
+            let requestResopnse = await this.$http.post('note/add', requestParams);
+            this.note.setId(requestResopnse.idAddedNote);
+            this.storage.notes.add(this.note);
+            this.resetFields();
+          } catch(error) {
+          }
         } else {
           alert('Fill the required fields!');
         }

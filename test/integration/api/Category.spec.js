@@ -82,4 +82,31 @@ describe(label('API: Category'), () => {
           });
     });
   });
+
+  describe(label('GET: Get notes for specific category'), () => {
+    it(label('Should returns notes for specific category'), (done) => {
+      const params = { category: 'foo' };
+      chai.request(server)
+          .get('/api/category/get-notes')
+          .send(params)
+          .end((err, res) => { 
+            res.should.have.status(200);
+            res.body.should.be.a('object');
+            res.body.should.have.property('success').which.is.eql(true);
+            res.body.should.have.property('notes').which.is.instanceof(Array);
+            done();
+          });
+    });
+
+    it(label('Should fail if category param is fail'), (done) => {
+      chai.request(server)
+          .get('/api/category/get-notes')
+          .end((err, res) => { 
+            res.should.have.status(200);
+            res.body.should.be.a('object');
+            res.body.should.have.property('success').which.is.eql(false);
+            done();
+          });
+    });
+  });
 });

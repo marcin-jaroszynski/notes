@@ -1,7 +1,7 @@
 import express from 'express';
 const app = express(); 
 import bodyParser from 'body-parser';
-import { addCategory, changeTitleCategory } from './routes/category';
+import { addCategory, changeTitleCategory, getNotes } from './routes/category';
 import { addNote, editNote } from './routes/note';
 import { initStorage } from './routes/storage';
 import { label } from './util/colors';
@@ -16,6 +16,7 @@ app.use(bodyParser.json({type: 'application/json'}));
 
 app.post('/api/category/add', addCategory);
 app.post('/api/category/change-title', changeTitleCategory);
+app.get('/api/category/get-notes', getNotes);
 app.post('/api/note/add', addNote);
 app.post('/api/note/edit', editNote);
 app.get('/api/storage/init', initStorage);

@@ -3,6 +3,8 @@ const Schema = mongoose.Schema;
 import tagSchema from './tag';
 import noteSchema from './note';
 import TagList from '../../../src/model/tag/list';
+import NoteModel from '../../../src/model/note/note';
+import Url from '../../../src/model/url.js';
 
 const categorySchema = new Schema({
   title: { type: String, required: true },
@@ -135,18 +137,32 @@ categorySchema.static('addNote', async function(note) {
 categorySchema.static('updateNote', async function(editedNote) {
   try { 
     let currentNote = await noteSchema.note(editedNote.getId());
-    if (currentNote.category === editedNote.getCategoryId()) {
-      let tagsToUpdate = await noteSchema.edit(editedNote);
-      return await this.editTags(editedNote.getCategoryId(), tagsToUpdate);
-    } else {
-      await this.removeTags(currentNote.category, currentNote.tags);
-      await noteSchema.edit(editedNote);
-      return await this.addTags(editedNote.getCategoryId(), editedNote.tags);
+    if (currentNote) {
+      if (currentNote.category === editedNote.getCategoryId()) {
+        let tagsToUpdate = await noteSchema.edit(editedNote);
+        return await this.editTags(editedNote.getCategoryId(), tagsToUpdate);
+      } else {
+        await this.removeTags(currentNote.category, currentNote.tags);
+        await noteSchema.edit(editedNote);
+        return await this.addTags(editedNote.getCategoryId(), editedNote.tags);
+      }
     }
-    
   } catch(error) {
     console.log(error);
   }
+});
+
+categorySchema.static('getNotesList', async function(categoryCode) {
+  let notesList = await noteSchema.getLatestEntries(categoryCode);
+  let returnData = [];
+  for (let i = 0; i < notesList.length; i++) {
+    let note = new NoteModel();
+    note.setId(notesList[i]._id);
+    note.setTitle(notesList[i].title);
+    note.setDateAdded(notesList[i].created_date);
+    returnData.push(note);
+  }
+  return returnData;
 });
 
 export default mongoose.model('category', categorySchema);

@@ -23,13 +23,15 @@ export default {
     }
   },
   methods: {
-    validate: function(e) {
+    validate: async function(e) {
       if (this.loginField.length > 0 && this.passwordField.length > 0) {
-        let that = this;
-        this.$http.get('storage/init', {}, function(data) {
-          that.storage.init(data);
-          that.$router.push(Url.getDashboard());
-        });
+        try {
+          let data = await this.$http.get('storage/init');
+          this.storage.init(data);
+          this.$router.push(Url.getDashboard());
+        } catch(error) {
+
+        }
         
       } else {
         alert('Nope! You entered invalid data!');

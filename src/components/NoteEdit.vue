@@ -103,7 +103,7 @@
       removeTag: function(event) {
         this.tagEditList.remove(event.target.dataset.title);
       },
-      editNote: function() {
+      editNote: async function() {
         let noteEdit = new Note();
         noteEdit.setId(this.note.getId());
         noteEdit.setCategoryId(this.currentCategory);
@@ -111,17 +111,17 @@
         noteEdit.setContent(this.noteContent);
         noteEdit.tags.set(this.tagEditList.get());
         if (this.validate()) {
-          let that = this; 
           let requestParams = {}
           requestParams.id = noteEdit.getId();
           requestParams.title = noteEdit.getTitle();
           requestParams.content = noteEdit.getContent();
           requestParams.category = noteEdit.getCategoryId();
           requestParams.tags = noteEdit.tags.get();
-          this.$http.post('note/edit', requestParams, function(data) {
-            that.storage.notes.edit(noteEdit);
-          });
-          
+          try {
+            await this.$http.post('note/edit', requestParams);
+            this.storage.notes.edit(noteEdit);
+          } catch(error) {
+          }
         } else {
           alert('Fill the required fields!');
         }

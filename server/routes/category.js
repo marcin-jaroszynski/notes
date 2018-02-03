@@ -41,4 +41,20 @@ async function changeTitleCategory(req, res) {
   res.json(response);
 }
 
-export { getCategories, addCategory, changeTitleCategory };
+async function getNotes(req, res) {
+  let response = {};
+  response.success = true;
+  response.notes = [];
+  if (!req.query.category) {
+    response.success = false;
+    return res.json(response);
+  }
+  try {
+    response.notes = await CategorySchema.getNotesList(req.query.category);
+  } catch(err) {
+    response.success = false;
+  }
+  res.json(response);
+}
+
+export { getCategories, addCategory, changeTitleCategory, getNotes };

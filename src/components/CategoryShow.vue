@@ -48,14 +48,29 @@
     data() {
       return {
         categories: this.storage.categories.getAll(),
+        notesList: []
       }
     },
+    beforeRouteUpdate(to, from, next) {
+      this.setNewsetEntries(to.params.categoryId);
+      next();
+    },
+    async created() {
+      this.setNewsetEntries(this.getCurrentCategoryId());
+    },
     methods: {
+      setNewsetEntries: async function(categoryId) {
+        try {
+          let data = await this.$http.get('category/get-notes', { category: categoryId });
+          this.notesList = data.notes;
+        } catch (error) {
+        }
+      },
       getCategoryCountNotes: function() {
-        return this.getCategoryNotes().length;
+        return this.notesList.length;
       },
       getCategoryNotes: function() {
-        return this.storage.categories.getNotesFor(this.getCurrentCategoryId());
+        return this.notesList;
       },
       getCategoryTags: function() {
         return this.storage.categories.getTagsFor(this.getCurrentCategoryId());

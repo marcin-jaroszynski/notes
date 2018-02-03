@@ -30,6 +30,10 @@ export default class Note {
     this.content = content;
   }
 
+  setDateAdded(date) {
+    this.dateAdded = date;
+  }
+  
   createUrl() {
     return Url.getNoteShow(this.id);
   }

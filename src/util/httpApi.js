@@ -7,35 +7,28 @@ export default class HttApi {
     });
   }
 
-  get(url, params, callback) {
-    this._request('get', url, params, callback);
+  get(url, params) {
+    return this._request('get', url, params);
   }
 
-  post(url, params, callback) {
-    this._request('post', url, params, callback);
+  post(url, params) {
+    return this._request('post', url, params);
   }
 
-  _request(method, url, params, callback) {
-    let request = null;
+  async _request(method, url, params) {
+    let response = { data: { success: false } };
     if ('get' === method) {
-      request = this.http.get(url, params);
+      response = await this.http.get(url, { params });
     } else if ('post' === method) {
-      request = this.http.post(url, params);
+      response = await this.http.post(url, params);
     }
-    let that = this;
-    if (null !== request) {
-      request.then(function(response) {
-            if (false == response.data.success) {
-                that.messageError();
-                callback(false);
-              } else {
-                callback(response.data);
-              }
-            })
-            .catch(function(error) {
-              callback(false);
-            });
+    if (false == response.data.success) {
+      this.messageError();
+      return false;
+    } else {
+      return response.data;
     }
+ 
   }
   messageError() {
     alert('Sorry, something went wrong');

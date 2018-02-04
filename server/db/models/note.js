@@ -23,6 +23,10 @@ noteSchema.static('getLatestEntries',  function(categoryCode) {
   return this.find({category: categoryCode}, {title: 1, created_date: 1});
 });
 
+noteSchema.static('getDashboardEntries', function() {
+  return this.find({}, {title: 1, category: 1, created_date: 1}).sort({ created_date: -1 }).limit(10);
+});
+
 noteSchema.static('getTags', async function(noteId) {
   let note = await this.findOne({_id: noteId}, { tags: 1 });
   return note.tags;

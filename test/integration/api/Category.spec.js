@@ -88,7 +88,7 @@ describe(label('API: Category'), () => {
       const params = { category: 'foo' };
       chai.request(server)
           .get('/api/category/get-notes')
-          .send(params)
+          .query(params)
           .end((err, res) => { 
             res.should.have.status(200);
             res.body.should.be.a('object');

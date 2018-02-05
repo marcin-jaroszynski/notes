@@ -70,6 +70,7 @@
         return this.notesList.length;
       },
       getCategoryNotes: function() {
+        console.log('getCategoryNotes');
         return this.notesList;
       },
       getCategoryTags: function() {

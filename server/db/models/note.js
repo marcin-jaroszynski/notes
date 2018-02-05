@@ -24,7 +24,7 @@ noteSchema.static('getLatestEntries',  function(categoryCode) {
 });
 
 noteSchema.static('getDashboardEntries', function() {
-  return this.find({}, {title: 1, category: 1, created_date: 1}).sort({ created_date: -1 }).limit(10);
+  return this.find({}, {title: 1, category: 1, created_date: 1}).sort({ created_date: 1 }).limit(10);
 });
 
 noteSchema.static('getTags', async function(noteId) {

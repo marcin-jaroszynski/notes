@@ -7,7 +7,6 @@ async function initStorage(req, res) {
     let dashboardEntries = await NoteSchema.getDashboardEntries();
     res.json({ success: true, categories: categories, dashboard: dashboardEntries });
   } catch(error) {
-    console.log(error);
   }
 }
 

@@ -68,6 +68,10 @@ export default class Dashboard {
     return this.data.length();
   }
 
+  reset() {
+    this.data = new Stack();
+  }
+
   _getIndexFor(noteId) {
     let notFound = -1;
     let dasboardItems = this.data.getAll(); 

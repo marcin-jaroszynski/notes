@@ -51,33 +51,6 @@ describe('Dashboard model', () => {
     expect(2).to.equal(counterUpdateDashbordItems);
   });
 
-  it('update - update specific note data in dashboard', () => {
-    let storage = Helper.getStorage();
-    let categoryLinux = Helper.getCategory('Linux');
-    storage.categories.add(categoryLinux);
-    let nNotes = 2;
-    let dashboard = getDashboardWithNotes(nNotes, categoryLinux);
-    let categoryPython = Helper.getCategory('Python');
-    storage.categories.add(categoryPython);
-    
-    let noteEditId = 1;
-    let noteEdit = Helper.getNote('Note ' + noteEditId);
-    noteEdit.setId(noteEditId);
-    noteEdit.setCategoryId(categoryPython.getCode());
-    let resultUpdateDashboardEntry = dashboard.updateEntry(noteEdit, categoryPython); 
-    expect(true).to.equal(resultUpdateDashboardEntry);   
-
-    let dashboardItems = dashboard.get();
-    let isDashboardEntryUpdated = false;
-    for (let i = 0; i < nNotes; i++) {
-      if (dashboardItems[i].getNoteId() === noteEditId && 
-          dashboardItems[i].getCategoryTitle() == categoryPython.getTitle()) {
-          isDashboardEntryUpdated = true;
-      }
-    }
-    expect(true).to.equal(isDashboardEntryUpdated);
-  });
-
   it('remove specific entry from dashboard', () => {
     let storage = Helper.getStorage();
     let categoryLinux = Helper.getCategory('Linux');

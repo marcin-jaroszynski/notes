@@ -1,4 +1,5 @@
 import CategorySchema from '../db/models/category';
+import NoteSchema from '../db/models/note';
 import NoteModel from '../../src/model/note/note';
 
 async function addNote(req, res) {
@@ -48,4 +49,36 @@ async function editNote(req, res) {
   } 
 }
 
-export { addNote, editNote };
+async function getNote(req, res) {
+  let response = {};
+  response.success = false;
+  try {
+    if (req.query.id) {    
+      let note = await NoteSchema.note(req.query.id);
+      response.id = note._id;
+      response.title = note.title;
+      response.content = note.content;
+      response.category = note.category;
+      response.created_date = note.created_date;
+      response.tags = note.tags;
+      response.success = true;
+    }
+  } catch(error) {
+  }
+  res.json(response);
+}
+
+async function removeNote(req, res) {
+  let response = {};
+  response.success = false;
+  try {
+    if (req.body.id) {    
+      await CategorySchema.removeNote(req.body.id);
+      response.success = true;
+    }
+  } catch(error) {
+  }
+  res.json(response);
+}
+
+export { addNote, editNote, getNote, removeNote };

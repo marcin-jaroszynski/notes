@@ -15,8 +15,8 @@ noteSchema.static('notes', function(categoryCode) {
   return this.find({category: categoryCode});
 });
 
-noteSchema.static('note', async function(noteId) {
-  return await this.findOne({_id: noteId});
+noteSchema.static('note',  function(noteId) {
+  return this.findOne({_id: noteId});
 });
 
 noteSchema.static('getLatestEntries',  function(categoryCode) {

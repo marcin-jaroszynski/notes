@@ -152,6 +152,18 @@ categorySchema.static('updateNote', async function(editedNote) {
   }
 });
 
+categorySchema.static('removeNote', async function(noteId) {
+  try {
+    let noteToRemove = await noteSchema.note(noteId);
+    if (noteToRemove) {
+      await noteSchema.remove({_id: noteId});
+      await this.removeTags(noteToRemove.category, noteToRemove.tags);
+    }
+  } catch(error) {
+    console.log(error);
+  }
+});
+
 categorySchema.static('getNotesList', async function(categoryCode) {
   let notesList = await noteSchema.getLatestEntries(categoryCode);
   let returnData = [];

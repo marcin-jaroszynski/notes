@@ -63,6 +63,10 @@ export default class Note {
     return this.url;
   }
 
+  isEmpty() {
+    return (this.title === '');
+  }
+  
   getEmptyObject() {
     return {
       id: 0,

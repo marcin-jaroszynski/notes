@@ -34,6 +34,14 @@ export default class Category extends Resource {
     return false;
   }
 
+  setNote(note) {
+    if (this.code) {
+      this.notes.add(note);
+      return true;
+    }
+    return false;
+  }
+
   editNote(editedNote) {
     if (this.code) {
       let currentNote = this.notes.get(editedNote.getId());

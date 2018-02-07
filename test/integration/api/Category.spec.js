@@ -29,7 +29,7 @@ describe(label('API: Category'), () => {
         });
   });
 
-  describe('POST: Request change title', () => { 
+  describe(label('POST: Request change title'), () => { 
     it(label('Should change title for existing category'), (done) => {
       const params = { currentTitle: 'Foo', newTitle: 'Bar' };
       chai.request(server)

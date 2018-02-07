@@ -211,4 +211,23 @@ describe(label('DB: Category'), () => {
     }
   });
 
+  it(label('Remove note'), async () => {
+    try {
+      let categoryFoo = await addCategory('Foo');
+      let tagX = HelperUnit.getTag('Tag X');
+      let tagY = HelperUnit.getTag('Tag Y');
+      let note1 = await addNote('Note 1', categoryFoo, ['Tag 1', tagX.getTitle()]);
+      let note2 = await addNote('Note 2', categoryFoo, [tagX.getTitle(), tagY.getTitle()]);
+      await CategorySchema.removeNote(note2.getId());
+      let notesCategoryFoo = await NoteSchema.notes(categoryFoo.getCode());
+      expect(1).to.equal(notesCategoryFoo.length, 'Amount of notes after remove note');
+      let category = await CategorySchema.category(categoryFoo.getCode());
+      let categoryTagsMap = createCategoryTagsMap(category.tags);
+      expect(1).to.equal(categoryTagsMap.get(tagX.getCode()).counter, 'Counter Tag X');
+      expect(undefined).to.equal(categoryTagsMap.get(tagY.getCode()), 'Counter Tag Y');
+    } catch(error) {
+      console.log(error);
+    }
+  });
+
 });

@@ -93,6 +93,9 @@
       backToCategory: function() {
         this.$router.push(Url.getCategoryShow(this.note.getCategoryId()));
       },
+      redirectToCategory: function(categoryCode) {
+        this.$router.push(Url.getCategoryShow(categoryCode));
+      },
       backToNote: function() {
         this.$router.push(Url.getNoteShow(this.note.getId()));
       },
@@ -133,10 +136,12 @@
         }
         return false;
       },
-      removeNote: function() {
+      removeNote: async function() {
+        let categoryCode = this.note.getCategoryId();
+        await this.$http.post('note/remove', { id: this.note.getId() });
         let resultRemove = this.storage.notes.remove(this.note.getId());
         if (resultRemove) {
-          this.backToCategory();
+          this.redirectToCategory(categoryCode);
         } 
       }
     }

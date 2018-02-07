@@ -56,6 +56,14 @@ export default class Notes {
     return false;
   }
 
+  set(note) {
+    let category = this.categories.get(note.getCategoryId());
+    if (category.setNote(note)) {
+      return true;
+    }
+    return false;
+  }
+
   remove(noteId) {
     let noteToRemove = this.get(noteId);
     let category = this.categories.get(noteToRemove.getCategoryId());

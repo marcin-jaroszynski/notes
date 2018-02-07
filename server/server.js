@@ -2,7 +2,7 @@ import express from 'express';
 const app = express(); 
 import bodyParser from 'body-parser';
 import { addCategory, changeTitleCategory, getNotes } from './routes/category';
-import { addNote, editNote } from './routes/note';
+import { addNote, editNote, getNote, removeNote } from './routes/note';
 import { initStorage } from './routes/storage';
 import { getEntries as getDashbordEntries } from './routes/dashboard';
 import { label } from './util/colors';
@@ -20,6 +20,8 @@ app.post('/api/category/change-title', changeTitleCategory);
 app.get('/api/category/get-notes', getNotes);
 app.post('/api/note/add', addNote);
 app.post('/api/note/edit', editNote);
+app.get('/api/note/get', getNote);
+app.post('/api/note/remove', removeNote);
 app.get('/api/storage/init', initStorage);
 app.get('/api/dashboard/get', getDashbordEntries);
 

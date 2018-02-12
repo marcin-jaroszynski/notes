@@ -128,10 +128,10 @@ categorySchema.static('removeTags', async function(categoryCode, tagsToRemove) {
 });
 
 categorySchema.static('addNote', async function(note) {
-  let addedNoteId = await noteSchema.add(note);
+  let addedNote = await noteSchema.add(note);
   await this.addTags(note.getCategoryId(), note.tags);
   let recordAfterUpdate = await this.findOne({code: note.getCategoryId()}, {tags: 1});
-  return addedNoteId;
+  return addedNote;
 });
 
 categorySchema.static('updateNote', async function(editedNote) {

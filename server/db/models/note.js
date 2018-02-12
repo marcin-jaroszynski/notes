@@ -20,7 +20,7 @@ noteSchema.static('note',  function(noteId) {
 });
 
 noteSchema.static('getLatestEntries',  function(categoryCode) {
-  return this.find({category: categoryCode}, {title: 1, created_date: 1});
+  return this.find({category: categoryCode}, {title: 1, created_date: 1}).sort({ created_date: -1 });
 });
 
 noteSchema.static('getDashboardEntries', function() {
@@ -39,7 +39,7 @@ noteSchema.static('add', async function(note) {
   noteToAdd.category = note.getCategoryId();
   noteToAdd.tags = note.tags.get();
   let addedNote = await noteToAdd.save();
-  return addedNote._id;
+  return addedNote;
 });
 
 noteSchema.static('edit', async function(note) {

@@ -9,7 +9,7 @@ import CategorySchema from '../../../server/db/models/category';
 import NoteModel from '../../../src/model/note/note';
 
 chai.use(chaiHttp);
-
+ 
 describe(label('API: Notes'), () => {
   it(label('POST: Add note'), (done) => {
     let params = { title: 'Note 1', content: 'Lorem ipsum', category: 'foo' };
@@ -21,6 +21,7 @@ describe(label('API: Notes'), () => {
           res.body.should.be.a('object');
           res.body.should.have.property('success').which.is.eql(true);
           res.body.should.have.property('idAddedNote').which.is.not.empty;
+          res.body.should.have.property('dateAddedNote').which.is.not.empty;
           done();
         });
   });
@@ -39,7 +40,7 @@ describe(label('API: Notes'), () => {
   });
 
   describe(label('Fetch note'), () => { 
-    let idAddedNote = '';
+    let addedNote = '';
 
     beforeEach(async () => {
       let note = new NoteModel();
@@ -47,11 +48,11 @@ describe(label('API: Notes'), () => {
       note.setContent('Lorem ipsum');
       note.setCategoryId('foo');
       note.tags.set([]);
-      idAddedNote = await CategorySchema.addNote(note);
+      addedNote = await CategorySchema.addNote(note);
     });
 
     it(label('GET: Fetch existing note'), (done) => {
-      const params = { id: idAddedNote.toString() };
+      const params = { id: addedNote._id.toString() };
       chai.request(server)
           .get('/api/note/get')
           .query(params)

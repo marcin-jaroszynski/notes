@@ -90,6 +90,7 @@
           try {
             let requestResopnse = await this.$http.post('note/add', requestParams);
             this.note.setId(requestResopnse.idAddedNote);
+            this.note.setDateAdded(requestResopnse.dateAddedNote);
             this.storage.notes.add(this.note);
             this.resetFields();
           } catch(error) {

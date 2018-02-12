@@ -7,23 +7,26 @@ import { initStorage } from './routes/storage';
 import { getEntries as getDashbordEntries } from './routes/dashboard';
 import { label } from './util/colors';
 import dbConnect from './db';
+import ApiUrl from './apiUrl';
+
 
 dbConnect();
+let apiUrl = new ApiUrl(process.env.NODE_ENV);
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.text());
 app.use(bodyParser.json({type: 'application/json'}));
 
-app.post('/api/category/add', addCategory);
-app.post('/api/category/change-title', changeTitleCategory);
-app.get('/api/category/get-notes', getNotes);
-app.post('/api/note/add', addNote);
-app.post('/api/note/edit', editNote);
-app.get('/api/note/get', getNote);
-app.post('/api/note/remove', removeNote);
-app.get('/api/storage/init', initStorage);
-app.get('/api/dashboard/get', getDashbordEntries);
+app.post(apiUrl.categoryAdd(), addCategory);
+app.post(apiUrl.categoryChangeTitle(), changeTitleCategory);
+app.get(apiUrl.categoryNotes(), getNotes);
+app.post(apiUrl.noteAdd(), addNote);
+app.post(apiUrl.noteEdit(), editNote);
+app.get(apiUrl.note(), getNote);
+app.post(apiUrl.noteRemove(), removeNote);
+app.get(apiUrl.storageInit(), initStorage);
+app.get(apiUrl.dashboard(), getDashbordEntries);
 
 if ('dev' !== process.env.NODE_ENV) {
   app.listen(3000, function() {

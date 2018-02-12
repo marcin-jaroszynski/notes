@@ -6,7 +6,7 @@
   "private": true,
   "scripts": {
     "dev": "NODE_ENV=dev babel-node build/dev-server.js --presets es2015,stage-2",
-    "start": "babel-node server/server.js --presets es2015,stage-2",
+    "start": "NODE_ENV=prod babel-node server/server.js --presets es2015,stage-2",
     "build": "node build/build.js",
     "test-unit": "cross-env BABEL_ENV=test karma start test/unit/karma.conf.js --single-run",
     "test-api": "node_modules/mocha/bin/mocha --timeout 10000 --require babel-register test/integration/api/*.spec.js",

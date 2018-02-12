@@ -17,7 +17,7 @@
           Tags: <span v-for="tag in note.tags.get()"><router-link :to="tag.url">{{ tag.title }} </router-link></span>
         </div>
         <p>
-          {{ note.getContent() }}
+          <pre>{{ note.getContent() }}</pre>
         </p>
       </div>
     </layout>

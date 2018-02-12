@@ -12,10 +12,11 @@ async function addNote(req, res) {
       note.setContent(req.body.content);
       note.setCategoryId(req.body.category);
       if (req.body.tags) {
-        note.tags.set(req.body.tags);
+        note.tags.set(req.body.tags); 
       } 
-      let idAddedNote = await CategorySchema.addNote(note);
-      response.idAddedNote = idAddedNote;
+      let addedNote = await CategorySchema.addNote(note);
+      response.idAddedNote = addedNote._id;
+      response.dateAddedNote = addedNote.created_date;
       response.success = true;
     }
     res.json(response);

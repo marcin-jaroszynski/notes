@@ -15,6 +15,15 @@ export default class Categories {
     return this.categories.get();
   }
 
+  getAllAsHash() {
+    let data = {};
+    let categories = this.categories.get();
+    for (let i = 0; i < categories.length; i++) {
+      data[categories[i].getCode()] = categories[i];
+    }
+    return data;
+  }
+
   getTagsFor(categoryId) {
     let categoryToFind = this.categories.findByCode(categoryId);
     return categoryToFind.getTags();

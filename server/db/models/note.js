@@ -32,6 +32,10 @@ noteSchema.static('getTags', async function(noteId) {
   return note.tags;
 });
 
+noteSchema.static('getByTag', function(tagCode) {
+  return this.find({'tags.code': tagCode}, {title: 1, category: 1, created_date: 1}).sort({ created_date: -1 });
+});
+
 noteSchema.static('add', async function(note) {
   let noteToAdd = new this;
   noteToAdd.title = note.getTitle();

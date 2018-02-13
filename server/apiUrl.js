@@ -1,5 +1,6 @@
 export default class ApiUrl {
   constructor(env) {
+    console.log('ApiUrl.constructor.env: ' + env);
     this.prefix = '/';
     if ('dev' === env || 'test' === env) {
       this.prefix = '/api/';
@@ -32,6 +33,10 @@ export default class ApiUrl {
 
   noteRemove() {
     return this.prefix + 'note/remove';
+  }
+
+  noteGetByTag() {
+    return this.prefix + 'note/getByTag';
   }
 
   storageInit() {

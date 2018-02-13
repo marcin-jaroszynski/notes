@@ -83,4 +83,18 @@ describe(label('API: Notes'), () => {
         done();
       });
   });
+
+  it(label('GET: Fetch notes by specific tag'), (done) => {
+    const params = { tag: 'foo' };
+    chai.request(server)
+          .get('/api/note/getByTag')
+          .query(params)
+          .end((err, res) => { 
+            res.should.have.status(200);
+            res.body.should.be.a('object');
+            res.body.should.have.property('notes').which.is.instanceof(Array);
+            done();
+          });
+  });
+
 });

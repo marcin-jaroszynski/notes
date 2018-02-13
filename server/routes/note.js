@@ -82,4 +82,17 @@ async function removeNote(req, res) {
   res.json(response);
 }
 
-export { addNote, editNote, getNote, removeNote };
+async function getByTagNote(req, res) {
+  let response = {};
+  response.success = false;
+  try {
+    if (req.query.tag) {
+      response.notes = await NoteSchema.getByTag(req.query.tag);
+      response.success = true;
+    } 
+  } catch(error) {
+  }
+  res.json(response);
+}
+
+export { addNote, editNote, getNote, removeNote, getByTagNote };

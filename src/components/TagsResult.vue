@@ -15,7 +15,7 @@
                 <td>Category</td>
                 <td>Date added</td>
               </tr>
-              <tr v-for="entry in getEntriesForTag">
+              <tr v-for="entry in notesList">
                 <td><router-link :to="entry.noteUrl">{{ entry.noteTitle }}</router-link></td>
                 <td><router-link :to="entry.categoryUrl">{{ entry.categoryTitle }}</router-link></td>
                 <td>{{ entry.noteDateAdded }}</td>
@@ -31,17 +31,23 @@
 <script>
   import Layout from './Layout'
   import Url from '../model/url.js'
+  import Note from '../model/note/note.js'
+  import Category from '../model/category/category.js'
 
   export default {
     props: ['storage'],
     name: 'tags-result',
     components: {
       layout: Layout
+    }, 
+    beforeRouteEnter(to, from, next) {
+      next(vm => vm.setData());
     },
     data() {
       return {
         tagCode: this.$route.params.tagCode,
-      }
+        notesList: []
+      } 
     },
     computed: {
       getEntriesForTag() {
@@ -54,6 +60,30 @@
       }     
     },
     methods: {
+      setData: async function() {
+        let response = await this.$http.get('note/getByTag', { tag: this.tagCode });
+        let categories = this.storage.categories.getAllAsHash();
+        if (response.success === true) {
+          let notes = [];
+          for (let i = 0; i < response.notes.length; i++) {
+            if (categories[response.notes[i].category]) {
+              let category = categories[response.notes[i].category];
+              let note = new Note();
+              note.setTitle(response.notes[i].title);
+              note.setId(response.notes[i]._id);
+              note.setDateAdded(response.notes[i].created_date);
+              notes.push({
+                categoryTitle: category.getTitle(),
+                categoryUrl: category.getUrl(),
+                noteTitle: note.getTitle(),
+                noteUrl: note.getUrl(),
+                noteDateAdded: note.getDateAdded()
+              });
+            }
+          }
+          this.notesList = notes;
+        }
+      },
       backToDashboard: function() {
         this.$router.push(Url.getDashboard());
       },

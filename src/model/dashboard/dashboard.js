@@ -15,47 +15,6 @@ export default class Dashboard {
     this.data.push(new DashboardItem(note, category));
   }
 
-  updateCategories(oldTitleCategory, newTitleCategory) {
-    let dasboardItems = this.data.getAll();
-    let newCategory = new Category({title: newTitleCategory});
-    for (let i = 0; i < dasboardItems.length; i++) {
-      if (dasboardItems[i].getCategoryTitle() === oldTitleCategory) {
-        dasboardItems[i].setCategoryTitle(newCategory.getTitle());
-        dasboardItems[i].setCategoryUrl(newCategory.getUrl());
-      }
-    }
-  }
-
-  updateEntry(note, category) {
-    let dashboardItemToEdit = this.find(note.getId());
-    if (dashboardItemToEdit) {
-      dashboardItemToEdit.setNoteTitle(note.getTitle());
-      dashboardItemToEdit.setNoteUrl(note.getUrl());
-      dashboardItemToEdit.setCategoryTitle(category.getTitle());
-      dashboardItemToEdit.setCategoryUrl(category.getUrl());
-      return true;
-    }
-    return false;
-  }
-
-  remove(noteId) {
-    let dasboardItemIndexToRemove = this._getIndexFor(noteId);
-    if (dasboardItemIndexToRemove !== -1) {
-      let dasboardItems = this.data.getAll();
-      dasboardItems.splice(dasboardItemIndexToRemove, 1);
-      return true;
-    }
-    return false;
-  }
-
-  find(noteId) {
-    let dasboardItemIndexToFind = this._getIndexFor(noteId);
-    if (dasboardItemIndexToFind !== -1) {
-      return this.data.getAll()[dasboardItemIndexToFind];
-    }
-    return false;
-  }
-
   peek() {
     return this.data.peek();
   }
@@ -70,16 +29,5 @@ export default class Dashboard {
 
   reset() {
     this.data = new Stack();
-  }
-
-  _getIndexFor(noteId) {
-    let notFound = -1;
-    let dasboardItems = this.data.getAll(); 
-    for (let i = 0; i < dasboardItems.length; i++) {
-      if (dasboardItems[i].getNoteId() == noteId) {
-        return i;
-      }
-    }
-    return notFound;
   }
 }

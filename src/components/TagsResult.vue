@@ -32,7 +32,6 @@
   import Layout from './Layout'
   import Url from '../model/url.js'
   import Note from '../model/note/note.js'
-  import Category from '../model/category/category.js'
 
   export default {
     props: ['storage'],

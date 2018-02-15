@@ -8,8 +8,8 @@ import Note from '../note/note.js'
 export default class Storage {
   constructor() {
     this.dashboard = new Dashboard();
-    this.categories = new Categories(this.dashboard);
-    this.notes = new Notes(this.categories, this.dashboard);
+    this.categories = new Categories();
+    this.notes = new Notes(this.categories);
     this.tags = new Tags(this.categories);
   }
 

@@ -70,9 +70,13 @@ export default class Helper {
     return new ResourceList();
   };
 
+  static getStorageCategories() {
+    return new StorageCategories(); 
+  };
+
   static getDashboard() {
     return new Dashboard();
-  }
+  };
 
   static getStorageCategories() {
     let dashboard = this.getDashboard();

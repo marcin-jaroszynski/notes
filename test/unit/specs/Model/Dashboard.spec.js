@@ -32,35 +32,13 @@ describe('Dashboard model', () => {
     expect('Note 2').to.equal(lastNoteInDashboard.getNoteTitle());
   });
 
-  it('update - change name of category', () => {
+  it('reset', () => {
     let storage = Helper.getStorage();
-    let categoryLinux = Helper.getCategory('Linux');
-    storage.categories.add(categoryLinux);
-    let nNotes = 2;
-    let dashboard = getDashboardWithNotes(nNotes, categoryLinux);
-    let categoryPython = Helper.getCategory('Python');
-    dashboard.updateCategories(categoryLinux.getTitle(), categoryPython.getTitle());
-    let counterUpdateDashbordItems = 0;
-    let dashboardItems = dashboard.get();
-    for (let i = 0; i < nNotes; i++) {
-      if (dashboardItems[i].getCategoryTitle() == categoryPython.getTitle() &&
-          dashboardItems[i].getCategoryUrl() == categoryPython.getUrl()) {
-        counterUpdateDashbordItems++;
-      }
-    }
-    expect(2).to.equal(counterUpdateDashbordItems);
+    let category = storage.categories.get('linux');
+    let nNotes = 10;
+    let dashboard = getDashboardWithNotes(nNotes, category);
+    expect(nNotes).to.equal(dashboard.length());
+    dashboard.reset();
+    expect(0).to.equal(dashboard.length());
   });
-
-  it('remove specific entry from dashboard', () => {
-    let storage = Helper.getStorage();
-    let categoryLinux = Helper.getCategory('Linux');
-    storage.categories.add(categoryLinux);
-    let nNotes = 2;
-    let dashboard = getDashboardWithNotes(nNotes, categoryLinux);
-    expect(2).to.equal(dashboard.length());
-    let noteIdToRemove = 1;
-    dashboard.remove(noteIdToRemove);
-    expect(1).to.equal(dashboard.length());
-  });
-
 });

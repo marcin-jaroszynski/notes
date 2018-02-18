@@ -8,7 +8,7 @@ const noteSchema = new Schema({
   content: { type: String, required: true },
   category: { type: String, required: true, index: true },
   tags: [tagSchema],
-  created_date: { type: Date, default: Date.now() }
+  created_date: { type: Date, default: () => { return Date.now(); } }
 });
 
 noteSchema.static('notes', function(categoryCode) {

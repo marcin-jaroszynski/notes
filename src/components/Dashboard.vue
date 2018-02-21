@@ -24,6 +24,7 @@
               </tr>
             </tbody>
           </table>
+          <pagination pages="7" :currentpage="getCurrentPage" url="/dashboard/page/"></pagination>
         </p>
       </div>
     </layout>
@@ -42,6 +43,11 @@
       layout: Layout
     },
     async created() {
+      console.log('Page: ' + JSON.stringify(this.$route.params));
+      if (this.$route.params) {
+        this.currentPage = this.$route.params.page;
+      }
+
       this.storage.dashboard.reset();
       let categoriesMap = new Map();
       let categories = this.storage.categories.getAll();
@@ -63,9 +69,16 @@
       }
       this.dashboardEntries = this.storage.dashboard.get();
     },
+    beforeRouteUpdate (to, from, next) {
+      console.log('beforeRouteUpdate.to: ' + JSON.stringify(to.params));
+      this.currentPage = parseInt(to.params.page);
+      next();
+      // this.$router.push(Url.getDashboardPage(this.currentPage));
+    },
     data() {
       return {
         dashboardEntries: [],
+        currentPage: 1
       }
     },
     computed: {
@@ -74,6 +87,9 @@
       },
       getCategories() {
         return this.storage.categories.getAll();
+      },
+      getCurrentPage() {
+        return this.currentPage;
       }     
     },
     methods: {

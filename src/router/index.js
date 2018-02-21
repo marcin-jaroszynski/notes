@@ -48,6 +48,15 @@ export default new Router({
       }
     },
     {
+      path: Url.getDashboardPage(':page(\\d+)'),
+      name: 'DashboardPage',
+      title: 'Dashboard',
+      component: Dashboard,
+      props: {
+        storage: storage
+      }
+    },
+    {
       path: Url.getCategoryShow(':categoryId/'),
       name: 'CategoryShow',
       component: CategoryShow,

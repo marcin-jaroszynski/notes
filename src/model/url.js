@@ -7,6 +7,10 @@ export default class Url {
     return '/dashboard/';
   }
 
+  static getDashboardPage(page) {
+    return '/dashboard/page/' + page;
+  }
+
   static getCategoryShow(categoryId) {
     return '/category/show/' + categoryId;
   }

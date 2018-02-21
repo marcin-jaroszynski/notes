@@ -42,6 +42,6 @@ export default class Stack {
   }
 
   getAll() {
-    return this.data.reverse();
+    return this.data;
   }
 }

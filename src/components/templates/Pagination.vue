@@ -23,6 +23,7 @@
     methods: {
       getPages() {
         this.currentPage = parseInt(this.currentpage);
+        this.maxPages = parseInt(this.pages);
         let links = [];
         let start = 1;
         let to = 1;
@@ -39,11 +40,15 @@
           start = this.maxPages - 2;
           to = this.maxPages + 1;
         }
-        
+        if (0 >= start) {
+          start = 1;
+        }
+
         for (let page = start; page < to; page++) {
           links.push(this._getItem(page, this.url + page));
         }
-        if ( (this.maxPages - this.currentPage) >= offset-1 ) { 
+
+        if (this.maxPages >= this.currentPage + 2 && this.maxPages != offset) {
           links.push(this._getSeparator());
           links.push(this._getItem(this.maxPages, this.url + this.maxPages));
         }

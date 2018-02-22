@@ -24,7 +24,7 @@
               </tr>
             </tbody>
           </table>
-          <pagination pages="7" :currentpage="getCurrentPage" url="/dashboard/page/"></pagination>
+          <pagination :pages="getNumOfPages" :currentpage="getCurrentPage" url="/dashboard/page/"></pagination>
         </p>
       </div>
     </layout>
@@ -35,6 +35,7 @@
   import Layout from './Layout'
   import Url from '../model/url.js'
   import Note from '../model/note/note.js'
+  import DashboardPagination from '../model/dashboard/pagination.js'
 
   export default {
     props: ['storage'],
@@ -42,43 +43,19 @@
     components: {
       layout: Layout
     },
-    async created() {
-      console.log('Page: ' + JSON.stringify(this.$route.params));
-      if (this.$route.params) {
-        this.currentPage = this.$route.params.page;
-      }
-
-      this.storage.dashboard.reset();
-      let categoriesMap = new Map();
-      let categories = this.storage.categories.getAll();
-      for (let i = 0; i < categories.length; i++) {
-        categoriesMap.set(categories[i].getCode(), categories[i]);
-      }
-      let response = await this.$http.get('dashboard/get');
-      let dashboardEntries = response.entries;
-      for (let i = 0; i < dashboardEntries.length; i++) {
-        if (categoriesMap.has(dashboardEntries[i].category)) {
-          let note = new Note();
-          note.setId(dashboardEntries[i]._id);
-          note.setTitle(dashboardEntries[i].title);
-          note.setCategoryId(dashboardEntries[i].category);
-          note.setDateAdded(dashboardEntries[i].created_date);
-          let categoryNote = categoriesMap.get(dashboardEntries[i].category);
-          this.storage.dashboard.add(note, categoryNote);
-        }
-      }
-      this.dashboardEntries = this.storage.dashboard.get();
+    beforeRouteEnter (to, from, next) {
+      next(vm => vm.setDashboard(to.params.page));
     },
     beforeRouteUpdate (to, from, next) {
-      console.log('beforeRouteUpdate.to: ' + JSON.stringify(to.params));
       this.currentPage = parseInt(to.params.page);
+      this.setDashboard(this.currentPage);
       next();
-      // this.$router.push(Url.getDashboardPage(this.currentPage));
     },
     data() {
       return {
         dashboardEntries: [],
-        currentPage: 1
+        currentPage: 1,
+        numOfPages: 1
       }
     },
     computed: {
@@ -90,11 +67,45 @@
       },
       getCurrentPage() {
         return this.currentPage;
+      },
+      getNumOfPages() {
+         return this.numOfPages;
       }     
     },
     methods: {
       getCategoryAddUrl() {
         this.$router.push(Url.getCategoryAdd());
+      },
+      setNumOfPages(entries) {
+        let pagination = new DashboardPagination(entries);
+        this.numOfPages = pagination.getPages();
+      },
+      setDashboard: async function(page) {
+        if (page) {
+          this.currentPage = page;
+        }
+
+        this.storage.dashboard.reset();
+        let categoriesMap = new Map();
+        let categories = this.storage.categories.getAll();
+        for (let i = 0; i < categories.length; i++) {
+          categoriesMap.set(categories[i].getCode(), categories[i]);
+        }
+        let response = await this.$http.get('dashboard/get', { currentPage: this.currentPage });
+        this.setNumOfPages(response.numOfAllEntries);
+        let dashboardEntries = response.entries;
+        for (let i = 0; i < dashboardEntries.length; i++) {
+          if (categoriesMap.has(dashboardEntries[i].category)) {
+            let note = new Note();
+            note.setId(dashboardEntries[i]._id);
+            note.setTitle(dashboardEntries[i].title);
+            note.setCategoryId(dashboardEntries[i].category);
+            note.setDateAdded(dashboardEntries[i].created_date);
+            let categoryNote = categoriesMap.get(dashboardEntries[i].category);
+            this.storage.dashboard.add(note, categoryNote);
+          }
+        }
+        this.dashboardEntries = this.storage.dashboard.get();
       }
     }
   }

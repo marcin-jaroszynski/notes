@@ -1,4 +1,4 @@
 {
-  "DB_HOST": "mongodb://localhost/notes",
+  "DB_HOST": "mongodb://localhost/testMongoNotes",
   "DB_OPTIONS": { "useMongoClient": true }
 }

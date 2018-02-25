@@ -1,5 +1,4 @@
 import NoteSchema from '../db/models/note';
-import DashboardPagination from '../../src/model/dashboard/pagination';
 
 async function getEntries(req, res) {
   let response = {};
@@ -7,10 +6,11 @@ async function getEntries(req, res) {
   response.entries = [];
   response.numOfAllEntries = 0;
   try {
-    if (req.query.currentPage) {
+    let currentPage = parseInt(req.query.currentPage);
+    let numEntriesPerPage = parseInt(req.query.numEntriesPerPage);
+    if (currentPage && numEntriesPerPage) {
       response.numOfAllEntries = await NoteSchema.numOfNotes();
-      let pagination = new DashboardPagination(response.numOfAllEntries);
-      response.entries = await NoteSchema.getDashboardEntries(req.query.currentPage, pagination.getEntriesPerPage());
+      response.entries = await NoteSchema.getDashboardEntries(currentPage, numEntriesPerPage);
       response.success = true;
     }
   } catch(error) {

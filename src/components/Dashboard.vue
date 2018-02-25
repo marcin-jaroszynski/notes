@@ -24,7 +24,7 @@
               </tr>
             </tbody>
           </table>
-          <pagination :pages="getNumOfPages" :currentpage="getCurrentPage" url="/dashboard/page/"></pagination>
+          <pagination :currentPage="getCurrentPage" :numOfAllEntries="getNumOfAllEntries" :offset="getPaginationOffset" :numEntriesPerPage="getNumEntriesPerPage" url="/dashboard/page/"></pagination>
         </p>
       </div>
     </layout>
@@ -35,7 +35,6 @@
   import Layout from './Layout'
   import Url from '../model/url.js'
   import Note from '../model/note/note.js'
-  import DashboardPagination from '../model/dashboard/pagination.js'
 
   export default {
     props: ['storage'],
@@ -55,7 +54,7 @@
       return {
         dashboardEntries: [],
         currentPage: 1,
-        numOfPages: 1
+        numOfAllEntries: 0
       }
     },
     computed: {
@@ -68,17 +67,22 @@
       getCurrentPage() {
         return this.currentPage;
       },
-      getNumOfPages() {
-         return this.numOfPages;
-      }     
+      getNumOfAllEntries() {
+        return this.numOfAllEntries;
+      },
+      getPaginationOffset() {
+        return 3;
+      },
+      getNumEntriesPerPage() {
+        return 2;
+      }    
     },
     methods: {
       getCategoryAddUrl() {
         this.$router.push(Url.getCategoryAdd());
       },
-      setNumOfPages(entries) {
-        let pagination = new DashboardPagination(entries);
-        this.numOfPages = pagination.getPages();
+      setNumOfAllEntries(entries) {
+        this.numOfAllEntries = entries;
       },
       setDashboard: async function(page) {
         if (page) {
@@ -91,8 +95,8 @@
         for (let i = 0; i < categories.length; i++) {
           categoriesMap.set(categories[i].getCode(), categories[i]);
         }
-        let response = await this.$http.get('dashboard/get', { currentPage: this.currentPage });
-        this.setNumOfPages(response.numOfAllEntries);
+        let response = await this.$http.get('dashboard/get', { currentPage: this.currentPage, numEntriesPerPage: this.getNumEntriesPerPage });
+        this.setNumOfAllEntries(response.numOfAllEntries);
         let dashboardEntries = response.entries;
         for (let i = 0; i < dashboardEntries.length; i++) {
           if (categoriesMap.has(dashboardEntries[i].category)) {

@@ -10,7 +10,7 @@ chai.use(chaiHttp);
 
 describe(label('API: Dashboard'), () => {
   it(label('GET: it should fetch latest entries'), (done) => {
-    const params = { currentPage: 1 };
+    const params = { currentPage: 1, numEntriesPerPage: 10 };
     chai.request(server)
         .get('/api/dashboard/get')
         .query(params)

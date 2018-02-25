@@ -3,64 +3,65 @@
     <nav>
       <span>Pages:</span>
       <ul>
-        <li v-for="page in getPages()" v-if="!page.isSeparator"><router-link :to="page.url">{{ page.title }}</router-link></li>
-        <li v-else>...</li>
+        <li v-for="item in getPages()">
+          <span v-if="!item.isSeparator"><router-link :to="item.url">{{ item.title }}</router-link></span>
+          <span v-else>{{ item.title }}</span>
+        </li>
       </ul>
     </nav>
   </section>
 </template>
 
 <script>
+  import Pagination from '../../model/pagination.js'
   export default {
     name: 'pagination',
-    props: ['pages', 'currentpage', 'url'],
-    data() {
-      return {
-        maxPages: parseInt(this.pages),
-        currentPage: parseInt(this.currentpage)
-      }
-    },
+    props: ['currentPage', 'numOfAllEntries', 'offset', 'numEntriesPerPage', 'url'],
     methods: {
       getPages() {
-        this.currentPage = parseInt(this.currentpage);
-        this.maxPages = parseInt(this.pages);
-        let links = [];
+        let pagination = new Pagination();
+        pagination.setNumOfAllEntries(parseInt(this.numOfAllEntries));
+        pagination.setCurrentPage(parseInt(this.currentPage));
+        pagination.setOffset(parseInt(this.offset));
+        pagination.setNumEntriesPerPage(parseInt(this.numEntriesPerPage));
+
+        let items = [];
         let start = 1;
-        let to = 1;
-        let offset = 3;
-        if (this.currentPage == 1) {
-          start = 1;
-        } else {
-          start = this.currentPage - 1;
+        let to = pagination.getOffset();
+
+        if (pagination.getOffset() > pagination.getPages()) {
+          to = pagination.getPages();
         }
 
-        to = start + offset;
-        
-        if (to > this.maxPages) {
-          start = this.maxPages - 2;
-          to = this.maxPages + 1;
-        }
-        if (0 >= start) {
-          start = 1;
+        if (pagination.getCurrentPage() > 2) {
+          start = pagination.getCurrentPage() - 1;
+          to = start + pagination.getOffset() - 1;
+          items.push(this._getItem(1));
+          items.push(this._getSeparator());
         }
 
-        for (let page = start; page < to; page++) {
-          links.push(this._getItem(page, this.url + page));
+        if (to > pagination.getPages()) {
+          start = pagination.getPages() - pagination.getOffset() + 1;
+          to = pagination.getPages();
         }
 
-        if (this.maxPages >= this.currentPage + 2 && this.maxPages != offset) {
-          links.push(this._getSeparator());
-          links.push(this._getItem(this.maxPages, this.url + this.maxPages));
+        for (let page = start; page <= to; page++) {
+          items.push(this._getItem(page));
         }
-        return links;
+
+        if (pagination.getPages() >= pagination.getCurrentPage() + pagination.getOffset() - 1) {
+          items.push(this._getSeparator());
+          items.push(this._getItem(pagination.getPages()));
+        }
+        return items;
       },
       _getSeparator() {
-        return this._getItem('...', '', true);
+        return this._getItem('...', true);
       },
-      _getItem(title, url, isSeparator=false) {
+      _getItem(page, isSeparator=false) {
         return {
-          title: title,
-          url: url,
+          title: page,
+          url: this.url + page,
           isSeparator: isSeparator
         }
       }

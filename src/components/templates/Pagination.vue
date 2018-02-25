@@ -1,6 +1,6 @@
 <template>
   <section>
-    <nav>
+    <nav v-if="getPages().length > 1">
       <span>Pages:</span>
       <ul>
         <li v-for="item in getPages()">
@@ -19,13 +19,13 @@
     props: ['currentPage', 'numOfAllEntries', 'offset', 'numEntriesPerPage', 'url'],
     methods: {
       getPages() {
+        let items = [];
         let pagination = new Pagination();
         pagination.setNumOfAllEntries(parseInt(this.numOfAllEntries));
         pagination.setCurrentPage(parseInt(this.currentPage));
         pagination.setOffset(parseInt(this.offset));
         pagination.setNumEntriesPerPage(parseInt(this.numEntriesPerPage));
 
-        let items = [];
         let start = 1;
         let to = pagination.getOffset();
 
@@ -54,6 +54,9 @@
           items.push(this._getItem(pagination.getPages()));
         }
         return items;
+      },
+      getNumOfPages() {
+
       },
       _getSeparator() {
         return this._getItem('...', true);

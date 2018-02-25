@@ -85,7 +85,7 @@ describe(label('API: Category'), () => {
 
   describe(label('GET: Get notes for specific category'), () => {
     it(label('Should returns notes for specific category'), (done) => {
-      const params = { category: 'foo' };
+      const params = { category: 'foo', currentPage: 1, numEntriesPerPage: 10 };
       chai.request(server)
           .get('/api/category/get-notes')
           .query(params)
@@ -94,6 +94,7 @@ describe(label('API: Category'), () => {
             res.body.should.be.a('object');
             res.body.should.have.property('success').which.is.eql(true);
             res.body.should.have.property('notes').which.is.instanceof(Array);
+            res.body.should.have.property('numOfAllEntries').which.is.a('number');
             done();
           });
     });

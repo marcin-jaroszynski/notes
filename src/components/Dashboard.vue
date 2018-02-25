@@ -74,7 +74,7 @@
         return 3;
       },
       getNumEntriesPerPage() {
-        return 2;
+        return 10;
       }    
     },
     methods: {

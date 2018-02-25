@@ -15,6 +15,10 @@ export default class Url {
     return '/category/show/' + categoryId;
   }
 
+  static getCategoryShowPage(categoryId, page) {
+    return '/category/show/' + categoryId + '/page/' + page;
+  }
+
   static getCategoryAdd() {
     return '/category/add/';
   }

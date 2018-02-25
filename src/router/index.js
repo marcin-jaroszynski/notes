@@ -65,6 +65,14 @@ export default new Router({
       }
     },
     {
+      path: Url.getCategoryShowPage(':categoryId', ':page(\\d+)'),
+      name: 'CategoryShow',
+      component: CategoryShow,
+      props: {
+        storage: storage
+      }
+    },
+    {
       path: Url.getCategoryAdd(),
       name: 'CategoryAdd',
       component: CategoryAdd,

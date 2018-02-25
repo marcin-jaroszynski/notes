@@ -9,7 +9,7 @@
       <div slot="content">
         <div>Category: {{ getCategoryName() }}</div>
         <div>
-          Number of entries: {{ getCategoryCountNotes() }}
+          Number of entries: {{ getNumOfAllEntries }}
           <button  @click="addNewNote">Add new entry</button>
         </div>
         <p>
@@ -29,6 +29,7 @@
           <div>
           Tags: <span v-for="tag in getCategoryTags()"><router-link :to="tag.url">{{ tag.title }}</router-link> </span>
           </div>
+          <pagination :currentPage="getCurrentPage" :numOfAllEntries="getNumOfAllEntries" :offset="getPaginationOffset" :numEntriesPerPage="getNumEntriesPerPage" :url="getPaginationUrl"></pagination>
         </p>
       </div>
     </layout>
@@ -48,29 +49,55 @@
     data() {
       return {
         categories: this.storage.categories.getAll(),
-        notesList: []
+        notesList: [],
+        currentPage: 1,
+        numOfAllEntries: 0
       }
     },
+    beforeRouteEnter(to, from, next) {
+      next(vm => vm.setNewsetEntries(to.params.categoryId, to.params.page));
+    },
     beforeRouteUpdate(to, from, next) {
-      this.setNewsetEntries(to.params.categoryId);
+      this.setNewsetEntries(to.params.categoryId, to.params.page);
       next();
     },
-    async created() {
-      this.setNewsetEntries(this.getCurrentCategoryId());
+    computed: {
+      getCurrentPage() {
+        return this.currentPage;
+      },
+      getNumOfAllEntries() {
+        return this.numOfAllEntries;
+      },
+      getPaginationOffset() {
+        return 3;
+      },
+      getNumEntriesPerPage() {
+        return 10;
+      },
+      getPaginationUrl() {
+        return Url.getCategoryShow(this.getCurrentCategoryId()) + '/page/';
+      }
     },
     methods: {
-      setNewsetEntries: async function(categoryId) {
+      setNewsetEntries: async function(categoryId, page) {
+        this.currentPage = 1;
+        if (page) {
+          this.currentPage = page;
+        }
+
         try {
-          let data = await this.$http.get('category/get-notes', { category: categoryId });
+          let requestParams = {
+            category: categoryId,
+            currentPage: this.currentPage,
+            numEntriesPerPage: this.getNumEntriesPerPage
+          };
+          let data = await this.$http.get('category/get-notes', requestParams);
           this.notesList = data.notes;
+          this.numOfAllEntries = data.numOfAllEntries;
         } catch (error) {
         }
       },
-      getCategoryCountNotes: function() {
-        return this.notesList.length;
-      },
       getCategoryNotes: function() {
-        console.log('getCategoryNotes');
         return this.notesList;
       },
       getCategoryTags: function() {

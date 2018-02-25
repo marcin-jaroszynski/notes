@@ -111,8 +111,8 @@ categorySchema.static('removeNote', async function(noteId) {
   }
 });
 
-categorySchema.static('getNotesList', async function(categoryCode) {
-  let notesList = await noteSchema.getLatestEntries(categoryCode);
+categorySchema.static('getNotes', async function(categoryCode, currentPage, numEntriesPerPage) {
+  let notesList = await noteSchema.getEntries(categoryCode, currentPage, numEntriesPerPage);
   let returnData = [];
   for (let i = 0; i < notesList.length; i++) {
     let note = new NoteModel();
@@ -122,6 +122,10 @@ categorySchema.static('getNotesList', async function(categoryCode) {
     returnData.push(note);
   }
   return returnData;
+});
+
+categorySchema.static('numOfNotes', async function(categoryCode) {
+  return await noteSchema.numOfNotes(categoryCode);
 });
 
 export default mongoose.model('category', categorySchema);

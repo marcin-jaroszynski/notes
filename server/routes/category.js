@@ -45,9 +45,13 @@ async function getNotes(req, res) {
   let response = {};
   response.success = false;
   response.notes = [];
-  if (req.query.category) {
+  let category = req.query.category;
+  let currentPage = parseInt(req.query.currentPage);
+  let numEntriesPerPage = parseInt(req.query.numEntriesPerPage);
+  if (category && currentPage && numEntriesPerPage) {
     try {
-      response.notes = await CategorySchema.getNotesList(req.query.category);
+      response.notes = await CategorySchema.getNotes(category, currentPage, numEntriesPerPage);
+      response.numOfAllEntries = await CategorySchema.numOfNotes(category);
       response.success = true;
     } catch(err) {
     }

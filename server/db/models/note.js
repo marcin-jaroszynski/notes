@@ -19,12 +19,17 @@ noteSchema.static('note',  function(noteId) {
   return this.findOne({_id: noteId});
 });
 
-noteSchema.static('numOfNotes', function() {
-  return this.find({}).count();
+noteSchema.static('numOfNotes', function(categoryId='') {
+  let conditions = {};
+  if (categoryId) {
+    conditions = { category: categoryId };
+  }
+  return this.find(conditions).count();
 });
 
-noteSchema.static('getLatestEntries',  function(categoryCode) {
-  return this.find({category: categoryCode}, {title: 1, created_date: 1}).sort({ created_date: -1 });
+noteSchema.static('getEntries',  function(categoryCode, page, limit) {
+  let skip = limit * (page - 1);
+  return this.find({category: categoryCode}, {title: 1, created_date: 1}).sort({ created_date: -1 }).skip(skip).limit(limit);
 });
 
 noteSchema.static('getDashboardEntries', function(page, limit) {

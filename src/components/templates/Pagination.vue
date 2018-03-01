@@ -33,7 +33,8 @@
           to = pagination.getPages();
         }
 
-        if (pagination.getCurrentPage() > 2) {
+        let isDisplayFirstPageWithSeparator = ( pagination.getCurrentPage() >= pagination.getOffset() && pagination.getPages() != pagination.getOffset() );
+        if (isDisplayFirstPageWithSeparator) {
           start = pagination.getCurrentPage() - 1;
           to = start + pagination.getOffset() - 1;
           items.push(this._getItem(1));
@@ -49,7 +50,8 @@
           items.push(this._getItem(page));
         }
 
-        if (pagination.getPages() >= pagination.getCurrentPage() + pagination.getOffset() - 1) {
+        let isDisplayLastPageWithSeparator = (pagination.getCurrentPage() + 1 < pagination.getPages() && pagination.getPages() != pagination.getOffset() ); 
+        if (isDisplayLastPageWithSeparator) {
           items.push(this._getSeparator());
           items.push(this._getItem(pagination.getPages()));
         }

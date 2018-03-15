@@ -82,19 +82,20 @@
         this.categoryNameFromSelect = titleSelectedCategory;
         this.categoryNameFromField = titleSelectedCategory;
       },
-      changeCategoryTitle: function() {
+      changeCategoryTitle: async function() {
         let categoryWithNewTitle = new Category({title: this.categoryNameFromField});
         if (this.storage.categories.isExist(categoryWithNewTitle)) {
           alert('Category with this title is already exist!');
           return;
         }
-        let that = this;
-        this.$http.post('category/change-title', { currentTitle: this.categoryNameFromSelect, newTitle: categoryWithNewTitle.getTitle() }, function(data) {
-          let updatedCategory = that.storage.categories.changeTitle(that.categoryNameFromSelect, that.categoryNameFromField);
+        try {
+          await this.$http.post('category/change-title', { currentTitle: this.categoryNameFromSelect, newTitle: categoryWithNewTitle.getTitle() });
+          let updatedCategory = this.storage.categories.changeTitle(this.categoryNameFromSelect, this.categoryNameFromField);
           alert('Category title changed!');
-          that.categoryNameFromSelect = updatedCategory.getTitle();
-          that.categoryNameFromField = updatedCategory.getTitle();
-        });
+          this.categoryNameFromSelect = updatedCategory.getTitle();
+          this.categoryNameFromField = updatedCategory.getTitle();
+        } catch(error) {
+        }
       }
     }
   }

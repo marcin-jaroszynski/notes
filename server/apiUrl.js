@@ -46,4 +46,8 @@ export default class ApiUrl {
   dashboard() {
     return this.prefix + 'dashboard/get';
   }
+
+  login() {
+    return this.prefix + 'login';
+  }
 }

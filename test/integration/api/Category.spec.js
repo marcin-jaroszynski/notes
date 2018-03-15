@@ -6,21 +6,26 @@ const should = chai.should();
 const server = require('../../../server/server');
 import CategoryModel from '../../../server/db/models/category';
 import { label } from '../../../server/util/colors.js';
+import { generateToken } from '../db/Helper';
 
 chai.use(chaiHttp);
 
 describe(label('API: Category'), () => {
-  beforeEach(function(done) {
-    CategoryModel.remove({}, function(err) {
-      done();
-    });
+  let token = '';
+  beforeEach(async () => {
+    await CategoryModel.remove({});
+    token = await generateToken();
   });
 
+  let getRequestParams = (params) => {
+    return Object.assign({ token: token }, params);
+  };
+
   it(label('POST: Request should add new category'), (done) => {
-    const category =  { title: "Foo" };
+    const params = getRequestParams({title: "Foo"});
     chai.request(server)
         .post('/api/category/add')
-        .send(category)
+        .send(params)
         .end((err, res) => {
           res.should.have.status(200);
           res.body.should.be.a('object');
@@ -31,7 +36,7 @@ describe(label('API: Category'), () => {
 
   describe(label('POST: Request change title'), () => { 
     it(label('Should change title for existing category'), (done) => {
-      const params = { currentTitle: 'Foo', newTitle: 'Bar' };
+      const params = getRequestParams({ currentTitle: 'Foo', newTitle: 'Bar' });
       chai.request(server)
           .post('/api/category/change-title')
           .send(params)
@@ -44,7 +49,7 @@ describe(label('API: Category'), () => {
     });
 
     it(label('Should fail if currenTitle and newTitle params are empty'), (done) => {
-      const params = { currentTitle: '', newTitle: '' };
+      const params = getRequestParams({ currentTitle: '', newTitle: '' });
       chai.request(server)
           .post('/api/category/change-title')
           .send(params)
@@ -57,7 +62,7 @@ describe(label('API: Category'), () => {
     });
 
     it(label('Should fail if currenTitle param is empty'), (done) => {
-      const params = { currentTitle: '', newTitle: 'Bar' };
+      const params = getRequestParams({ currentTitle: '', newTitle: 'Bar' });
       chai.request(server)
           .post('/api/category/change-title')
           .send(params)
@@ -70,7 +75,7 @@ describe(label('API: Category'), () => {
     });
 
     it(label('Should fail if newTitle param is empty'), (done) => {
-      const params = { currentTitle: 'Foo', newTitle: '' };
+      const params = getRequestParams({ currentTitle: 'Foo', newTitle: '' });
       chai.request(server)
           .post('/api/category/change-title')
           .send(params)
@@ -85,7 +90,7 @@ describe(label('API: Category'), () => {
 
   describe(label('GET: Get notes for specific category'), () => {
     it(label('Should returns notes for specific category'), (done) => {
-      const params = { category: 'foo', currentPage: 1, numEntriesPerPage: 10 };
+      const params = getRequestParams({ category: 'foo', currentPage: 1, numEntriesPerPage: 10 });
       chai.request(server)
           .get('/api/category/get-notes')
           .query(params)

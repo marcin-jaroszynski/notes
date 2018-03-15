@@ -48,17 +48,20 @@
         let note = this.getNote();
         if (note.isEmpty()) {
           let noteId = this.getNoteId();
-          let noteResponse = await this.$http.get('note/get', { id: noteId });
-          if (noteResponse.success === true) {
-            let noteToSet = new Note();
-            noteToSet.setId(noteResponse.id);
-            noteToSet.setTitle(noteResponse.title);
-            noteToSet.setContent(noteResponse.content);
-            noteToSet.setCategoryId(noteResponse.category);
-            noteToSet.setDateAdded(noteResponse.created_date);
-            noteToSet.tags.set(noteResponse.tags);
-            this.storage.notes.set(noteToSet);
-            this.note = noteToSet;
+          try {
+            let noteResponse = await this.$http.get('note/get', { id: noteId });
+            if (noteResponse.success === true) {
+              let noteToSet = new Note();
+              noteToSet.setId(noteResponse.id);
+              noteToSet.setTitle(noteResponse.title);
+              noteToSet.setContent(noteResponse.content);
+              noteToSet.setCategoryId(noteResponse.category);
+              noteToSet.setDateAdded(noteResponse.created_date);
+              noteToSet.tags.set(noteResponse.tags);
+              this.storage.notes.set(noteToSet);
+              this.note = noteToSet;
+            }
+          } catch(error) {
           }
         } 
       },

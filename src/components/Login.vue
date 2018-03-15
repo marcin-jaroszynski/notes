@@ -26,13 +26,11 @@ export default {
     validate: async function(e) {
       if (this.loginField.length > 0 && this.passwordField.length > 0) {
         try {
-          let data = await this.$http.get('storage/init');
+          let data = await this.$http.get('login', { login: this.loginField, password: this.passwordField });
           this.storage.init(data);
           this.$router.push(Url.getDashboard());
         } catch(error) {
-
         }
-        
       } else {
         alert('Nope! You entered invalid data!');
       }

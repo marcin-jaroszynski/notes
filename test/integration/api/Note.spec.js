@@ -7,12 +7,23 @@ const server = require('../../../server/server');
 import { label } from '../../../server/util/colors.js';
 import CategorySchema from '../../../server/db/models/category';
 import NoteModel from '../../../src/model/note/note';
+import { generateToken } from '../db/Helper';
 
 chai.use(chaiHttp);
  
 describe(label('API: Notes'), () => {
+  let token = '';
+  
+  beforeEach(async () => {
+    token = await generateToken();
+  });
+
+  let getRequestParams = (params) => {
+    return Object.assign({ token: token }, params);
+  };
+
   it(label('POST: Add note'), (done) => {
-    let params = { title: 'Note 1', content: 'Lorem ipsum', category: 'foo' };
+    let params = getRequestParams({ title: 'Note 1', content: 'Lorem ipsum', category: 'foo' });
     chai.request(server)
         .post('/api/note/add')
         .send(params)
@@ -27,7 +38,7 @@ describe(label('API: Notes'), () => {
   });
 
   it(label('POST: Edit note'), (done) => {
-    let params = { id: '5a6a3f242f05ab23d4baf60e', title: 'Note 1 edited', content: 'Lorem ipsum edited', category: 'foo' };
+    let params = getRequestParams({ id: '5a6a3f242f05ab23d4baf60e', title: 'Note 1 edited', content: 'Lorem ipsum edited', category: 'foo' });
     chai.request(server)
       .post('/api/note/edit')
       .send(params)
@@ -52,7 +63,7 @@ describe(label('API: Notes'), () => {
     });
 
     it(label('GET: Fetch existing note'), (done) => {
-      const params = { id: addedNote._id.toString() };
+      const params = getRequestParams({ id: addedNote._id.toString() });
       chai.request(server)
           .get('/api/note/get')
           .query(params)
@@ -72,7 +83,7 @@ describe(label('API: Notes'), () => {
   });
 
   it(label('POST: Remove note'), (done) => {
-    let params = { id: '5a6a3f242f05ab23d4baf60e' };
+    let params = getRequestParams({ id: '5a6a3f242f05ab23d4baf60e' });
     chai.request(server)
       .post('/api/note/remove')
       .send(params)
@@ -85,7 +96,7 @@ describe(label('API: Notes'), () => {
   });
 
   it(label('GET: Fetch notes by specific tag'), (done) => {
-    const params = { tag: 'foo' };
+    const params = getRequestParams({ tag: 'foo' });
     chai.request(server)
           .get('/api/note/getByTag')
           .query(params)

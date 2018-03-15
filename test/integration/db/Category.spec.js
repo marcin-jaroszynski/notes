@@ -10,7 +10,7 @@ import chai from 'chai';
 const expect = chai.expect;
 import chaiAsPromised from 'chai-as-promised';
 import dbConnect from '../../../server/db.js';
-import clearDb from './Helper.js';
+import { clearDb } from './Helper.js';
 
 chai.use(chaiAsPromised);
 

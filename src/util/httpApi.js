@@ -5,6 +5,7 @@ export default class HttApi {
     this.http = axios.create({
       baseURL: '/api/'
     });
+    this.token = '';
   }
 
   get(url, params) {
@@ -17,20 +18,26 @@ export default class HttApi {
 
   async _request(method, url, params) {
     let response = { data: { success: false } };
-    if ('get' === method) {
-      response = await this.http.get(url, { params });
-    } else if ('post' === method) {
-      response = await this.http.post(url, params);
+    try {
+      if (this.token) {
+        params.token = this.token;
+      }
+      if ('get' === method) {
+        response = await this.http.get(url, { params });
+      } else if ('post' === method) {
+        response = await this.http.post(url, params);
+      }
+      if (response.data.token) {
+        this.token = response.data.token;
+      }
+    } catch(error) {
+      this.messageError(error.response.data.message);
+      throw new Error();
     }
-    if (false == response.data.success) {
-      this.messageError();
-      return false;
-    } else {
-      return response.data;
-    }
- 
+    return response.data;
   }
-  messageError() {
-    alert('Sorry, something went wrong');
+  messageError(message) {
+    let displayMessage = 'Sorry, something went wrong'; 
+    alert(message);
   }
 }

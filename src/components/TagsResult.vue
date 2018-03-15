@@ -60,27 +60,30 @@
     },
     methods: {
       setData: async function() {
-        let response = await this.$http.get('note/getByTag', { tag: this.tagCode });
-        let categories = this.storage.categories.getAllAsHash();
-        if (response.success === true) {
-          let notes = [];
-          for (let i = 0; i < response.notes.length; i++) {
-            if (categories[response.notes[i].category]) {
-              let category = categories[response.notes[i].category];
-              let note = new Note();
-              note.setTitle(response.notes[i].title);
-              note.setId(response.notes[i]._id);
-              note.setDateAdded(response.notes[i].created_date);
-              notes.push({
-                categoryTitle: category.getTitle(),
-                categoryUrl: category.getUrl(),
-                noteTitle: note.getTitle(),
-                noteUrl: note.getUrl(),
-                noteDateAdded: note.getDateAdded()
-              });
+        try {
+          let response = await this.$http.get('note/getByTag', { tag: this.tagCode });
+          let categories = this.storage.categories.getAllAsHash();
+          if (response.success === true) {
+            let notes = [];
+            for (let i = 0; i < response.notes.length; i++) {
+              if (categories[response.notes[i].category]) {
+                let category = categories[response.notes[i].category];
+                let note = new Note();
+                note.setTitle(response.notes[i].title);
+                note.setId(response.notes[i]._id);
+                note.setDateAdded(response.notes[i].created_date);
+                notes.push({
+                  categoryTitle: category.getTitle(),
+                  categoryUrl: category.getUrl(),
+                  noteTitle: note.getTitle(),
+                  noteUrl: note.getUrl(),
+                  noteDateAdded: note.getDateAdded()
+                });
+              }
             }
+            this.notesList = notes;
           }
-          this.notesList = notes;
+        } catch(error) {
         }
       },
       backToDashboard: function() {

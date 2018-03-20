@@ -95,6 +95,7 @@
           this.categoryNameFromSelect = updatedCategory.getTitle();
           this.categoryNameFromField = updatedCategory.getTitle();
         } catch(error) {
+          this.$router.push(Url.getLogout());
         }
       }
     }

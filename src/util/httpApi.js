@@ -1,11 +1,11 @@
 import axios from 'axios'
+import VueCookies from 'vue-cookies'
 
 export default class HttApi {
   constructor() {
     this.http = axios.create({
       baseURL: '/api/'
     });
-    this.token = '';
   }
 
   get(url, params) {
@@ -19,8 +19,8 @@ export default class HttApi {
   async _request(method, url, params) {
     let response = { data: { success: false } };
     try {
-      if (this.token) {
-        params.token = this.token;
+      if (VueCookies.get('token')) {
+        params.token = VueCookies.get('token');
       }
       if ('get' === method) {
         response = await this.http.get(url, { params });
@@ -28,7 +28,7 @@ export default class HttApi {
         response = await this.http.post(url, params);
       }
       if (response.data.token) {
-        this.token = response.data.token;
+        VueCookies.set('token', response.data.token, 60*60);
       }
     } catch(error) {
       this.messageError(error.response.data.message);

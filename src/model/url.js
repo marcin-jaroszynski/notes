@@ -2,6 +2,10 @@ export default class Url {
   static getLogin() {
     return '/login';
   }
+
+  static getLogout() {
+    return '/logout';
+  }
   
   static getDashboard() {
     return '/dashboard/';

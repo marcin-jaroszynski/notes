@@ -61,4 +61,8 @@ export default class Categories {
     }
     return new Category();
   }
+
+  reset() {
+    this.categories = new CategoryList();
+  }
 }

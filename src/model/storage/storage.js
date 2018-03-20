@@ -17,6 +17,11 @@ export default class Storage {
     let categoriesMap = this._initCategories(data.categories);
   }
 
+  reset() {
+    this.dashboard.reset();
+    this.categories.reset();
+  }
+
   _initCategories(categories) {
     for (let i = 0; i < categories.length; i++) {
       let category = new Category({title: categories[i].title });

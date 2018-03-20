@@ -124,6 +124,7 @@
             await this.$http.post('note/edit', requestParams);
             this.storage.notes.edit(noteEdit);
           } catch(error) {
+            this.$router.push(Url.getLogout());
           }
         } else {
           alert('Fill the required fields!');

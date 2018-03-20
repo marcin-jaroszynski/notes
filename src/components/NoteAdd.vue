@@ -94,6 +94,7 @@
             this.storage.notes.add(this.note);
             this.resetFields();
           } catch(error) {
+            this.$router.push(Url.getLogout());
           }
         } else {
           alert('Fill the required fields!');

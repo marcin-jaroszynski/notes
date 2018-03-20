@@ -84,6 +84,7 @@
             this.notesList = notes;
           }
         } catch(error) {
+          this.$router.push(Url.getLogout());
         }
       },
       backToDashboard: function() {

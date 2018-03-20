@@ -1,6 +1,7 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Login from '@/components/Login'
+import Logout from '@/components/Logout'
 import Dashboard from '@/components/Dashboard'
 import CategoryShow from '@/components/CategoryShow'
 import CategoryAdd from '@/components/CategoryAdd'
@@ -34,6 +35,15 @@ export default new Router({
       name: 'Login',
       title: 'Login',
       component: Login,
+      props: {
+        storage: storage
+      }
+    },
+    {
+      path: '/logout',
+      name: 'Logout',
+      title: 'Logout',
+      component: Logout,
       props: {
         storage: storage
       }

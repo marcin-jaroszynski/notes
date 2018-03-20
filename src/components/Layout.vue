@@ -7,7 +7,7 @@
       <div>
         <input type="text" placeholder="Search...">
         <button>Search</button>
-        <button class="logout" @click="getLoginUrl()">Log out</button>
+        <button class="logout" @click="getLogoutUrl()">Log out</button>
       </div>
       <slot name="content"></slot>
     </div>
@@ -19,8 +19,8 @@
 
   export default {
     methods: {
-      getLoginUrl: function() {
-        this.$router.push(Url.getLogin());
+      getLogoutUrl: function() {
+        this.$router.push(Url.getLogout());
       }
     }
   }

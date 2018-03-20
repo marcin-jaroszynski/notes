@@ -62,6 +62,7 @@
               this.note = noteToSet;
             }
           } catch(error) {
+            this.$router.push(Url.getLogout());
           }
         } 
       },

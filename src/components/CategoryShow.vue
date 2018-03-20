@@ -95,6 +95,7 @@
           this.notesList = data.notes;
           this.numOfAllEntries = data.numOfAllEntries;
         } catch (error) {
+          this.$router.push(Url.getLogout());
         }
       },
       getCategoryNotes: function() {

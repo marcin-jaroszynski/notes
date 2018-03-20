@@ -112,6 +112,7 @@
           }
           this.dashboardEntries = this.storage.dashboard.get();
         } catch(error) {
+          this.$router.push(Url.getLogout());
         }
       }
     }

@@ -7,6 +7,7 @@ import TitlePageComponent from './components/TitlePage';
 import SideMenuTemplate from './components/templates/SideMenu';
 import TagItemTemplate from './components/templates/TagItem';
 import PaginationTemplate from './components/templates/Pagination';
+import TagsListTemplate from './components/templates/TagsList';
 import HttpApi from './util/httpApi.js';
 
 Vue.prototype.$http = new HttpApi();
@@ -15,6 +16,7 @@ Vue.component('title-page', TitlePageComponent);
 Vue.component('side-menu', SideMenuTemplate);
 Vue.component('tag-item', TagItemTemplate);
 Vue.component('pagination', PaginationTemplate);
+Vue.component('tags-list', TagsListTemplate);
 
 /* eslint-disable no-new */
 new Vue({

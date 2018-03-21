@@ -27,7 +27,7 @@
             </tbody>
           </table>
           <div>
-          Tags: <span v-for="tag in getCategoryTags()"><router-link :to="tag.url">{{ tag.title }}</router-link> </span>
+          Tags: <tags-list v-bind:tags="getCategoryTags()"></tags-list>
           </div>
           <pagination :currentPage="getCurrentPage" :numOfAllEntries="getNumOfAllEntries" :offset="getPaginationOffset" :numEntriesPerPage="getNumEntriesPerPage" :url="getPaginationUrl"></pagination>
         </p>

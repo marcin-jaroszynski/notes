@@ -19,4 +19,13 @@ export default {
   color: #2c3e50;
   margin-top: 60px;
 }
+
+textarea {
+  width: 50em;
+  height: 25em;
+}
+
+pre {
+  white-space: pre-wrap;
+}
 </style>

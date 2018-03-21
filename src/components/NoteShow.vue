@@ -14,7 +14,7 @@
           Date added: {{ note.getDateAdded() }}
         </div>
         <div>
-          Tags: <span v-for="tag in note.tags.get()"><router-link :to="tag.url">{{ tag.title }} </router-link></span>
+          Tags: <tags-list v-bind:tags="note.tags.get()"></tags-list>
         </div>
         <p>
           <pre>{{ note.getContent() }}</pre>

@@ -10,7 +10,6 @@ import { label } from './util/colors';
 import dbConnect from './db';
 import ApiUrl from './apiUrl';
 import ConfigServerModel from './db/models/config';
-import UserSchema from './db/models/user';
 import jwt from 'jsonwebtoken';
 
 dbConnect();

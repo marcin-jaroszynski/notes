@@ -8,6 +8,8 @@
       </div>
       <div slot="content">
         <div>Dashboard</div>
+        <br>
+        <div>Number of all notes: {{ getNumOfAllEntries }}</div>
         <p>
           <div>Latest entries:</div>
           <table>

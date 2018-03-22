@@ -1,6 +1,6 @@
 <template> 
   <article>
-    <title-page title="Tag results"></title-page>
+    <title-page :title="getTitlePage"></title-page>
     <layout>
       <div slot="menu">
         <li><button @click="backToDashboard()">Back to Dashboard</button></li>
@@ -56,6 +56,9 @@
       getTitleTag() {
         let tagInfo = this.storage.tags.tag(this.tagCode);
         return tagInfo.getTitle();
+      },
+      getTitlePage() {
+        return 'Results of searching by tag: ' + this.getTitleTag;
       }     
     },
     methods: {

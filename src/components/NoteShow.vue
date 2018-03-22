@@ -1,6 +1,6 @@
 <template>
   <article>
-    <title-page title="Note display section"></title-page>
+    <title-page :title="getTitlePage"></title-page>
     <layout>
       <div slot="menu">
         <button @click="backToCategory()">Back to category: {{ getTitleCategory() }}</button>
@@ -41,6 +41,11 @@
     data() {
       return {
         note: this.getNote()
+      }
+    },
+    computed: {
+      getTitlePage() {
+        return 'Note - ' + this.note.getTitle();
       }
     },
     methods: {

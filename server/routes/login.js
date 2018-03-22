@@ -17,7 +17,6 @@ async function login(req, res) {
       response.message = 'Login or password are not valid!';
     }
   }
-  // console.log('LoginRequest.response: ' + JSON.stringify(response));
   return res.json(response);
 }
 

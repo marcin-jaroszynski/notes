@@ -1,6 +1,6 @@
 <template>
   <article>
-    <title-page title="Category section"></title-page>
+    <title-page :title="getTitlePage"></title-page>
     <layout>
       <div slot="menu">
         <side-menu title="Categories" v-bind:items="categories"></side-menu>
@@ -76,6 +76,9 @@
       },
       getPaginationUrl() {
         return Url.getCategoryShow(this.getCurrentCategoryId()) + '/page/';
+      },
+      getTitlePage() {
+        return 'Category - ' + this.getCategoryName();
       }
     },
     methods: {

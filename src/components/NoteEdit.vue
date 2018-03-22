@@ -1,6 +1,6 @@
 <template>
   <article>
-    <title-page title="Note edit section"></title-page>
+    <title-page :title="getTitlePage"></title-page>
     <layout>
       <div slot="menu">
         <button @click="backToNote()">Back to note</button>
@@ -81,6 +81,9 @@
       },
       getCategoryName: function() {
         return this.storage.categories.getTitleFor(this.note.getCategoryId());
+      },
+      getTitlePage() {
+        return 'Note - ' + this.getTitleNote + ' - Edit';
       }
     },
     methods: {

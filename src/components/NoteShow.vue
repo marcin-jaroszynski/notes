@@ -3,11 +3,11 @@
     <title-page :title="getTitlePage"></title-page>
     <layout>
       <div slot="menu">
-        <button @click="backToCategory()">Back to category: {{ getTitleCategory() }}</button>
-        <button @click="backToDashboard()">Back to Dashboard</button>
+        <button @click="backToCategory()" class="button">Back to category: {{ getTitleCategory() }}</button>
+        <button @click="backToDashboard()" class="button">Back to Dashboard</button>
       </div>
       <div slot="content">
-        <div><button @click="goToNoteEdit()">Edit</button></div>
+        <div><button @click="goToNoteEdit()" class="button">Edit</button></div>
         <div>Note: {{ note.getTitle() }}</div>
         <div>Category: {{ getTitleCategory() }}</div>
         <div>

@@ -2,11 +2,11 @@
   <article>
     <title-page title="Login"></title-page>
     <h2>Login screen</h2>
-    <input v-model="loginField" type="email" name="login" placeholder="your login e-mail">
+    <input v-model="loginField" type="email" name="login" placeholder="your login e-mail" class="login_field">
     <br>
-    <input v-model="passwordField" type="password" name="password" placeholder="password">
+    <input v-model="passwordField" type="password" name="password" placeholder="password" class="login_field">
     <br>
-    <button @click="validate">Sign in</button>
+    <button @click="validate" class="button">Sign in</button>
   </article>
 </template>
 
@@ -38,3 +38,12 @@ export default {
   }
 }
 </script>
+
+<style>
+.login_field {
+  height: 2em;
+  margin-bottom: 1.5em;
+  border: 1px solid black;
+  padding: 0.25em;
+}
+</style>

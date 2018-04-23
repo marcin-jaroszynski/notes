@@ -3,7 +3,7 @@
     <title-page title="Add new category section"></title-page>
     <layout>
       <div slot="menu">
-        <button @click="backToDashboard()">Back to Dashboard</button>
+        <button @click="backToDashboard()" class="button">Back to Dashboard</button>
       </div>
       <div slot="content">
         <div>Add new category</div>
@@ -16,8 +16,8 @@
         </div>
         <p>
           Name of new category: <input type="text" v-model.trim="categoryNameFromField">
-          <button @click="addCategory()" :disabled="isDisabledAddBtn">Add</button>
-          <button @click="changeCategoryTitle()" :disabled="isDisabledEditBtn">Edit</button>
+          <button @click="addCategory()" :disabled="isDisabledAddBtn" class="button">Add</button>
+          <button @click="changeCategoryTitle()" :disabled="isDisabledEditBtn" class="button">Edit</button>
         </p>
       </div>
     </layout>

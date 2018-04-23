@@ -2,7 +2,7 @@
   <section>
     <div>{{ title }}</div>
     <nav>
-      <ul>
+      <ul class="menu__categories">
         <li v-for="item in items"><router-link :to="item.url">{{ item.title }}</router-link></li>
       </ul>
     </nav>

@@ -4,7 +4,7 @@
     <layout>
       <div slot="menu">
         <side-menu title="Categories" v-bind:items="getCategories"></side-menu>
-        <li><button @click="getCategoryAddUrl()">Add category</button></li>
+        <li><button @click="getCategoryAddUrl()" class="button">Add category</button></li>
       </div>
       <div slot="content">
         <div>Dashboard</div>

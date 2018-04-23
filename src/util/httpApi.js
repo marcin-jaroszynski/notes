@@ -28,7 +28,7 @@ export default class HttApi {
         response = await this.http.post(url, params);
       }
       if (response.data.token) {
-        VueCookies.set('token', response.data.token, 60*60);
+        VueCookies.set('token', response.data.token, 86400, '/');
       }
     } catch(error) {
       this.messageError(error.response.data.message);

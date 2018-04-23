@@ -3,9 +3,9 @@
     <title-page :title="getTitlePage"></title-page>
     <layout>
       <div slot="menu">
-        <button @click="backToNote()">Back to note</button>
-        <button @click="backToCategory()">Back to category: {{ getCategoryName }}</button>
-        <button @click="backToDashboard()">Back to Dashboard</button>
+        <button @click="backToNote()" class="button">Back to note</button>
+        <button @click="backToCategory()" class="button">Back to category: {{ getCategoryName }}</button>
+        <button @click="backToDashboard()" class="button">Back to Dashboard</button>
       </div>
       <div slot="content">
         <div>
@@ -21,7 +21,7 @@
         <div>
           <label for="note-tag">Tag:</label>
           <input v-model.trim="tagField" id="note-tag" type="text">
-          <button @click="addTag">Add</button>
+          <button @click="addTag" class="button">Add</button>
           <div>
             List of tags:  
             <ul>
@@ -33,8 +33,8 @@
           <div><label for="note-content">Content:</label></div>
           <textarea v-model="noteContent" id="note-content"></textarea>
           <div>
-            <button @click="editNote">Edit</button>
-            <button @click="removeNote">Remove</button>
+            <button @click="editNote" class="button">Edit</button>
+            <button @click="removeNote" class="button">Remove</button>
           </div>
         </div>
       </div>

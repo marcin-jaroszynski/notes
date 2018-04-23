@@ -4,13 +4,13 @@
     <layout>
       <div slot="menu">
         <side-menu title="Categories" v-bind:items="categories"></side-menu>
-        <button @click="backToDashboard()">Back to Dashboard</button>
+        <button @click="backToDashboard()" class="button">Back to Dashboard</button>
       </div>
       <div slot="content">
         <div>Category: {{ getCategoryName() }}</div>
         <div>
           Number of entries: {{ getNumOfAllEntries }}
-          <button  @click="addNewNote">Add new entry</button>
+          <button  @click="addNewNote" class="button">Add new entry</button>
         </div>
         <p>
           <div>Latest entries:</div>

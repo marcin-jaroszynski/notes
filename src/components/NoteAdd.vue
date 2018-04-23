@@ -3,8 +3,8 @@
     <title-page title="Note add section"></title-page>
     <layout>
       <div slot="menu"> 
-        <button @click="backToCategory()">Back to category: {{ getCategoryName() }}</button>
-        <button @click="backToDashboard()">Back to Dashboard</button>
+        <button @click="backToCategory()" class="button">Back to category: {{ getCategoryName() }}</button>
+        <button @click="backToDashboard()" class="button">Back to Dashboard</button>
       </div>
       <div slot="content">
         <div>Category: {{ getCategoryName() }}</div>
@@ -15,7 +15,7 @@
         <div>
           <label for="note-tag">Tag:</label>
           <input v-model.trim="tagField" id="note-tag" type="text">
-          <button @click="addTag">Add</button>
+          <button @click="addTag" class="button">Add</button>
           <div>
             List of tags:  
             <ul>
@@ -27,7 +27,7 @@
           <div><label for="note-content">Content:</label></div>
           <textarea v-model="contentField" id="note-content"></textarea>
           <div>
-            <button @click="addNote">Add</button>
+            <button @click="addNote" class="button">Add</button>
           </div>
         </div>
       </div>

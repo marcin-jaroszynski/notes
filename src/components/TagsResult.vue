@@ -3,7 +3,7 @@
     <title-page :title="getTitlePage"></title-page>
     <layout>
       <div slot="menu">
-        <li><button @click="backToDashboard()">Back to Dashboard</button></li>
+        <li><button @click="backToDashboard()" class="button">Back to Dashboard</button></li>
       </div>
       <div slot="content">
         <div>Entries for tag: {{ getTitleTag }}</div>

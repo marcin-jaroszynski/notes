@@ -14,7 +14,7 @@
         </div>
         <div>
           <label for="note-tag">Tag:</label>
-          <input v-model.trim="tagField" id="note-tag" type="text">
+          <input v-model.trim="tagField" @keyup.enter="addTag" id="note-tag" type="text">
           <button @click="addTag" class="button">Add</button>
           <div>
             List of tags:  

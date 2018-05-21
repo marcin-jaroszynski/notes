@@ -2,9 +2,9 @@
   <article>
     <title-page title="Login"></title-page>
     <h2>Login screen</h2>
-    <input v-model="loginField" type="email" name="login" placeholder="your login e-mail" class="login_field">
+    <input v-model="loginField" @keyup.enter="validate" type="email" name="login" placeholder="your login e-mail" class="login_field">
     <br>
-    <input v-model="passwordField" type="password" name="password" placeholder="password" class="login_field">
+    <input v-model="passwordField" @keyup.enter="validate" type="password" name="password" placeholder="password" class="login_field">
     <br>
     <button @click="validate" class="button">Sign in</button>
   </article>

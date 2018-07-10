@@ -1,7 +1,7 @@
 import express from 'express';
 const app = express(); 
 import bodyParser from 'body-parser';
-import { addCategory, changeTitleCategory, getNotes } from './routes/category';
+import { addCategory, changeTitleCategory, getNotes, tags } from './routes/category';
 import { addNote, editNote, getNote, removeNote, getByTagNote } from './routes/note';
 import { initStorage } from './routes/storage';
 import { getEntries as getDashbordEntries } from './routes/dashboard';
@@ -54,6 +54,7 @@ app.post(apiUrl.noteRemove(), authCheck, removeNote);
 app.get(apiUrl.noteGetByTag(), authCheck, getByTagNote);
 app.get(apiUrl.storageInit(), authCheck, initStorage);
 app.get(apiUrl.dashboard(), authCheck, getDashbordEntries);
+app.get(apiUrl.tags(), authCheck, tags);
 
 if ('dev' !== process.env.NODE_ENV) {
   app.listen(3000, function() {

@@ -59,4 +59,16 @@ async function getNotes(req, res) {
   res.json(response);
 }
 
-export { getCategories, addCategory, changeTitleCategory, getNotes };
+async function tags(req, res) {
+  let response = {};
+  response.success = false;
+  response.tags = [];
+  try {
+    response.tags = await CategorySchema.tags();
+    response.success = true;
+  } catch(err) {
+  }
+  res.json(response);
+}
+
+export { getCategories, addCategory, changeTitleCategory, getNotes, tags };

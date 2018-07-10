@@ -22,6 +22,22 @@ categorySchema.static('categories', async function() {
   return categories;
 });
 
+categorySchema.static('tags', async function() {
+  let tags = await this.find({}, {tags: 1});
+  if (Object.keys(tags).length === 0) {
+    return [];
+  }
+  let returnData = [];
+  for (let i = 0; i < tags.length; i++) {
+    if (!returnData[tags[i]['code']]) {
+      returnData[tags[i]['code']] = tags[i];
+    } else {
+      returnData[tags[i]['code']]['counter'] += tags[i]['counter'];
+    }
+  }
+  return returnData;
+});
+
 categorySchema.static('category', function(categoryCode) {
   return this.findOne({code: categoryCode});
 });

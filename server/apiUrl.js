@@ -50,4 +50,8 @@ export default class ApiUrl {
   login() {
     return this.prefix + 'login';
   }
+
+  tags() {
+    return this.prefix + 'tags';
+  }
 }

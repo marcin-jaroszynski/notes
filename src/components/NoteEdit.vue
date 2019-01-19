@@ -141,11 +141,13 @@
         return false;
       },
       removeNote: async function() {
-        let categoryCode = this.note.getCategoryId();
-        await this.$http.post('note/remove', { id: this.note.getId() });
-        let resultRemove = this.storage.notes.remove(this.note.getId());
-        if (resultRemove) {
-          this.redirectToCategory(categoryCode);
+        if (confirm('Are you sure you want to remove that note?')) {
+          let categoryCode = this.note.getCategoryId();
+          await this.$http.post('note/remove', { id: this.note.getId() });
+          let resultRemove = this.storage.notes.remove(this.note.getId());
+          if (resultRemove) {
+            this.redirectToCategory(categoryCode);
+          }
         } 
       }
     }
